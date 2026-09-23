@@ -87,6 +87,8 @@ details p{margin-top:10px;color:var(--muted);max-width:70ch}
 footer{border-top:1px solid var(--line);padding:30px 22px;text-align:center;color:var(--muted);font-size:.95rem}
 @media(max-width:820px){.cols,.two{grid-template-columns:1fr;gap:30px}.cols{padding:40px 0}.bar nav a:first-child{display:none}}`;
 
+const MMCSS = "\n/* Shared look with mmrahmanbappi.github.io */\n:root{--bg:#eeeeea;--ink:#171518;--muted:#5f5d61;--line:#d9d8d2;--blue:#b23a0a;--card:#fff;--mt-soft:#f6f6f2;--mt-accink:#fff;color-scheme:light}\n@media (prefers-color-scheme:dark){:root{--bg:#141316;--ink:#f2f1ed;--muted:#a3a1a6;--line:#302f35;--blue:#ff7b4f;--card:#222126;--mt-soft:#1b1a1e;--mt-accink:#141316;color-scheme:dark}}\nbody{font-family:\"Inter\",system-ui,-apple-system,\"Segoe UI\",Roboto,sans-serif;background:var(--bg);color:var(--ink)}\nh1,h2,h3,h4,.bar a.logo{font-family:\"Inter\",system-ui,-apple-system,\"Segoe UI\",Roboto,sans-serif!important;letter-spacing:-.035em}\nh1{font-weight:560!important;line-height:1.05}h2{font-weight:600!important}h3{font-weight:600!important;letter-spacing:-.02em}\na{color:var(--ink)}\n.bar{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent)!important;backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}\n.bar a.logo{display:flex;align-items:center;gap:.6rem;font-weight:700!important;font-size:1.02rem!important;letter-spacing:-.01em}\n.bar a.logo i{width:2.1rem;height:2.1rem;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-style:normal;font-size:.7rem;font-weight:800;flex:none}\n.bar nav{display:flex;align-items:center;gap:1.4rem}.bar nav a{color:var(--muted);text-decoration:none}.bar nav a:hover{color:var(--ink)}\n.bar nav a.gh{border:1.5px solid var(--ink);border-radius:999px;padding:.35rem 1rem;color:var(--ink);font-weight:600}\n.btn{border-radius:999px!important;font-weight:600}.btn.main{background:var(--ink)!important;border-color:var(--ink)!important;color:var(--bg)!important}\n.tile,.card{border-radius:18px;background:var(--card);border-color:var(--line)}\n.cat,.eyebrow,.kick{color:var(--blue)}\ndetails{border-color:var(--line)}\n.btn{background:var(--card);color:var(--ink);border-color:var(--ink)}.copy{background:var(--card)!important;color:var(--ink)!important;border:1px solid var(--line)!important}\n@media (max-width:700px){.bar nav a:not(.gh){display:none}}\n";
+const MMFONT = "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap\">";
 const FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;600;700&display=swap" rel="stylesheet">';
 
 function head(title, desc, url, image, keywords, schema) {
@@ -115,12 +117,12 @@ function head(title, desc, url, image, keywords, schema) {
 <meta name="twitter:description" content="${d}">
 <meta name="twitter:image" content="${image}">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%2317191f'/><rect x='14' y='30' width='9' height='20' rx='2' fill='%23fff'/><rect x='28' y='18' width='9' height='32' rx='2' fill='%23fff'/><rect x='42' y='24' width='9' height='26' rx='2' fill='%23fff'/></svg>">
-${FONTS}
-<style>${CSS}</style>
+${FONTS}${MMFONT}
+<style>${CSS}${MMCSS}</style>
 <script type="application/ld+json">${json(schema)}</script>
 </head>
 <body>
-<header class="bar"><div><a class="logo" href="${B}">70 Free Data Charts</a><nav><a href="${B}#categories">Categories</a><a href="${SITE.repo}">GitHub</a></nav></div></header>
+<header class="bar"><div><a class="logo" href="${B}"><i aria-hidden="true">CH</i>70 Free Data Charts</a><nav><a href="${B}#categories">Categories</a><a href="https://mmrahmanbappi.github.io/">All projects</a><a class="gh" href="${SITE.repo}">GitHub</a></nav></div></header>
 `;
 }
 
