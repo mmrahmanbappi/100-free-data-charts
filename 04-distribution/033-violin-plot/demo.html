@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Violin Plot Example: How long customers waited for their coffee | 100 Free Data Charts</title>
+<meta name="description" content="A working violin plot made with HTML, CSS and vanilla JavaScript. Smooth distribution shapes with median and quartiles inside. One file, no library.">
+<link rel="canonical" href="https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/033-violin-plot/demo.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* Change these colors to match your brand */
+:root {
+  --bg: #f3efe9;
+  --card: #ffffff;
+  --ink: #2a211a;
+  --muted: #6c6157;
+  --line: #e9e2d9;
+  --accent: #6f4e37;
+  --soft: #efe4d8;
+}
+* { box-sizing: border-box; margin: 0; }
+body { font-family: "Manrope", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; min-height: 100vh; }
+.page { max-width: 1160px; margin: 0 auto; padding: 28px 24px 40px; }
+.brand { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; font-size: .95rem; }
+.logo { font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+.logo b { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); display: inline-block; }
+.brand span:last-child { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px 30px 22px; }
+.head { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+h1 { font-size: clamp(1.35rem, 2.6vw, 1.8rem); line-height: 1.2; }
+.sub { color: var(--muted); margin-top: 6px; max-width: 60ch; }
+.take { margin-top: 14px; padding: 10px 14px; border-radius: 10px; background: var(--soft); font-weight: 500; display: inline-block; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
+.seg button { font: inherit; font-size: .9rem; border: 0; background: none; color: var(--muted); padding: 7px 12px; border-radius: 7px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--card); }
+#legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 4px; min-height: 8px; }
+.key { font: inherit; font-size: .9rem; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: none; color: var(--ink); padding: 5px 11px; border-radius: 99px; cursor: pointer; }
+.key:disabled { cursor: default; opacity: 1; }
+.key i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+.key[aria-pressed="false"] { opacity: .45; text-decoration: line-through; }
+#chart { height: 420px; margin-top: 6px; position: relative; }
+#chart svg { display: block; overflow: visible; }
+.grid { stroke: var(--line); }
+.axis { stroke: var(--muted); stroke-width: 1.2; }
+.tick { fill: var(--muted); font-size: 12px; }
+.label { fill: var(--ink); font-size: 13px; }
+.value { fill: var(--ink); font-size: 12px; font-weight: 700; }
+.hit { cursor: pointer; outline: none; transition: opacity .15s; }
+.hit:hover, .hit:focus-visible { opacity: .8; }
+.hit:focus-visible { stroke: var(--ink); stroke-width: 2; }
+.zone { outline: none; cursor: crosshair; }
+.zone:focus-visible { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 4 4; }
+.note { color: var(--muted); font-size: .85rem; margin-top: 10px; }
+details { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+summary { cursor: pointer; font-weight: 500; }
+table { border-collapse: collapse; margin-top: 12px; font-size: .9rem; width: 100%; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+td { font-variant-numeric: tabular-nums; }
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--ink); color: var(--card); padding: 8px 11px; border-radius: 8px; font-size: .85rem; line-height: 1.4; max-width: 240px; }
+#tip[hidden] { display: none; }
+button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+@media (max-width: 640px) {
+  .page { padding: 16px 12px 30px; }
+  .card { padding: 20px 16px 16px; }
+  #chart { height: 380px; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="brand"><span class="logo"><b aria-hidden="true"></b>Little Bean Coffee</span><span>Order waits in September 2026</span></header>
+  <section class="card" aria-labelledby="title">
+    <div class="head">
+      <div>
+        <h1 id="title">How long customers waited for their coffee</h1>
+        <p class="sub">The wider the shape, the more orders took that long. The white dot is the middle wait and the dark bar holds the middle half.</p>
+        <p class="take">Station Road has two kinds of wait: about 3 minutes, or about 8 when the morning train crowd arrives.</p>
+      </div>
+      
+    </div>
+    <div id="legend"></div>
+    <figure id="chart" aria-label="How long customers waited for their coffee. Station Road has two kinds of wait: about 3 minutes, or about 8 when the morning train crowd arrives. Use Tab to step through each value."></figure>
+    <p class="note">Source: Little Bean order screens. Sample data for this demo.</p>
+    <details><summary>Show the data as a table</summary><table id="table"></table></details>
+  </section>
+</main>
+<div id="tip" hidden></div>
+<script>
+// Small helpers: SVG elements, scales, tooltip, legend and table.
+const NS = 'http://www.w3.org/2000/svg';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]static/.test(location.search);
+function el(tag, attrs, parent) {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs || {}) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function text(parent, x, y, str, attrs) {
+  const t = el('text', Object.assign({ x, y }, attrs || {}), parent);
+  t.textContent = str;
+  return t;
+}
+function linear(d0, d1, r0, r1) {
+  const f = v => r0 + (v - d0) / (d1 - d0) * (r1 - r0);
+  f.domain = [d0, d1];
+  return f;
+}
+function band(keys, r0, r1, pad) {
+  const step = (r1 - r0) / keys.length;
+  const bw = step * (1 - pad);
+  const f = k => r0 + keys.indexOf(k) * step + (step - bw) / 2;
+  f.bw = bw; f.step = step;
+  return f;
+}
+function niceTicks(min, max, count) {
+  const span = max - min;
+  const raw = span / count;
+  const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const m = raw / p;
+  const step = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+  const out = [];
+  for (let v = Math.ceil(min / step) * step; v <= max + step / 1e6; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+function niceMax(v, count) {
+  const t = niceTicks(0, v, count || 5);
+  const last = t[t.length - 1];
+  return last >= v ? last : last + (t[1] - t[0]);
+}
+function fmt(n, d) { return n.toLocaleString('en-US', { maximumFractionDigits: d == null ? 0 : d }); }
+function tween(dur, delay, fn) {
+  if (reduce) { fn(1); return; }
+  const start = performance.now() + (delay || 0);
+  fn(0);
+  function step(now) {
+    const t = Math.min(1, Math.max(0, (now - start) / dur));
+    fn(1 - Math.pow(1 - t, 3));
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const tip = document.getElementById('tip');
+function showTip(html, x, y) {
+  tip.innerHTML = html;
+  tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let left = x + 14, top = y - h - 12;
+  if (left + w > innerWidth - 8) left = x - w - 14;
+  if (top < 8) top = y + 16;
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+function hideTip() { tip.hidden = true; }
+function bindTip(node, label, html) {
+  node.setAttribute('tabindex', '0');
+  node.setAttribute('role', 'img');
+  node.setAttribute('aria-label', label);
+  node.classList.add('hit');
+  node.addEventListener('mousemove', e => showTip(html, e.clientX, e.clientY));
+  node.addEventListener('mouseleave', hideTip);
+  node.addEventListener('focus', () => { const r = node.getBoundingClientRect(); showTip(html, r.left + r.width / 2, r.top); });
+  node.addEventListener('blur', hideTip);
+}
+function yGrid(g, scale, ticks, x0, x1, format) {
+  ticks.forEach(v => {
+    const y = scale(v);
+    el('line', { x1: x0, x2: x1, y1: y, y2: y, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x0 - 10, y + 4, format(v), { class: 'tick', 'text-anchor': 'end' });
+  });
+}
+function xGrid(g, scale, ticks, y0, y1, format) {
+  ticks.forEach(v => {
+    const x = scale(v);
+    el('line', { x1: x, x2: x, y1: y0, y2: y1, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x, y1 + 20, format(v), { class: 'tick', 'text-anchor': 'middle' });
+  });
+}
+function legend(items, onToggle) {
+  const box = document.getElementById('legend');
+  box.innerHTML = '';
+  items.forEach(it => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'key';
+    b.setAttribute('aria-pressed', 'true');
+    b.innerHTML = '<i style="background:' + it.color + '"></i>' + it.name;
+    if (onToggle) b.onclick = () => {
+      const on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', on);
+      onToggle(it.name, on);
+    };
+    else b.disabled = true;
+    box.appendChild(b);
+  });
+}
+function table(head, rows) {
+  const t = document.getElementById('table');
+  t.innerHTML = '<thead><tr>' + head.map(h => '<th scope="col">' + h + '</th>').join('') + '</tr></thead><tbody>' +
+    rows.map(r => '<tr>' + r.map((c, i) => i ? '<td>' + c + '</td>' : '<th scope="row">' + c + '</th>').join('') + '</tr>').join('') + '</tbody>';
+}
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function linePath(pts, smooth) {
+  if (!smooth) return pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+  let d = 'M' + pts[0][0].toFixed(1) + ',' + pts[0][1].toFixed(1);
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    d += 'C' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ',' + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) + ' ' +
+      (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ',' + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) + ' ' + p2[0].toFixed(1) + ',' + p2[1].toFixed(1);
+  }
+  return d;
+}
+function areaPath(top, bottom, smooth) {
+  return linePath(top, smooth) + linePath(bottom.slice().reverse(), smooth).replace('M', 'L') + 'Z';
+}
+function arcPath(cx, cy, r0, r1, a0, a1) {
+  if (a1 - a0 >= Math.PI * 2 - 1e-6) a1 = a0 + Math.PI * 2 - 1e-4;
+  const large = a1 - a0 > Math.PI ? 1 : 0;
+  const p = (r, a) => (cx + r * Math.sin(a)).toFixed(2) + ',' + (cy - r * Math.cos(a)).toFixed(2);
+  let d = 'M' + p(r1, a0) + 'A' + r1 + ',' + r1 + ' 0 ' + large + ' 1 ' + p(r1, a1);
+  d += r0 > 0 ? 'L' + p(r0, a1) + 'A' + r0 + ',' + r0 + ' 0 ' + large + ' 0 ' + p(r0, a0) + 'Z' : 'L' + cx + ',' + cy + 'Z';
+  return d;
+}
+function polar(cx, cy, r, a) { return [cx + r * Math.sin(a), cy - r * Math.cos(a)]; }
+function quantile(sorted, p) { const i = (sorted.length - 1) * p, lo = Math.floor(i), hi = Math.ceil(i); return sorted[lo] + (sorted[hi] - sorted[lo]) * (i - lo); }
+function kde(values, xs, bw) { const k = 1 / (Math.sqrt(2 * Math.PI) * bw * values.length); return xs.map(x => [x, values.reduce((a, v) => a + Math.exp(-0.5 * Math.pow((x - v) / bw, 2)), 0) * k]); }
+function steps(a, b, n) { return Array.from({ length: n }, (v, i) => a + (b - a) * i / (n - 1)); }
+function seeded(seed) { return () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; }
+let clipCount = 0;
+function reveal(svg, g, x, y, w, h, animate, dur) {
+  const id = 'clip' + (++clipCount);
+  const r = el('rect', { x, y, width: w, height: h }, el('clipPath', { id }, el('defs', {}, svg)));
+  g.setAttribute('clip-path', 'url(#' + id + ')');
+  const draw = t => r.setAttribute('width', w * t);
+  animate ? tween(dur || 1100, 0, draw) : draw(1);
+}
+function scrub(svg, xs, top, bottom, info) {
+  const guide = el('line', { y1: top, y2: bottom, class: 'axis', 'stroke-dasharray': '3 4', opacity: 0 }, svg);
+  const half = xs.length > 1 ? (xs[1] - xs[0]) / 2 : 20;
+  const x0 = xs[0] - half;
+  const zone = el('rect', { x: x0, y: top, width: xs[xs.length - 1] - xs[0] + half * 2, height: bottom - top, fill: 'transparent', tabindex: 0, class: 'zone', role: 'img',
+    'aria-label': 'Chart area. Use the left and right arrow keys to read each value.' }, svg);
+  let cur = -1;
+  function off() { guide.setAttribute('opacity', 0); info(-1, false); hideTip(); }
+  function go(i, cx, cy) {
+    i = Math.max(0, Math.min(xs.length - 1, i)); cur = i;
+    guide.setAttribute('x1', xs[i]); guide.setAttribute('x2', xs[i]); guide.setAttribute('opacity', 1);
+    const r = info(i, true);
+    zone.setAttribute('aria-label', r.label);
+    if (cx == null) { const b = svg.getBoundingClientRect(); cx = b.left + xs[i]; cy = b.top + (r.y != null ? r.y : top + 30); }
+    showTip(r.html, cx, cy);
+  }
+  function near(px) { let best = 0, bd = Infinity; xs.forEach((x, i) => { const d = Math.abs(x - px); if (d < bd) { bd = d; best = i; } }); return best; }
+  zone.addEventListener('mousemove', e => go(near(e.clientX - svg.getBoundingClientRect().left), e.clientX, e.clientY));
+  zone.addEventListener('mouseleave', off);
+  zone.addEventListener('blur', off);
+  zone.addEventListener('focus', () => go(cur < 0 ? xs.length - 1 : cur));
+  zone.addEventListener('keydown', e => {
+    const k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowLeft') { e.preventDefault(); go((cur < 0 ? xs.length - 1 : cur) + (k === 'ArrowRight' ? 1 : -1)); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(xs.length - 1); }
+  });
+  return zone;
+}
+function mount(draw) {
+  const box = document.getElementById('chart');
+  let last = 0;
+  function render(animate) {
+    const w = box.clientWidth, h = box.clientHeight;
+    box.innerHTML = '';
+    const svg = el('svg', { viewBox: '0 0 ' + w + ' ' + h, width: w, height: h }, box);
+    draw(svg, w, h, animate);
+  }
+  new ResizeObserver(() => {
+    if (Math.abs(box.clientWidth - last) < 2) return;
+    const first = last === 0;
+    last = box.clientWidth;
+    render(first);
+  }).observe(box);
+  return render;
+}
+function buttons(onPick) {
+  document.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    onPick(b.dataset.v);
+  });
+}
+
+// The chart
+const DATA = {"Station Road":[6.5,3.8,10.1,6.2,2.6,7.7,6,3.3,3.1,9.9,4.1,3.2,5.3,2,4.3,2.9,9.4,7.9,3.9,2.9,6,5.3,3.6,2.8,7.7,7,1.4,2.6,2.8,7.6,7,8.1,8.2,6.2,8.8,3.6,2.1,10.3,3.3,9.3,8.4,7.7,1.9,5.9,2.6,2.3,2.6,4,7.7,2.5,7.3,3.1,7,2.5,7.2,1.8,2.6,8.4,3.4,2.3,3.7,7.5,2.4,7.5,3.7,2,6.2,9.5,3.8,3.3,3.6,7.7,8,3.8,8,3.8,9.1,2.1,3.3,2.8,2.8,1.8,8.3,7.9,2.4,3.7,5.1,5.7,5.9,9.6,8.5,3,2.7,7.2,2.7,3.3,8.7,8.4,7.9,6.9,8.1,2.6,4.2,5.4,2.4,3.8,3.2,2.3,2.6,2.8,2.6,4.3,3.5,3.2,5.4,3.4,10.1,4.8,1.8,6.2,3.5,8.1,7.8,2.5,3.5,8.8,8.2,2.8,3,8.7,1.8,8.1,6.5,7.3,2.6,4.2,2.2,3.4,2.8,8.1,2,2.8,3.6,3.5,3.2,4.3,1.3,4.2,9.3,7.7,2.7,9.8,2,8,3.5,3.3,5.5,3.7,2.9,7.5],"Market Square":[5,3.6,3.7,6.4,4.9,3,6.3,5.2,6,5,2.1,3.7,4.3,4.3,6.2,3.8,4.4,4.4,4.4,3.4,3.1,1.6,4.9,4.3,4.7,3.3,4.5,3.4,3.4,4.9,5.2,5.2,4.5,4.1,6.1,5.9,3.8,3.3,4.9,4.9,3.5,7,2.2,3.6,4.8,5.6,2.5,4,6.1,6.1,4.2,4.5,3.5,4.9,3.3,2.3,2.8,4.6,3,5.7,5.9,5.6,5.2,5.8,4.8,5.5,5,5.4,3.4,3.8,3.4,5.4,5.1,3.6,3.4,3.9,5.5,4.4,4.2,3.7,4.4,6.3,3.7,4.1,6.4,5.3,3.2,5.7,3.1,5.1,1.7,3.4,5.5,3.8,3.7,4.6,4.5,4,3.8,6.5,6.2,4.9,3.2,3.9,4.2,5,6.3,3.9,4.7,4,4.7,3.7,4.9,5.8,4.1,4.1,4.6,3.1,6.5,3,4.1,3.5,6.2,4,3.9,6.6,4.4,3.6,4.5,4.7,3.7,4.3,4.3,5.3,5.4,5.4,4.4,5.4,4.3,5.8,5,4,5.9,2.8,3.4,3.6,4.4,3.1,3.2,2.4,4.6,3.7,6.9,5.4,3.2,6,4.6,5.7,3.3,5.8],"University":[8.9,4.9,3.8,5,6.7,12.3,10.8,9.9,5.4,5.2,7,5.3,4.8,5.5,8.2,5.8,6.6,5.3,5.5,5.2,9.3,6.6,9.9,5.6,8.8,2.4,5,5.9,4.4,5.7,3.6,5.6,4.3,6,5.2,3.4,5,6.1,2.7,6.3,9.3,5.4,7.5,7.6,3.9,9.5,12.6,3.3,11.6,4.2,9.8,1.3,9,6.4,2.7,3.9,3.3,3.7,7,5.5,1,5.2,7.2,6.3,10.4,1.2,6.7,6.1,7.9,2.5,2.6,5.6,6.2,1.3,7,6,7.9,1,7.3,3.7,4.8,8.1,10.4,6.4,5.7,9.4,3.7,5.6,4.7,3.4,6.5,11.3,6.7,7.3,5.9,9,6.5,3.7,6.3,9.8,5.8,9.2,5.8,11.3,6.8,7.7,5.3,8.2,5.4,2.1,6.8,2.9,9.9,8.1,6.1,7.8,1,10,4.3,7.8,12.7,1.8,4.9,6.9,7.1,1.6,3.6,9.9,4.4,7.5,2.4,3.6,1.3,6.7,9,6.3,5.3,6.7,7.2,5.3,7.5,11.1,11.8,4.5,2.7,11,8.6,9.2,7.6,5.4,8.6,8.9,9.1,3.2,8.7,5.1,5.1,6.9,5.1,12.1],"Airport":[2.1,4.1,3.8,2.5,5.8,9.3,3.2,3.8,2.8,6.1,10.1,5,3,9.3,1.9,2.9,3.2,5.4,5.1,1.5,1.8,6.7,5.1,3.9,4.7,5,5.5,3.7,8.4,6.3,2.3,4.1,5.4,5.5,1.1,3.6,6.9,2.3,5.2,4.9,11.4,3.5,5.4,6,5.3,3.7,5.4,3,11.6,7.7,8.2,3.4,1.6,4.1,6.6,2,2.4,3,9.2,6.8,13.2,9.9,6.1,7,4.4,1.6,7.2,7.9,3.9,3,7.7,4,4,5.6,1.7,5.8,8.9,3.1,3.4,4.2,4.6,3.3,4.8,9.3,7,5.8,5.7,2.7,3.6,8.5,9.4,8.1,4.8,5.2,2.1,7.9,2.6,6.2,4.6,7.6,1.9,5.2,2.1,5.1,5.3,3.9,2.5,3.2,5.5,4.5,3.5,8.1,4.3,5,6.8,3.8,5,4.3,4.5,8.8,8.4,7.2,4.8,3.3,5.8,4.1,1.5,9.4,6.7,4.5,3.1,2,11.1,4.5,8.2,8.9,3.4,6,9.8,8.5,3.6,5.7,2.8,3.7,4.7,6.6,5.7,6.1,4.2,2.1,7.8,3.6,5.8,4.3,2.7,13.5,3.4,2.5,10.1,3.5]};
+const COLORS = ['#6f4e37', '#b07d56', '#d4a373', '#8a9a5b'];
+const NAMES = Object.keys(DATA);
+const STATS = NAMES.map((n, i) => { const s = DATA[n].slice().sort((a, b) => a - b); return { n, s, color: COLORS[i], q1: quantile(s, .25), med: quantile(s, .5), q3: quantile(s, .75) }; });
+const mins = v => v.toFixed(1) + ' min';
+legend(STATS.map(s => ({ name: s.n, color: s.color })));
+table(['Shop', 'Shortest', 'Lower quarter', 'Middle', 'Upper quarter', 'Longest'], STATS.map(s => [s.n, mins(s.s[0]), mins(s.q1), mins(s.med), mins(s.q3), mins(s.s[s.s.length - 1])]));
+mount((svg, w, h, animate) => {
+  const small = w < 560;
+  const m = { t: 12, r: 10, b: 40, l: 48 };
+  const y = linear(0, 16, h - m.b, m.t);
+  const x = band(NAMES, m.l, w - m.r, 0.12);
+  const g = el('g', {}, svg);
+  yGrid(g, y, [0, 2, 4, 6, 8, 10, 12, 14, 16], m.l, w - m.r, v => v + 'm');
+  const ys = steps(0, 16, 90);
+  const dens = STATS.map(s => kde(s.s, ys, 0.55));
+  const maxD = Math.max(...dens.flatMap(d => d.map(p => p[1])));
+  STATS.forEach((s, i) => {
+    const cx = x(s.n) + x.bw / 2, half = x.bw / 2;
+    text(g, cx, h - m.b + 22, small ? s.n.split(' ')[0] : s.n, { class: 'label', 'text-anchor': 'middle' });
+    const pts = dens[i].filter(p => p[1] > maxD * 0.004);
+    const right = pts.map(p => [cx + p[1] / maxD * half, y(p[0])]), left = pts.map(p => [cx - p[1] / maxD * half, y(p[0])]);
+    const shape = el('path', { d: areaPath(right, left, true), fill: s.color, 'fill-opacity': .85 }, g);
+    el('rect', { x: cx - 4, width: 8, y: y(s.q3), height: y(s.q1) - y(s.q3), rx: 3, fill: 'var(--ink)', 'pointer-events': 'none' }, g);
+    el('circle', { cx, cy: y(s.med), r: 5, fill: '#fff', stroke: 'var(--ink)', 'stroke-width': 1.5, 'pointer-events': 'none' }, g);
+    if (animate && !reduce) { shape.style.transformOrigin = cx + 'px 0'; shape.style.transform = 'scaleX(0)'; shape.style.transition = 'transform .8s ' + (i * 0.1) + 's'; requestAnimationFrame(() => requestAnimationFrame(() => shape.style.transform = '')); }
+    bindTip(shape, s.n + ': middle wait ' + s.med.toFixed(1) + ' minutes', '<b>' + s.n + '</b><br>Middle wait: ' + mins(s.med) + '<br>Middle half: ' + mins(s.q1) + ' to ' + mins(s.q3) + '<br>' + s.s.length + ' orders');
+  });
+});
+</script>
+</body>
+</html>

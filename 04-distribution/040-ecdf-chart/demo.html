@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cumulative Distribution Chart Example: How fast our product page loads | 100 Free Data Charts</title>
+<meta name="description" content="A working cumulative distribution (ECDF) chart made with HTML, CSS and vanilla JavaScript. Compare speed or times against a target. One file, no library.">
+<link rel="canonical" href="https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/040-ecdf-chart/demo.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* Change these colors to match your brand */
+:root {
+  --bg: #f1f3f8;
+  --card: #ffffff;
+  --ink: #181d2b;
+  --muted: #5c6377;
+  --line: #e2e5ee;
+  --accent: #16a34a;
+  --soft: #e1f5e8;
+}
+* { box-sizing: border-box; margin: 0; }
+body { font-family: "Plus Jakarta Sans", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; min-height: 100vh; }
+.page { max-width: 1160px; margin: 0 auto; padding: 28px 24px 40px; }
+.brand { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; font-size: .95rem; }
+.logo { font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+.logo b { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); display: inline-block; }
+.brand span:last-child { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px 30px 22px; }
+.head { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+h1 { font-size: clamp(1.35rem, 2.6vw, 1.8rem); line-height: 1.2; }
+.sub { color: var(--muted); margin-top: 6px; max-width: 60ch; }
+.take { margin-top: 14px; padding: 10px 14px; border-radius: 10px; background: var(--soft); font-weight: 500; display: inline-block; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
+.seg button { font: inherit; font-size: .9rem; border: 0; background: none; color: var(--muted); padding: 7px 12px; border-radius: 7px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--card); }
+#legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 4px; min-height: 8px; }
+.key { font: inherit; font-size: .9rem; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: none; color: var(--ink); padding: 5px 11px; border-radius: 99px; cursor: pointer; }
+.key:disabled { cursor: default; opacity: 1; }
+.key i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+.key[aria-pressed="false"] { opacity: .45; text-decoration: line-through; }
+#chart { height: 420px; margin-top: 6px; position: relative; }
+#chart svg { display: block; overflow: visible; }
+.grid { stroke: var(--line); }
+.axis { stroke: var(--muted); stroke-width: 1.2; }
+.tick { fill: var(--muted); font-size: 12px; }
+.label { fill: var(--ink); font-size: 13px; }
+.value { fill: var(--ink); font-size: 12px; font-weight: 700; }
+.hit { cursor: pointer; outline: none; transition: opacity .15s; }
+.hit:hover, .hit:focus-visible { opacity: .8; }
+.hit:focus-visible { stroke: var(--ink); stroke-width: 2; }
+.zone { outline: none; cursor: crosshair; }
+.zone:focus-visible { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 4 4; }
+.note { color: var(--muted); font-size: .85rem; margin-top: 10px; }
+details { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+summary { cursor: pointer; font-weight: 500; }
+table { border-collapse: collapse; margin-top: 12px; font-size: .9rem; width: 100%; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+td { font-variant-numeric: tabular-nums; }
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--ink); color: var(--card); padding: 8px 11px; border-radius: 8px; font-size: .85rem; line-height: 1.4; max-width: 240px; }
+#tip[hidden] { display: none; }
+button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+@media (max-width: 640px) {
+  .page { padding: 16px 12px 30px; }
+  .card { padding: 20px 16px 16px; }
+  #chart { height: 380px; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="brand"><span class="logo"><b aria-hidden="true"></b>Tidy Home Store</span><span>Page speed test, 300 visits per version</span></header>
+  <section class="card" aria-labelledby="title">
+    <div class="head">
+      <div>
+        <h1 id="title">How fast our product page loads</h1>
+        <p class="sub">Each line climbs as more page loads finish. Read it like this: at 2.5 seconds, how many visits had a ready page?</p>
+        <p class="take">With the image fix, 96% of visits load within 2.5 seconds, up from 33% on the old site.</p>
+      </div>
+      
+    </div>
+    <div id="legend"></div>
+    <figure id="chart" aria-label="How fast our product page loads. With the image fix, 96% of visits load within 2.5 seconds, up from 33% on the old site. Tab to the chart, then use the left and right arrow keys to read each value."></figure>
+    <p class="note">Source: Tidy Home Store speed tests. Sample data for this demo.</p>
+    <details><summary>Show the data as a table</summary><table id="table"></table></details>
+  </section>
+</main>
+<div id="tip" hidden></div>
+<script>
+// Small helpers: SVG elements, scales, tooltip, legend and table.
+const NS = 'http://www.w3.org/2000/svg';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]static/.test(location.search);
+function el(tag, attrs, parent) {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs || {}) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function text(parent, x, y, str, attrs) {
+  const t = el('text', Object.assign({ x, y }, attrs || {}), parent);
+  t.textContent = str;
+  return t;
+}
+function linear(d0, d1, r0, r1) {
+  const f = v => r0 + (v - d0) / (d1 - d0) * (r1 - r0);
+  f.domain = [d0, d1];
+  return f;
+}
+function band(keys, r0, r1, pad) {
+  const step = (r1 - r0) / keys.length;
+  const bw = step * (1 - pad);
+  const f = k => r0 + keys.indexOf(k) * step + (step - bw) / 2;
+  f.bw = bw; f.step = step;
+  return f;
+}
+function niceTicks(min, max, count) {
+  const span = max - min;
+  const raw = span / count;
+  const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const m = raw / p;
+  const step = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+  const out = [];
+  for (let v = Math.ceil(min / step) * step; v <= max + step / 1e6; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+function niceMax(v, count) {
+  const t = niceTicks(0, v, count || 5);
+  const last = t[t.length - 1];
+  return last >= v ? last : last + (t[1] - t[0]);
+}
+function fmt(n, d) { return n.toLocaleString('en-US', { maximumFractionDigits: d == null ? 0 : d }); }
+function tween(dur, delay, fn) {
+  if (reduce) { fn(1); return; }
+  const start = performance.now() + (delay || 0);
+  fn(0);
+  function step(now) {
+    const t = Math.min(1, Math.max(0, (now - start) / dur));
+    fn(1 - Math.pow(1 - t, 3));
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const tip = document.getElementById('tip');
+function showTip(html, x, y) {
+  tip.innerHTML = html;
+  tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let left = x + 14, top = y - h - 12;
+  if (left + w > innerWidth - 8) left = x - w - 14;
+  if (top < 8) top = y + 16;
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+function hideTip() { tip.hidden = true; }
+function bindTip(node, label, html) {
+  node.setAttribute('tabindex', '0');
+  node.setAttribute('role', 'img');
+  node.setAttribute('aria-label', label);
+  node.classList.add('hit');
+  node.addEventListener('mousemove', e => showTip(html, e.clientX, e.clientY));
+  node.addEventListener('mouseleave', hideTip);
+  node.addEventListener('focus', () => { const r = node.getBoundingClientRect(); showTip(html, r.left + r.width / 2, r.top); });
+  node.addEventListener('blur', hideTip);
+}
+function yGrid(g, scale, ticks, x0, x1, format) {
+  ticks.forEach(v => {
+    const y = scale(v);
+    el('line', { x1: x0, x2: x1, y1: y, y2: y, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x0 - 10, y + 4, format(v), { class: 'tick', 'text-anchor': 'end' });
+  });
+}
+function xGrid(g, scale, ticks, y0, y1, format) {
+  ticks.forEach(v => {
+    const x = scale(v);
+    el('line', { x1: x, x2: x, y1: y0, y2: y1, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x, y1 + 20, format(v), { class: 'tick', 'text-anchor': 'middle' });
+  });
+}
+function legend(items, onToggle) {
+  const box = document.getElementById('legend');
+  box.innerHTML = '';
+  items.forEach(it => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'key';
+    b.setAttribute('aria-pressed', 'true');
+    b.innerHTML = '<i style="background:' + it.color + '"></i>' + it.name;
+    if (onToggle) b.onclick = () => {
+      const on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', on);
+      onToggle(it.name, on);
+    };
+    else b.disabled = true;
+    box.appendChild(b);
+  });
+}
+function table(head, rows) {
+  const t = document.getElementById('table');
+  t.innerHTML = '<thead><tr>' + head.map(h => '<th scope="col">' + h + '</th>').join('') + '</tr></thead><tbody>' +
+    rows.map(r => '<tr>' + r.map((c, i) => i ? '<td>' + c + '</td>' : '<th scope="row">' + c + '</th>').join('') + '</tr>').join('') + '</tbody>';
+}
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function linePath(pts, smooth) {
+  if (!smooth) return pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+  let d = 'M' + pts[0][0].toFixed(1) + ',' + pts[0][1].toFixed(1);
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    d += 'C' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ',' + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) + ' ' +
+      (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ',' + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) + ' ' + p2[0].toFixed(1) + ',' + p2[1].toFixed(1);
+  }
+  return d;
+}
+function areaPath(top, bottom, smooth) {
+  return linePath(top, smooth) + linePath(bottom.slice().reverse(), smooth).replace('M', 'L') + 'Z';
+}
+function arcPath(cx, cy, r0, r1, a0, a1) {
+  if (a1 - a0 >= Math.PI * 2 - 1e-6) a1 = a0 + Math.PI * 2 - 1e-4;
+  const large = a1 - a0 > Math.PI ? 1 : 0;
+  const p = (r, a) => (cx + r * Math.sin(a)).toFixed(2) + ',' + (cy - r * Math.cos(a)).toFixed(2);
+  let d = 'M' + p(r1, a0) + 'A' + r1 + ',' + r1 + ' 0 ' + large + ' 1 ' + p(r1, a1);
+  d += r0 > 0 ? 'L' + p(r0, a1) + 'A' + r0 + ',' + r0 + ' 0 ' + large + ' 0 ' + p(r0, a0) + 'Z' : 'L' + cx + ',' + cy + 'Z';
+  return d;
+}
+function polar(cx, cy, r, a) { return [cx + r * Math.sin(a), cy - r * Math.cos(a)]; }
+function quantile(sorted, p) { const i = (sorted.length - 1) * p, lo = Math.floor(i), hi = Math.ceil(i); return sorted[lo] + (sorted[hi] - sorted[lo]) * (i - lo); }
+function kde(values, xs, bw) { const k = 1 / (Math.sqrt(2 * Math.PI) * bw * values.length); return xs.map(x => [x, values.reduce((a, v) => a + Math.exp(-0.5 * Math.pow((x - v) / bw, 2)), 0) * k]); }
+function steps(a, b, n) { return Array.from({ length: n }, (v, i) => a + (b - a) * i / (n - 1)); }
+function seeded(seed) { return () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; }
+let clipCount = 0;
+function reveal(svg, g, x, y, w, h, animate, dur) {
+  const id = 'clip' + (++clipCount);
+  const r = el('rect', { x, y, width: w, height: h }, el('clipPath', { id }, el('defs', {}, svg)));
+  g.setAttribute('clip-path', 'url(#' + id + ')');
+  const draw = t => r.setAttribute('width', w * t);
+  animate ? tween(dur || 1100, 0, draw) : draw(1);
+}
+function scrub(svg, xs, top, bottom, info) {
+  const guide = el('line', { y1: top, y2: bottom, class: 'axis', 'stroke-dasharray': '3 4', opacity: 0 }, svg);
+  const half = xs.length > 1 ? (xs[1] - xs[0]) / 2 : 20;
+  const x0 = xs[0] - half;
+  const zone = el('rect', { x: x0, y: top, width: xs[xs.length - 1] - xs[0] + half * 2, height: bottom - top, fill: 'transparent', tabindex: 0, class: 'zone', role: 'img',
+    'aria-label': 'Chart area. Use the left and right arrow keys to read each value.' }, svg);
+  let cur = -1;
+  function off() { guide.setAttribute('opacity', 0); info(-1, false); hideTip(); }
+  function go(i, cx, cy) {
+    i = Math.max(0, Math.min(xs.length - 1, i)); cur = i;
+    guide.setAttribute('x1', xs[i]); guide.setAttribute('x2', xs[i]); guide.setAttribute('opacity', 1);
+    const r = info(i, true);
+    zone.setAttribute('aria-label', r.label);
+    if (cx == null) { const b = svg.getBoundingClientRect(); cx = b.left + xs[i]; cy = b.top + (r.y != null ? r.y : top + 30); }
+    showTip(r.html, cx, cy);
+  }
+  function near(px) { let best = 0, bd = Infinity; xs.forEach((x, i) => { const d = Math.abs(x - px); if (d < bd) { bd = d; best = i; } }); return best; }
+  zone.addEventListener('mousemove', e => go(near(e.clientX - svg.getBoundingClientRect().left), e.clientX, e.clientY));
+  zone.addEventListener('mouseleave', off);
+  zone.addEventListener('blur', off);
+  zone.addEventListener('focus', () => go(cur < 0 ? xs.length - 1 : cur));
+  zone.addEventListener('keydown', e => {
+    const k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowLeft') { e.preventDefault(); go((cur < 0 ? xs.length - 1 : cur) + (k === 'ArrowRight' ? 1 : -1)); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(xs.length - 1); }
+  });
+  return zone;
+}
+function mount(draw) {
+  const box = document.getElementById('chart');
+  let last = 0;
+  function render(animate) {
+    const w = box.clientWidth, h = box.clientHeight;
+    box.innerHTML = '';
+    const svg = el('svg', { viewBox: '0 0 ' + w + ' ' + h, width: w, height: h }, box);
+    draw(svg, w, h, animate);
+  }
+  new ResizeObserver(() => {
+    if (Math.abs(box.clientWidth - last) < 2) return;
+    const first = last === 0;
+    last = box.clientWidth;
+    render(first);
+  }).observe(box);
+  return render;
+}
+function buttons(onPick) {
+  document.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    onPick(b.dataset.v);
+  });
+}
+
+// The chart
+const DATA = {"Old site":[3.92,3.25,4.84,7.61,3.35,2.96,4.73,8.15,4.52,3.56,3.8,3.76,2.4,2.21,3.26,8.52,2.38,1.46,3,3.6,1.64,3.17,2.5,3.05,3.68,2.14,1.67,1.93,6.68,3.89,2.73,3.41,2.46,3.64,3.2,2.74,5.14,4.3,2.95,2.24,3.17,4.47,5.13,3.27,2.91,3.76,1.97,3.4,2.77,3.8,4.46,1.92,3.42,3.02,3.13,1.92,3.2,3.35,3.56,4.64,2.29,3.4,4.38,2.91,1.48,2.42,3.37,2.3,3.39,4.16,2.27,3.79,3.24,2.57,1.56,1.84,2.72,2.14,1.75,3.05,3.1,2.11,4.1,3.95,2.15,2.25,5.12,5.03,3.72,3.32,4.68,2.07,2.02,1.88,2.51,3.03,1.55,3.75,3.12,2.47,5.43,2.43,2.19,5.27,4.76,4.19,2.55,4.25,2.64,2.33,3.32,5.96,1.87,5.06,3.49,6.11,2.53,1.45,2.13,4.78,3.46,1.93,3.64,2.1,2.85,9.14,1.65,1.74,3.66,2.04,1.68,1.71,2.26,3.64,3.39,3.17,2.39,3.37,4.71,2.74,3.96,2.46,2.26,2.5,2.97,2.37,3.64,2.98,2.52,1.95,2.09,2.57,6.21,2.3,3.21,2.57,1.89,2.35,1.98,2.43,3.94,3.48,1.62,2.91,3.35,6.52,3.45,4.65,4.55,3.05,1.94,2.24,2.74,3.06,1.57,2.67,2.77,2.1,3.58,1.64,3.21,4.93,6.1,3.33,1.6,1.61,3.68,5.87,2.55,3.88,5.09,1.86,6.49,2.21,2.37,3.67,2.75,2.78,1.72,3.61,4.25,3.08,1.66,2.13,4.1,2.56,1.78,1.71,3.84,3.91,3.39,2.36,3.55,1.61,4.3,1.88,2.55,1.48,4.94,4.23,3.53,2.08,1.92,4.08,2.51,1.16,2.79,2.25,4.08,4.51,3.44,2.77,3.97,3.54,2.52,1.73,4.87,5.39,3.78,3.12,3.14,2.56,2.54,2.3,1.61,4.31,6.91,3.89,6.1,3.25,2.38,4.03,1.7,5.12,2.62,1.81,5.38,2.46,6.43,3.34,4.78,6.88,4.01,4,2.39,4.07,4.15,5.04,2.88,4.32,2.33,2.92,4.8,2.33,1.88,1.92,4.22,3.96,5.16,1.83,2.83,3.48,2.71,6.05,2.46,1.69,2.22,3.18,3.11,4.29,1.91,2.68,3.88,2.77,5.59,1.23,3.11,2.83,2.75,1.68],"New design":[2.25,1.25,2.23,2.19,2.82,1.33,1.57,2.02,2.52,1.67,2.35,3.46,2.14,2.48,5.17,2.09,3.02,1.86,2.8,2.5,1.91,1.81,3.19,2.4,2.57,2.8,2.75,5.62,3.37,1.76,2.44,2.22,2.43,1.89,1.65,3.9,3.12,1.97,2.45,2.98,1.27,1.98,2.51,2.3,2.96,3.37,3.12,2.41,1.43,2.51,3.17,2.18,1.5,1.95,2.04,1.3,1.77,3.41,1.55,1.87,2,2.14,1.52,2.44,2.82,1.61,2.03,1.72,2.36,2.1,2.4,1.47,2.56,3.62,1.79,3.21,1.86,2.22,2.94,2.2,2.21,2.31,3.38,1.88,1.76,2.02,1.82,2.22,2.38,2.5,1.64,3.69,1.08,1.72,2.4,2.79,4.08,2.83,1.51,1.91,1.2,2.42,5.7,3.57,2.33,1.95,3.93,2.86,2.22,2.4,2.25,2.38,3.43,2.83,3.57,2.3,3.9,2.27,2.13,2.11,1.51,1.91,2.29,2.64,2.54,2.5,2.21,2.35,2.86,2.41,3.31,2.02,2.38,2.49,2.48,4.47,2.59,2.68,1.19,2.41,2.25,3.41,1.39,1.5,3.09,1.65,2.55,0.78,2.07,2.51,2.85,1.47,2.12,3.14,2.35,2.48,2.62,2.16,2.78,2.76,2.29,2.57,2.76,2.05,1.37,1.23,1.98,2.42,3.16,2.77,2.23,1.23,1.72,3.35,3.22,1.62,2.53,4.47,2.76,4.51,1.8,2.75,2.96,1.4,2.61,1.93,1.93,2.86,1.91,1.46,3.14,1.12,2.41,1.38,2.32,2.31,1.38,1.9,3.13,1.89,2.47,2.72,1.28,2.12,1.84,4.35,1.69,1.94,2.25,1.9,1.55,2.78,1.35,3.83,2.23,4.36,2.9,1.55,1.15,1.78,2.37,1.19,2.25,2.3,1.89,1.51,1.93,3.91,1.67,1.89,1.08,2.3,2.61,1.42,3.82,1.29,1.69,1.48,2.21,1.7,1.92,3,2.08,1.53,1.33,3.85,1.62,2.21,2.87,3.69,1.77,3.1,1.65,2.95,2.83,2.88,2.46,2.57,2.47,1.15,1.57,1.3,1.65,3.59,2.2,1.89,2.38,1.78,3.25,1.85,1.66,2.3,1.3,1.52,1.79,2.25,1.76,2.32,3.72,2.68,1.94,1.58,1.31,0.8,2.35,3.08,2.13,3.47,2.03,1.63,2.43,2.95,1.25,3.21,2.45,1.51,3.76,1.88,2.08,1.68],"New design + image fix":[1.78,1.16,1.62,1.93,1.72,1.63,1.41,2.13,1.38,1.83,1.61,1.55,0.81,1.24,1.19,1.63,1.66,1.4,2.52,1.37,1.42,1.18,1.45,1.39,1.65,1.13,2.22,1.34,0.88,1.76,2.16,1.17,1.7,2.39,2.91,2.53,1.22,1.44,1.81,1.54,1.03,0.77,2.31,1.07,1.26,1.26,0.99,1.3,4.1,0.77,1.79,0.98,1.59,2.09,2.23,1.2,1.88,1.42,2.13,1.46,1.03,1.06,2.07,1.23,1.52,1.54,1.26,1.28,1.65,1.4,1.51,1.15,1.58,2.04,1.79,1.38,1.57,1.7,1.79,0.91,1.34,1.18,2.43,2.02,1.33,1.61,1.61,1.5,1.56,2.3,0.8,1.17,2,1.38,1.23,2.26,1.66,1.48,1.21,2,1.65,2.31,1.97,2.26,1.32,1.17,2.18,1.37,1.86,1.14,2.39,1.64,1.26,1.32,2.19,0.93,2.15,1.34,1.66,0.79,1.57,2.19,1.39,1.27,1.6,2.19,1.07,1.2,1.29,1.8,1.44,2.52,2.27,1.73,1.07,1.33,1.95,1.5,1.5,1.23,1.62,1.7,1.19,1.19,2.5,0.89,1.15,3.02,1.92,2.08,1.92,1.54,0.96,2.46,1.91,1.56,1.73,2.25,1.49,3.09,2.79,1.61,1.51,1.26,1.39,1.39,1.67,1.24,1.32,1.78,1.77,1.57,2.03,1.44,1.8,1.76,1.78,2.86,3.31,1.25,2.75,1.63,1.26,1.15,1.28,1.18,1.15,0.66,1.28,1.59,1.41,1.6,1.47,1.93,1.83,1.77,1.65,2.3,1.62,1.48,2.06,1.4,2.33,2.03,1.65,1.38,1.33,2.62,1.43,2.27,2.07,1.69,1.21,1.97,1.24,1.94,1.1,2.12,1.38,1.44,1.06,1.85,2.2,1.73,1.53,1.69,1.75,2.19,1.58,1.28,1.23,1.87,0.91,1.75,1.72,1.85,1.55,1.97,1.87,1.59,1.53,2.35,1.9,1.61,1.3,1.45,2.01,2.21,1.59,1.08,1.72,1.82,1.35,1.5,1.87,1.99,1.65,1.13,2.08,1.15,2.24,1.03,1.48,2.31,1.3,1.84,1.4,1.52,2.17,1.49,1.95,1.13,1.54,1.9,1.97,1.58,1.68,1.65,2.09,1.63,1.37,1.32,2,1.72,2.05,1.84,1.72,0.93,1.32,1.18,1.13,2.07,2.25,1.7,1.65,2.53,2.28,0.94,2.46,1.54]};
+const COLORS = { 'Old site': '#9aa3b5', 'New design': '#f59e0b', 'New design + image fix': '#16a34a' };
+const NAMES = Object.keys(DATA);
+const S = {}; NAMES.forEach(n => S[n] = DATA[n].slice().sort((a, b) => a - b));
+const TARGET = 2.5;
+const hidden = new Set();
+const within = (n, t) => S[n].filter(v => v <= t).length / S[n].length * 100;
+table(['Version', 'Middle load', 'Within 2.5 s', 'Slowest'], NAMES.map(n => [n, quantile(S[n], .5).toFixed(2) + ' s', within(n, TARGET).toFixed(0) + '%', S[n][S[n].length - 1].toFixed(2) + ' s']));
+const render = mount((svg, w, h, animate) => {
+  const show = NAMES.filter(n => !hidden.has(n));
+  const m = { t: 16, r: 16, b: 40, l: 48 };
+  const x = linear(0, 7, m.l, w - m.r), y = linear(0, 100, h - m.b, m.t);
+  const g = el('g', {}, svg);
+  yGrid(g, y, [0, 25, 50, 75, 100], m.l, w - m.r, v => v + '%');
+  for (let v = 0; v <= 7; v++) text(g, x(v), h - m.b + 20, v + ' s', { class: 'tick', 'text-anchor': 'middle' });
+  el('line', { x1: x(TARGET), x2: x(TARGET), y1: m.t, y2: h - m.b, stroke: 'var(--ink)', 'stroke-width': 1.5, 'stroke-dasharray': '6 4' }, g);
+  text(g, x(TARGET) + 6, h - m.b - 8, '2.5 second target', { class: 'tick', style: 'fill:var(--ink);font-weight:700' });
+  const lg = el('g', {}, svg);
+  show.forEach(n => {
+    let d = 'M' + x(0) + ',' + y(0);
+    S[n].forEach((v, i) => { d += 'H' + x(Math.min(7, v)).toFixed(1) + 'V' + y((i + 1) / S[n].length * 100).toFixed(1); });
+    d += 'H' + x(7);
+    el('path', { d, fill: 'none', stroke: COLORS[n], 'stroke-width': 3, 'stroke-linejoin': 'round' }, lg);
+  });
+  reveal(svg, lg, 0, 0, w, h, animate, 1300);
+  const dots = show.map(n => [n, el('circle', { r: 6, fill: COLORS[n], stroke: 'var(--card)', 'stroke-width': 2, opacity: 0 }, svg)]);
+  const ts = steps(0.2, 7, 69);
+  scrub(svg, ts.map(x), m.t, h - m.b, (i, on) => {
+    dots.forEach(([n, d]) => { d.setAttribute('opacity', on ? 1 : 0); if (on) { d.setAttribute('cx', x(ts[i])); d.setAttribute('cy', y(within(n, ts[i]))); } });
+    if (!on) return;
+    const t = ts[i].toFixed(1);
+    return { y: m.t + 30, label: 'Within ' + t + ' seconds: ' + show.map(n => n + ' ' + within(n, ts[i]).toFixed(0) + ' percent').join(', '),
+      html: '<b>Loaded within ' + t + ' s</b><br>' + show.map(n => '<span style="color:' + COLORS[n] + '">&#9679;</span> ' + n + ': ' + within(n, ts[i]).toFixed(0) + '% of visits').join('<br>') };
+  });
+});
+legend(NAMES.map(n => ({ name: n, color: COLORS[n] })), (name, on) => { on ? hidden.delete(name) : hidden.add(name); render(true); });
+</script>
+</body>
+</html>

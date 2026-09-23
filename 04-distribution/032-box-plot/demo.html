@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Box Plot Example: Monthly rent in six neighborhoods | 100 Free Data Charts</title>
+<meta name="description" content="A working box plot made with HTML, CSS and vanilla JavaScript. Quartiles, whiskers, outliers and an option to show every point. One file, no library.">
+<link rel="canonical" href="https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/032-box-plot/demo.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* Change these colors to match your brand */
+:root {
+  --bg: #eef2f7;
+  --card: #ffffff;
+  --ink: #172335;
+  --muted: #5a687c;
+  --line: #e0e6ee;
+  --accent: #3558a8;
+  --soft: #e3eaf8;
+}
+* { box-sizing: border-box; margin: 0; }
+body { font-family: "Inter Tight", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; min-height: 100vh; }
+.page { max-width: 1160px; margin: 0 auto; padding: 28px 24px 40px; }
+.brand { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; font-size: .95rem; }
+.logo { font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+.logo b { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); display: inline-block; }
+.brand span:last-child { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px 30px 22px; }
+.head { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+h1 { font-size: clamp(1.35rem, 2.6vw, 1.8rem); line-height: 1.2; }
+.sub { color: var(--muted); margin-top: 6px; max-width: 60ch; }
+.take { margin-top: 14px; padding: 10px 14px; border-radius: 10px; background: var(--soft); font-weight: 500; display: inline-block; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
+.seg button { font: inherit; font-size: .9rem; border: 0; background: none; color: var(--muted); padding: 7px 12px; border-radius: 7px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--card); }
+#legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 4px; min-height: 8px; }
+.key { font: inherit; font-size: .9rem; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: none; color: var(--ink); padding: 5px 11px; border-radius: 99px; cursor: pointer; }
+.key:disabled { cursor: default; opacity: 1; }
+.key i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+.key[aria-pressed="false"] { opacity: .45; text-decoration: line-through; }
+#chart { height: 420px; margin-top: 6px; position: relative; }
+#chart svg { display: block; overflow: visible; }
+.grid { stroke: var(--line); }
+.axis { stroke: var(--muted); stroke-width: 1.2; }
+.tick { fill: var(--muted); font-size: 12px; }
+.label { fill: var(--ink); font-size: 13px; }
+.value { fill: var(--ink); font-size: 12px; font-weight: 700; }
+.hit { cursor: pointer; outline: none; transition: opacity .15s; }
+.hit:hover, .hit:focus-visible { opacity: .8; }
+.hit:focus-visible { stroke: var(--ink); stroke-width: 2; }
+.zone { outline: none; cursor: crosshair; }
+.zone:focus-visible { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 4 4; }
+.note { color: var(--muted); font-size: .85rem; margin-top: 10px; }
+details { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+summary { cursor: pointer; font-weight: 500; }
+table { border-collapse: collapse; margin-top: 12px; font-size: .9rem; width: 100%; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+td { font-variant-numeric: tabular-nums; }
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--ink); color: var(--card); padding: 8px 11px; border-radius: 8px; font-size: .85rem; line-height: 1.4; max-width: 240px; }
+#tip[hidden] { display: none; }
+button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+@media (max-width: 640px) {
+  .page { padding: 16px 12px 30px; }
+  .card { padding: 20px 16px 16px; }
+  #chart { height: 380px; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="brand"><span class="logo"><b aria-hidden="true"></b>Homefinder Rentals</span><span>One bedroom flats, September 2026</span></header>
+  <section class="card" aria-labelledby="title">
+    <div class="head">
+      <div>
+        <h1 id="title">Monthly rent in six neighborhoods</h1>
+        <p class="sub">The box holds the middle half of flats, the line inside is the middle rent, and the whiskers reach the usual range. Dots are unusual listings.</p>
+        <p class="take">Harbourside is the priciest area, with a middle rent of $2,140. Eastfield is the cheapest at $1,240.</p>
+      </div>
+      <div class="seg" role="group" aria-label="What to show"><button type="button" data-v="box" aria-pressed="true">Boxes</button><button type="button" data-v="all" aria-pressed="false">Boxes and every flat</button></div>
+    </div>
+    <div id="legend"></div>
+    <figure id="chart" aria-label="Monthly rent in six neighborhoods. Harbourside is the priciest area, with a middle rent of $2,140. Eastfield is the cheapest at $1,240. Use Tab to step through each value."></figure>
+    <p class="note">Source: Homefinder listings. Sample data for this demo.</p>
+    <details><summary>Show the data as a table</summary><table id="table"></table></details>
+  </section>
+</main>
+<div id="tip" hidden></div>
+<script>
+// Small helpers: SVG elements, scales, tooltip, legend and table.
+const NS = 'http://www.w3.org/2000/svg';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]static/.test(location.search);
+function el(tag, attrs, parent) {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs || {}) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function text(parent, x, y, str, attrs) {
+  const t = el('text', Object.assign({ x, y }, attrs || {}), parent);
+  t.textContent = str;
+  return t;
+}
+function linear(d0, d1, r0, r1) {
+  const f = v => r0 + (v - d0) / (d1 - d0) * (r1 - r0);
+  f.domain = [d0, d1];
+  return f;
+}
+function band(keys, r0, r1, pad) {
+  const step = (r1 - r0) / keys.length;
+  const bw = step * (1 - pad);
+  const f = k => r0 + keys.indexOf(k) * step + (step - bw) / 2;
+  f.bw = bw; f.step = step;
+  return f;
+}
+function niceTicks(min, max, count) {
+  const span = max - min;
+  const raw = span / count;
+  const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const m = raw / p;
+  const step = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+  const out = [];
+  for (let v = Math.ceil(min / step) * step; v <= max + step / 1e6; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+function niceMax(v, count) {
+  const t = niceTicks(0, v, count || 5);
+  const last = t[t.length - 1];
+  return last >= v ? last : last + (t[1] - t[0]);
+}
+function fmt(n, d) { return n.toLocaleString('en-US', { maximumFractionDigits: d == null ? 0 : d }); }
+function tween(dur, delay, fn) {
+  if (reduce) { fn(1); return; }
+  const start = performance.now() + (delay || 0);
+  fn(0);
+  function step(now) {
+    const t = Math.min(1, Math.max(0, (now - start) / dur));
+    fn(1 - Math.pow(1 - t, 3));
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const tip = document.getElementById('tip');
+function showTip(html, x, y) {
+  tip.innerHTML = html;
+  tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let left = x + 14, top = y - h - 12;
+  if (left + w > innerWidth - 8) left = x - w - 14;
+  if (top < 8) top = y + 16;
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+function hideTip() { tip.hidden = true; }
+function bindTip(node, label, html) {
+  node.setAttribute('tabindex', '0');
+  node.setAttribute('role', 'img');
+  node.setAttribute('aria-label', label);
+  node.classList.add('hit');
+  node.addEventListener('mousemove', e => showTip(html, e.clientX, e.clientY));
+  node.addEventListener('mouseleave', hideTip);
+  node.addEventListener('focus', () => { const r = node.getBoundingClientRect(); showTip(html, r.left + r.width / 2, r.top); });
+  node.addEventListener('blur', hideTip);
+}
+function yGrid(g, scale, ticks, x0, x1, format) {
+  ticks.forEach(v => {
+    const y = scale(v);
+    el('line', { x1: x0, x2: x1, y1: y, y2: y, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x0 - 10, y + 4, format(v), { class: 'tick', 'text-anchor': 'end' });
+  });
+}
+function xGrid(g, scale, ticks, y0, y1, format) {
+  ticks.forEach(v => {
+    const x = scale(v);
+    el('line', { x1: x, x2: x, y1: y0, y2: y1, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x, y1 + 20, format(v), { class: 'tick', 'text-anchor': 'middle' });
+  });
+}
+function legend(items, onToggle) {
+  const box = document.getElementById('legend');
+  box.innerHTML = '';
+  items.forEach(it => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'key';
+    b.setAttribute('aria-pressed', 'true');
+    b.innerHTML = '<i style="background:' + it.color + '"></i>' + it.name;
+    if (onToggle) b.onclick = () => {
+      const on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', on);
+      onToggle(it.name, on);
+    };
+    else b.disabled = true;
+    box.appendChild(b);
+  });
+}
+function table(head, rows) {
+  const t = document.getElementById('table');
+  t.innerHTML = '<thead><tr>' + head.map(h => '<th scope="col">' + h + '</th>').join('') + '</tr></thead><tbody>' +
+    rows.map(r => '<tr>' + r.map((c, i) => i ? '<td>' + c + '</td>' : '<th scope="row">' + c + '</th>').join('') + '</tr>').join('') + '</tbody>';
+}
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function linePath(pts, smooth) {
+  if (!smooth) return pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+  let d = 'M' + pts[0][0].toFixed(1) + ',' + pts[0][1].toFixed(1);
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    d += 'C' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ',' + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) + ' ' +
+      (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ',' + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) + ' ' + p2[0].toFixed(1) + ',' + p2[1].toFixed(1);
+  }
+  return d;
+}
+function areaPath(top, bottom, smooth) {
+  return linePath(top, smooth) + linePath(bottom.slice().reverse(), smooth).replace('M', 'L') + 'Z';
+}
+function arcPath(cx, cy, r0, r1, a0, a1) {
+  if (a1 - a0 >= Math.PI * 2 - 1e-6) a1 = a0 + Math.PI * 2 - 1e-4;
+  const large = a1 - a0 > Math.PI ? 1 : 0;
+  const p = (r, a) => (cx + r * Math.sin(a)).toFixed(2) + ',' + (cy - r * Math.cos(a)).toFixed(2);
+  let d = 'M' + p(r1, a0) + 'A' + r1 + ',' + r1 + ' 0 ' + large + ' 1 ' + p(r1, a1);
+  d += r0 > 0 ? 'L' + p(r0, a1) + 'A' + r0 + ',' + r0 + ' 0 ' + large + ' 0 ' + p(r0, a0) + 'Z' : 'L' + cx + ',' + cy + 'Z';
+  return d;
+}
+function polar(cx, cy, r, a) { return [cx + r * Math.sin(a), cy - r * Math.cos(a)]; }
+function quantile(sorted, p) { const i = (sorted.length - 1) * p, lo = Math.floor(i), hi = Math.ceil(i); return sorted[lo] + (sorted[hi] - sorted[lo]) * (i - lo); }
+function kde(values, xs, bw) { const k = 1 / (Math.sqrt(2 * Math.PI) * bw * values.length); return xs.map(x => [x, values.reduce((a, v) => a + Math.exp(-0.5 * Math.pow((x - v) / bw, 2)), 0) * k]); }
+function steps(a, b, n) { return Array.from({ length: n }, (v, i) => a + (b - a) * i / (n - 1)); }
+function seeded(seed) { return () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; }
+let clipCount = 0;
+function reveal(svg, g, x, y, w, h, animate, dur) {
+  const id = 'clip' + (++clipCount);
+  const r = el('rect', { x, y, width: w, height: h }, el('clipPath', { id }, el('defs', {}, svg)));
+  g.setAttribute('clip-path', 'url(#' + id + ')');
+  const draw = t => r.setAttribute('width', w * t);
+  animate ? tween(dur || 1100, 0, draw) : draw(1);
+}
+function scrub(svg, xs, top, bottom, info) {
+  const guide = el('line', { y1: top, y2: bottom, class: 'axis', 'stroke-dasharray': '3 4', opacity: 0 }, svg);
+  const half = xs.length > 1 ? (xs[1] - xs[0]) / 2 : 20;
+  const x0 = xs[0] - half;
+  const zone = el('rect', { x: x0, y: top, width: xs[xs.length - 1] - xs[0] + half * 2, height: bottom - top, fill: 'transparent', tabindex: 0, class: 'zone', role: 'img',
+    'aria-label': 'Chart area. Use the left and right arrow keys to read each value.' }, svg);
+  let cur = -1;
+  function off() { guide.setAttribute('opacity', 0); info(-1, false); hideTip(); }
+  function go(i, cx, cy) {
+    i = Math.max(0, Math.min(xs.length - 1, i)); cur = i;
+    guide.setAttribute('x1', xs[i]); guide.setAttribute('x2', xs[i]); guide.setAttribute('opacity', 1);
+    const r = info(i, true);
+    zone.setAttribute('aria-label', r.label);
+    if (cx == null) { const b = svg.getBoundingClientRect(); cx = b.left + xs[i]; cy = b.top + (r.y != null ? r.y : top + 30); }
+    showTip(r.html, cx, cy);
+  }
+  function near(px) { let best = 0, bd = Infinity; xs.forEach((x, i) => { const d = Math.abs(x - px); if (d < bd) { bd = d; best = i; } }); return best; }
+  zone.addEventListener('mousemove', e => go(near(e.clientX - svg.getBoundingClientRect().left), e.clientX, e.clientY));
+  zone.addEventListener('mouseleave', off);
+  zone.addEventListener('blur', off);
+  zone.addEventListener('focus', () => go(cur < 0 ? xs.length - 1 : cur));
+  zone.addEventListener('keydown', e => {
+    const k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowLeft') { e.preventDefault(); go((cur < 0 ? xs.length - 1 : cur) + (k === 'ArrowRight' ? 1 : -1)); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(xs.length - 1); }
+  });
+  return zone;
+}
+function mount(draw) {
+  const box = document.getElementById('chart');
+  let last = 0;
+  function render(animate) {
+    const w = box.clientWidth, h = box.clientHeight;
+    box.innerHTML = '';
+    const svg = el('svg', { viewBox: '0 0 ' + w + ' ' + h, width: w, height: h }, box);
+    draw(svg, w, h, animate);
+  }
+  new ResizeObserver(() => {
+    if (Math.abs(box.clientWidth - last) < 2) return;
+    const first = last === 0;
+    last = box.clientWidth;
+    render(first);
+  }).observe(box);
+  return render;
+}
+function buttons(onPick) {
+  document.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    onPick(b.dataset.v);
+  });
+}
+
+// The chart
+const DATA = {"Harbourside":[2340,1980,2210,2110,2350,2380,2060,2380,2300,2130,2220,2330,2070,1980,2480,2150,2000,2270,1770,2170,1800,2040,1690,1970,2380,2100,1840,2600,1990,2530,2020,1780,2620,2040,2350,2460,1820,2170,2000,2310],"Old Town":[1780,1520,1790,1940,1720,1900,1670,1770,1850,1810,2040,1980,1950,1930,1810,1540,2000,2140,1830,1730,1770,2030,1840,1580,1750,1620,1740,1600,1600,2090,2000,1450,1580,1690,1700,1500,1960,1450,1920,1920],"Northgate":[1370,1320,1430,1440,1110,1240,1500,1410,1360,1280,1320,1310,1830,1240,1650,1490,1450,1450,1370,1660,1500,1420,1400,1450,1250,1370,1330,1510,1510,1150,1390,1570,1230,1250,1570,1400,1360,1240,1450,1340],"Riverside":[1700,1750,1820,1580,1530,1660,1630,1690,1530,1600,1510,1510,1690,1920,1530,1790,1730,1680,1810,1520,1780,1720,830,1740,1790,2110,1400,1670,1730,1420,1930,1760,1460,1370,1550,2210,2160,1070,1220,1810,2650,2780],"Parkview":[1510,1420,1640,1550,1580,1580,1340,1760,1450,1730,1650,1540,1560,1520,1210,1470,1610,1250,1270,1720,1670,1260,1610,1520,1700,1470,1490,1400,1560,1510,1420,1470,1400,1640,1350,1260,1360,1720,1440,1650],"Eastfield":[1290,1120,1290,1260,1180,1090,1180,1010,1150,1110,1250,1240,1100,1310,1360,1200,1090,1260,850,1110,1270,1470,1090,1400,1510,1450,870,1340,1220,1330,1170,1110,1160,1400,1310,1150,1240,1310,1270,1180,1850]};
+const money = v => '$' + fmt(v);
+const STATS = Object.entries(DATA).map(([name, v]) => {
+  const s = v.slice().sort((a, b) => a - b), q1 = quantile(s, .25), q3 = quantile(s, .75), iqr = q3 - q1;
+  const inside = s.filter(x => x >= q1 - 1.5 * iqr && x <= q3 + 1.5 * iqr);
+  return { name, s, q1, q3, med: quantile(s, .5), lo: inside[0], hi: inside[inside.length - 1], out: s.filter(x => x < q1 - 1.5 * iqr || x > q3 + 1.5 * iqr) };
+}).sort((a, b) => b.med - a.med);
+let mode = 'box';
+legend([{ name: 'Middle half of flats', color: 'var(--soft)' }, { name: 'Middle rent', color: 'var(--accent)' }, { name: 'Unusual listing', color: '#d1495b' }]);
+table(['Neighborhood', 'Lowest usual', 'Lower quarter', 'Middle', 'Upper quarter', 'Highest usual', 'Flats'], STATS.map(s => [s.name, money(s.lo), money(s.q1), money(s.med), money(s.q3), money(s.hi), s.s.length]));
+const render = mount((svg, w, h, animate) => {
+  const small = w < 560;
+  const m = { t: 16, r: 10, b: small ? 76 : 40, l: 56 };
+  const y = linear(800, 3000, h - m.b, m.t);
+  const x = band(STATS.map(s => s.name), m.l, w - m.r, small ? 0.35 : 0.5);
+  const g = el('g', {}, svg);
+  yGrid(g, y, niceTicks(800, 3000, 5), m.l, w - m.r, money);
+  const rnd = seeded(7);
+  STATS.forEach((s, i) => {
+    const cx = x(s.name) + x.bw / 2;
+    const nl = text(g, cx, h - m.b + 22, s.name, { class: 'label', 'text-anchor': small ? 'end' : 'middle' });
+    if (small) nl.setAttribute('transform', 'rotate(-35 ' + cx + ' ' + (h - m.b + 14) + ')');
+    const grp = el('g', {}, g);
+    el('line', { x1: cx, x2: cx, y1: y(s.lo), y2: y(s.q1), stroke: 'var(--ink)', 'stroke-width': 1.5 }, grp);
+    el('line', { x1: cx, x2: cx, y1: y(s.q3), y2: y(s.hi), stroke: 'var(--ink)', 'stroke-width': 1.5 }, grp);
+    [s.lo, s.hi].forEach(v => el('line', { x1: cx - x.bw / 4, x2: cx + x.bw / 4, y1: y(v), y2: y(v), stroke: 'var(--ink)', 'stroke-width': 1.5 }, grp));
+    const box = el('rect', { x: x(s.name), width: x.bw, y: y(s.q3), height: y(s.q1) - y(s.q3), rx: 4, fill: 'var(--soft)', stroke: 'var(--accent)', 'stroke-width': 1.5 }, grp);
+    el('line', { x1: x(s.name), x2: x(s.name) + x.bw, y1: y(s.med), y2: y(s.med), stroke: 'var(--accent)', 'stroke-width': 3 }, grp);
+    if (mode === 'all') s.s.forEach(v => el('circle', { cx: cx + (rnd() - 0.5) * x.bw * 0.8, cy: y(v), r: 2.6, fill: 'var(--ink)', 'fill-opacity': .35, 'pointer-events': 'none' }, grp));
+    s.out.forEach(v => { const o = el('circle', { cx, cy: y(v), r: 4.5, fill: '#d1495b' }, grp); bindTip(o, s.name + ' unusual listing: ' + v + ' dollars', '<b>' + s.name + '</b><br>Unusual listing: ' + money(v)); });
+    if (animate && !reduce) { grp.style.transformOrigin = cx + 'px ' + y(s.med) + 'px'; grp.style.transform = 'scaleY(0)'; grp.style.transition = 'transform .7s ' + (i * 0.07) + 's'; requestAnimationFrame(() => requestAnimationFrame(() => grp.style.transform = '')); }
+    bindTip(box, s.name + ': middle rent ' + s.med + ' dollars, middle half from ' + s.q1 + ' to ' + s.q3,
+      '<b>' + s.name + '</b><br>Middle rent: ' + money(s.med) + '<br>Middle half: ' + money(s.q1) + ' to ' + money(s.q3) + '<br>Usual range: ' + money(s.lo) + ' to ' + money(s.hi) + '<br>' + s.s.length + ' flats');
+  });
+});
+buttons(v => { mode = v; render(false); });
+</script>
+</body>
+</html>
