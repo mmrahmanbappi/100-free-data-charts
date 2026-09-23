@@ -46,7 +46,13 @@ const CATEGORIES = [
     desc: '10 free relationship charts made with HTML, CSS and vanilla JavaScript. Scatter, bubble, heatmap, correlation matrix, connected scatter, hexbin, contour, radar, parallel coordinates, quadrant.',
     intro: 'These charts show how two or more measures relate to each other. Does price drop as miles go up? Which hours are busiest? Which campaign gave the best value? Start with a scatter plot, add size with a bubble chart, or use a heatmap when both measures are categories. Every chart here is one HTML file with no library.',
   },
-  { num: 6, slug: '06-flow-and-network', name: 'Flow and Network', ready: false },
+  {
+    num: 6, slug: '06-flow-and-network', name: 'Flow and Network', ready: true,
+    keywords: 'sankey diagram html, chord diagram javascript, network graph, arc diagram, alluvial diagram, tree diagram, dendrogram, org chart, flowchart, radial tree',
+    title: 'Free Flow and Network Charts in HTML and JavaScript: Sankey, Chord, Tree',
+    desc: '10 free flow and network charts made with HTML, CSS and vanilla JavaScript. Sankey, chord, arc, network graph, alluvial, tree, dendrogram, org chart, flowchart, radial tree.',
+    intro: 'Some data is about connections: where people go next, who knows whom, how a company or a website is organized. These charts show flows between steps, links between people and the shape of hierarchies. Every layout, from the Sankey bands to the force directed network, is written in plain JavaScript in a single HTML file.',
+  },
   { num: 7, slug: '07-dashboard-widgets', name: 'Dashboard Widgets', ready: false },
   { num: 8, slug: '08-maps-and-globes', name: 'Maps and Globes', ready: false },
   { num: 9, slug: '09-3d-charts', name: '3D Charts', ready: false },
@@ -948,7 +954,7 @@ regions.forEach(([name, size, shares]) => {
     ],
     glance: { best: 'Steps in a process where people drop out', data: 'A name and a count for each step, in order', avoid: 'Steps that are not in a fixed order.' },
     when: ['Online shop checkout steps', 'Sign up and onboarding flows', 'Sales pipelines from lead to deal', 'Job applications from applied to hired'],
-    instead: [['005-horizontal-bar-chart', 'You want exact comparisons without the funnel shape'], ['078-sankey-diagram', 'People can take different paths between steps']],
+    instead: [['005-horizontal-bar-chart', 'You want exact comparisons without the funnel shape'], ['051-sankey-diagram', 'People can take different paths between steps']],
     features: ['Centered bars that shrink with each step', 'Soft shapes between bars that show the flow', 'The number and share lost between every step', 'A switch between share of all visitors and step to step', 'Bars grow out from the middle on load', 'Keyboard support and a full data table'],
     code: `const steps = [['Visited', 48200], ['Viewed a product', 21700], ['Added to cart', 7900], ['Bought', 2600]];
 const cx = 320, maxW = 400, rowH = 60;
@@ -1651,6 +1657,327 @@ features.forEach(([name, effort, impact]) => {
       ['What is an effort and impact matrix?', 'It is a quadrant chart with effort on one axis and impact on the other. It helps teams pick work that gives the most value for the least effort.'],
       ['Where should the dividing lines go?', 'Usually at the middle of each scale, or at a meaningful value like a target or an average. Say what the lines mean so readers trust the groups.'],
       ['Can I move the dots in this template?', 'Yes. Drag any dot with a mouse or finger, or tab to it and use the arrow keys. The group and the data table update as you go.'],
+    ],
+  },
+  {
+    num: 51, cat: '06-flow-and-network', slug: '051-sankey-diagram', name: 'Sankey Diagram',
+    example: 'website visitors from source to landing page to outcome',
+    title: 'Free Sankey Diagram in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free Sankey diagram made with HTML, CSS and vanilla JavaScript. No library. Flows between steps sized by value, with hover highlights. One file to download.',
+    keywords: 'sankey diagram html, sankey chart javascript, sankey without library, flow diagram, user path chart, energy flow chart',
+    what: [
+      'A Sankey diagram shows how an amount flows from one set of steps to the next. Blocks stand for steps, and the bands between them get wider the more of the amount takes that path.',
+      'It is the best chart for questions like: where did our visitors come from, which page did they land on, and what did they do next? The widest bands show the most common paths at a glance.',
+    ],
+    glance: { best: 'Flows through two or more stages', data: 'A list of from, to and amount', avoid: 'Flows that loop back to an earlier step.' },
+    when: ['Website visitor paths', 'Energy or money flows in a system', 'Budgets from income to spending', 'Materials from source to product'],
+    instead: [['028-funnel-chart', 'Everyone follows the same single path'], ['055-alluvial-diagram', 'Your stages are points in time'], ['052-chord-diagram', 'Flows go both ways between the same groups']],
+    features: ['A Sankey layout written in about 25 lines of JavaScript', 'Bands colored by where visitors came from', 'Hover a block to highlight every band that passes through it', 'Hover a band to see the number and its share', 'Labels with a soft outline so they stay readable over bands', 'A data table with every flow'],
+    code: `const flows = [['Search', 'Home', 1800], ['Search', 'Blog', 1500], ['Social', 'Home', 900]];
+const left = { Search: [20, 200], Social: [240, 60] };   // y and height of each block
+const right = { Home: [40, 160], Blog: [220, 90] };
+const used = {}, filled = {};
+const scale = 0.06;
+
+flows.forEach(([from, to, n]) => {
+  const w = n * scale;
+  const y1 = left[from][0] + (used[from] || 0), y2 = right[to][0] + (filled[to] || 0);
+  used[from] = (used[from] || 0) + w; filled[to] = (filled[to] || 0) + w;
+  make('path', { d: 'M60,' + y1 + 'C300,' + y1 + ' 300,' + y2 + ' 540,' + y2 + 'L540,' + (y2 + w) + 'C300,' + (y2 + w) + ' 300,' + (y1 + w) + ' 60,' + (y1 + w) + 'Z', fill: '#4f5bd5', 'fill-opacity': 0.4 });
+});`,
+    faq: [
+      ['What is a Sankey diagram used for?', 'It shows how an amount moves between stages, like visitors from traffic source to page to sign up, or energy from source to use. Band width shows the amount on each path.'],
+      ['How is a Sankey diagram different from a funnel chart?', 'A funnel shows one path where people drop out. A Sankey shows many paths that split and join, so you can see where each group ends up.'],
+      ['Where does the name Sankey come from?', 'It is named after Matthew Sankey, an Irish engineer who used this style in 1898 to show the energy use of a steam engine.'],
+      ['How do I make a Sankey diagram without a library?', 'Place the blocks in columns with heights that match their totals, then draw each flow as a curved band from the right edge of one block to the left edge of the next. This template does it in plain JavaScript.'],
+    ],
+  },
+  {
+    num: 52, cat: '06-flow-and-network', slug: '052-chord-diagram', name: 'Chord Diagram',
+    example: 'customers switching between five phone networks',
+    title: 'Free Chord Diagram in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free chord diagram made with HTML, CSS and vanilla JavaScript. Two way flows between groups shown as ribbons, with hover highlights. One file to download.',
+    keywords: 'chord diagram, chord diagram javascript, chord chart html, circular flow chart, migration chart',
+    what: [
+      'A chord diagram arranges groups around a circle and joins them with ribbons. Each ribbon shows the flow between two groups, and its width at each end shows how much went in that direction.',
+      'It is made for two way flows, like customers switching between phone networks or people moving between cities. You can see at once who gains, who loses and which pairs swap the most.',
+    ],
+    glance: { best: 'Two way flows between a handful of groups', data: 'A table of how much moved from each group to each other group', avoid: 'More than about 8 groups. It turns into a tangle.' },
+    when: ['Customers switching between brands', 'People moving between cities or countries', 'Trade between regions', 'Messages or calls between teams'],
+    instead: [['051-sankey-diagram', 'Flows go one way through stages'], ['043-heatmap', 'You want a grid that is easier to read exactly']],
+    features: ['Arcs sized by how many people left each network', 'Ribbons drawn with SVG curves through the center', 'Each ribbon colored by the network that won the bigger share', 'Hover a network to highlight its ribbons and see its net gain', 'Hover a ribbon to see the numbers in both directions', 'A full from and to table'],
+    code: `const names = ['Nova', 'Beam', 'Pulse'];
+const m = [[0, 12, 8], [18, 0, 6], [9, 10, 0]];
+const cx = 200, cy = 160, r = 120;
+const total = m.flat().reduce((a, b) => a + b, 0);
+const pt = a => (cx + r * Math.sin(a)) + ',' + (cy - r * Math.cos(a));
+let a = 0; const spans = [];
+
+m.forEach((row, i) => { spans.push(row.map(v => { const s = [a, a + v / total * Math.PI * 2]; a = s[1]; return s; })); });
+for (let i = 0; i < 3; i++) for (let j = i + 1; j < 3; j++) {
+  const [s, t] = [spans[i][j], spans[j][i]];
+  make('path', { fill: '#7c83ff', 'fill-opacity': 0.5, d: 'M' + pt(s[0]) + 'A' + r + ',' + r + ' 0 0 1 ' + pt(s[1]) + 'Q' + cx + ',' + cy + ' ' + pt(t[0]) + 'A' + r + ',' + r + ' 0 0 1 ' + pt(t[1]) + 'Q' + cx + ',' + cy + ' ' + pt(s[0]) + 'Z' });
+}`,
+    faq: [
+      ['What is a chord diagram?', 'A chord diagram places groups around a circle and draws ribbons between them to show how much flows from each group to each other group.'],
+      ['How do you read a chord diagram?', 'Pick a group on the circle. Each ribbon leaving it goes to another group. The width of the ribbon at each end shows how much moved in that direction.'],
+      ['When is a chord diagram better than a Sankey diagram?', 'When flows go both ways between the same groups, like switching between networks. A Sankey is better when flows move forward through stages.'],
+      ['How many groups can a chord diagram show?', 'About 5 to 8. With more, ribbons get too thin and cross too often to follow.'],
+    ],
+  },
+  {
+    num: 53, cat: '06-flow-and-network', slug: '053-arc-diagram', name: 'Arc Diagram',
+    example: 'characters who share scenes in a novel',
+    title: 'Free Arc Diagram in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free arc diagram made with HTML, CSS and vanilla JavaScript. Connections between items drawn as arcs above a line, with hover focus. One file to download.',
+    keywords: 'arc diagram, arc diagram javascript, arc chart html, connection chart, character network',
+    what: [
+      'An arc diagram puts items in a row along a line and joins connected items with curved arcs above it. Thicker arcs mean stronger links, and bigger dots mean items with more connections.',
+      'It is a tidy way to show a network when the order of the items matters, like characters grouped by family. Because every item sits on one line, labels never collide the way they can in a tangled network graph.',
+    ],
+    glance: { best: 'Small networks where order or grouping matters', data: 'A list of items and a list of links with strengths', avoid: 'Large networks with hundreds of links.' },
+    when: ['Characters in a book, play or film', 'Songs or chapters that share themes', 'Teams that work together', 'Stations or stops with direct links'],
+    instead: [['054-network-graph', 'You want the clusters to form on their own'], ['052-chord-diagram', 'You have flows with a direction and amount']],
+    features: ['Arcs drawn with SVG arc paths above a single line', 'Arc width by number of shared scenes, dot size by total scenes', 'Arcs draw themselves on load', 'Hover a character to light up only their arcs', 'Sort by family or by most scenes', 'Tilted names on phones and a data table'],
+    code: `const people = ['Nora', 'Elias', 'Ruth', 'Iris', 'Tom'];
+const links = [[0, 1, 14], [0, 2, 9], [0, 3, 8], [3, 4, 7], [1, 2, 5]];
+const x = i => 60 + i * 120, base = 260;
+
+links.forEach(([a, b, n]) => {
+  const r = (x(b) - x(a)) / 2;
+  make('path', { d: 'M' + x(a) + ',' + base + 'A' + r + ',' + r + ' 0 0 1 ' + x(b) + ',' + base, fill: 'none', stroke: '#9c4a2f', 'stroke-width': 1 + n * 0.7, 'stroke-opacity': 0.5 });
+});
+people.forEach((p, i) => { drawCircle(x(i), base, 8, '#9c4a2f'); drawText(x(i), base + 26, p, 'middle'); });`,
+    faq: [
+      ['What is an arc diagram?', 'An arc diagram places items along a line and draws arcs between items that are connected. It is a simple way to show a network.'],
+      ['When should I use an arc diagram instead of a network graph?', 'Use an arc diagram when the order of items matters or when you want neat, readable labels. Use a network graph when you want groups to form naturally.'],
+      ['Does the order of items matter?', 'Yes. Putting related items next to each other gives short arcs and a cleaner picture. This template lets you sort by family or by number of scenes.'],
+      ['How many items can an arc diagram show?', 'Up to about 30 is comfortable. With more, the arcs overlap into a solid shape.'],
+    ],
+  },
+  {
+    num: 54, cat: '06-flow-and-network', slug: '054-network-graph', name: 'Network Graph',
+    example: 'who runs with whom in a running club',
+    title: 'Free Network Graph in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free force directed network graph made with HTML, CSS and vanilla JavaScript. Draggable nodes, groups and hover highlights. One file to download.',
+    keywords: 'network graph, force directed graph javascript, network diagram html, node link diagram, graph without library',
+    what: [
+      'A network graph shows things as dots, called nodes, and the links between them as lines. A force directed layout pushes all nodes apart and pulls linked nodes together, so tight groups form on their own.',
+      'It reveals the shape of a network: close knit groups, loners and the few people who link groups together. In this example, two members connect three groups that would otherwise barely meet.',
+    ],
+    glance: { best: 'Seeing groups and key connectors in a network', data: 'A list of items and a list of links', avoid: 'Very large networks without filtering.' },
+    when: ['Friends, members or team connections', 'Websites that link to each other', 'Products that are bought together', 'Emails or messages between people'],
+    instead: [['053-arc-diagram', 'You want a tidy layout with readable labels'], ['052-chord-diagram', 'Links have amounts and directions between a few groups']],
+    features: ['A force simulation written in about 20 lines of JavaScript', 'Nodes colored by group and sized by number of partners', 'Drag any member to rearrange the graph', 'Hover a member to light up only their running partners', 'The layout fits any screen size', 'A table sorted by the most connected members'],
+    code: `const nodes = [{}, {}, {}, {}, {}].map(() => ({ x: 200 + Math.random() * 100, y: 150 + Math.random() * 100 }));
+const links = [[0, 1], [1, 2], [2, 0], [2, 3], [3, 4]];
+
+for (let step = 0; step < 300; step++) {
+  nodes.forEach((a, i) => nodes.forEach((b, j) => {            // push apart
+    if (i >= j) return;
+    const dx = b.x - a.x, dy = b.y - a.y, d2 = dx * dx + dy * dy + 0.1, f = 400 / d2;
+    a.x -= dx * f; a.y -= dy * f; b.x += dx * f; b.y += dy * f;
+  }));
+  links.forEach(([i, j]) => {                                    // pull linked nodes together
+    const a = nodes[i], b = nodes[j], dx = b.x - a.x, dy = b.y - a.y, f = 0.02;
+    a.x += dx * f; a.y += dy * f; b.x -= dx * f; b.y -= dy * f;
+  });
+}
+links.forEach(([i, j]) => drawLine(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y, '#9aa'));
+nodes.forEach(n => drawCircle(n.x, n.y, 10, '#1f7a5a'));`,
+    faq: [
+      ['What is a force directed graph?', 'It is a network layout where nodes push away from each other and links pull connected nodes together, like springs. After many small steps, the layout settles into clear groups.'],
+      ['How many nodes can a network graph show?', 'A few hundred in the browser. For larger networks, filter to the part that matters or group nodes together.'],
+      ['Can I drag the nodes?', 'Yes. Grab any member and move them. The lines follow so you can untangle the view or pull a group apart.'],
+      ['What does a node in the middle of two groups mean?', 'It usually marks a connector: someone who links groups that would otherwise not meet. In the example, Sam and Priya play that role.'],
+    ],
+  },
+  {
+    num: 55, cat: '06-flow-and-network', slug: '055-alluvial-diagram', name: 'Alluvial Diagram',
+    example: 'customers changing plans over three years',
+    title: 'Free Alluvial Diagram in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free alluvial diagram made with HTML, CSS and vanilla JavaScript. Shows how groups change over time, with hover to follow a plan. One file to download.',
+    keywords: 'alluvial diagram, alluvial chart javascript, alluvial plot html, customer migration chart, plan change chart',
+    what: [
+      'An alluvial diagram shows how items move between groups over time. Each column is a point in time, blocks show the groups, and bands show items moving from one group to another between columns.',
+      'It is like a Sankey diagram where the stages are dates. It answers questions like: how many free users became paying customers, and how many of them later cancelled?',
+    ],
+    glance: { best: 'The same items changing groups over time', data: 'Counts of items moving between groups for each step in time', avoid: 'Many groups per column. Bands get too thin.' },
+    when: ['Customers moving between plans', 'Students changing subjects year to year', 'Voters or members changing groups', 'Staff moving between teams'],
+    instead: [['051-sankey-diagram', 'Your stages are steps in a process, not dates'], ['014-stacked-area-chart', 'You only care about the size of each group over time']],
+    features: ['Three columns for 2024, 2025 and 2026', 'Bands colored by the plan customers came from', 'Hover a block to see every band that passes through it', 'Hover a band to see how many stayed or moved', 'Bands reveal from left to right on load', 'A table of plan sizes each year'],
+    code: `const years = [[600, 300, 100], [370, 315, 165]];   // Free, Basic, Pro
+const moves = [[0, 0, 360], [0, 1, 120], [1, 1, 190], [1, 2, 60], [2, 2, 85]];
+const colors = ['#9aa4c4', '#4dabf7', '#7048e8'], k = 0.28, gap = 14;
+const tops = years.map(col => { let y = 20; return col.map(v => { const t = y; y += v * k + gap; return t; }); });
+const outUsed = [0, 0, 0], inUsed = [0, 0, 0];
+
+moves.forEach(([a, b, n]) => {
+  const w = n * k, y1 = tops[0][a] + outUsed[a], y2 = tops[1][b] + inUsed[b];
+  outUsed[a] += w; inUsed[b] += w;
+  make('path', { d: 'M80,' + y1 + 'C300,' + y1 + ' 300,' + y2 + ' 520,' + y2 + 'V' + (y2 + w) + 'C300,' + (y2 + w) + ' 300,' + (y1 + w) + ' 80,' + (y1 + w) + 'Z', fill: colors[a], 'fill-opacity': 0.45 });
+});`,
+    faq: [
+      ['What is an alluvial diagram?', 'It is a chart that shows how items move between groups across several points in time, using blocks for groups and bands for the moves.'],
+      ['What is the difference between an alluvial diagram and a Sankey diagram?', 'They look alike. A Sankey usually shows flow through steps of a process. An alluvial diagram shows the same items being grouped differently over time.'],
+      ['Why is it called alluvial?', 'The bands look like rivers splitting and joining, and alluvial means made by flowing water, like soil left by a river.'],
+      ['How many time points can an alluvial diagram show?', 'Three to five columns work well. With more, the chart gets wide and the bands hard to follow.'],
+    ],
+  },
+  {
+    num: 56, cat: '06-flow-and-network', slug: '056-tree-diagram', name: 'Tree Diagram',
+    example: 'a garden centre website map with monthly visits',
+    title: 'Free Tree Diagram in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free collapsible tree diagram made with HTML, CSS and vanilla JavaScript. A sitemap you can fold and unfold, sized by visits. One file to download.',
+    keywords: 'tree diagram html, collapsible tree javascript, tree chart without library, sitemap diagram, hierarchy tree',
+    what: [
+      'A tree diagram shows a hierarchy as branches. It starts from one root, splits into sections, and each section splits again, just like folders on a computer or pages on a website.',
+      'Folding branches open and closed keeps big trees easy to read. Adding size to the circles, like monthly visits, turns a plain sitemap into a map of where people actually go.',
+    ],
+    glance: { best: 'Hierarchies you want to read branch by branch', data: 'A nested list of items, with a value for each end item', avoid: 'Comparing sizes exactly. Use a treemap.' },
+    when: ['Website sitemaps', 'Folder and file structures', 'Product categories', 'Decision trees and family trees'],
+    instead: [['024-treemap', 'You want to compare sizes and use space fully'], ['060-radial-tree', 'You want a round layout for many end items'], ['058-org-chart', 'You are showing people and roles']],
+    features: ['A tidy tree layout that places each branch between its children', 'Circle size and branch width by monthly visits', 'Click or press Enter to fold and unfold sections', 'Folded sections turn dark so you know they hold more', 'Keyboard focus stays on the section you toggled', 'A table of every page with its visits'],
+    code: `const tree = { name: 'Home', kids: [{ name: 'Shop', kids: [{ name: 'Plants' }, { name: 'Tools' }] }, { name: 'Advice', kids: [{ name: 'Blog' }] }] };
+let row = 0;
+function place(node, depth) {
+  node.x = 60 + depth * 200;
+  if (node.kids) { node.kids.forEach(k => place(k, depth + 1)); node.y = (node.kids[0].y + node.kids[node.kids.length - 1].y) / 2; }
+  else node.y = 40 + row++ * 60;
+}
+place(tree, 0);
+(function draw(n) {
+  (n.kids || []).forEach(k => { make('path', { d: 'M' + n.x + ',' + n.y + 'C' + (n.x + 100) + ',' + n.y + ' ' + (k.x - 100) + ',' + k.y + ' ' + k.x + ',' + k.y, fill: 'none', stroke: '#b9d3c0', 'stroke-width': 2 }); draw(k); });
+  drawCircle(n.x, n.y, 8, '#2f855a'); drawText(n.x + 12, n.y + 4, n.name);
+})(tree);`,
+    faq: [
+      ['What is a tree diagram?', 'A tree diagram shows a hierarchy as a set of branches that start from one root and split into smaller and smaller parts.'],
+      ['How do I make a collapsible tree in JavaScript?', 'Keep a closed flag on each branch, skip its children when laying out the tree, and redraw when the branch is clicked. This template does that without a library.'],
+      ['How is the layout worked out?', 'End items get their own row, one after another. Each branch then sits halfway between its first and last child, and its depth sets how far right it goes.'],
+      ['Is a tree diagram the same as a dendrogram?', 'No. A tree diagram shows a fixed structure, like a sitemap. A dendrogram shows items grouped by how similar they are, and the branch length has meaning.'],
+    ],
+  },
+  {
+    num: 57, cat: '06-flow-and-network', slug: '057-dendrogram', name: 'Dendrogram',
+    example: 'grocery items that shoppers buy together',
+    title: 'Free Dendrogram in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free dendrogram made with HTML, CSS and vanilla JavaScript. A cluster tree with a movable cut line that colors the groups. One file to download.',
+    keywords: 'dendrogram, dendrogram javascript, cluster tree html, hierarchical clustering chart, similarity tree',
+    what: [
+      'A dendrogram is a tree that shows how items group together by how similar they are. Items that join close to the start are very alike, and items that only join near the end have little in common.',
+      'Drawing a line across the tree splits the items into groups. Cut early and you get many small groups, cut late and you get a few big ones. It is the usual way to show the result of a clustering analysis.',
+    ],
+    glance: { best: 'Showing groups found by similarity', data: 'The result of a clustering: which items join and at what distance', avoid: 'Structures that are not based on similarity, like an org chart.' },
+    when: ['Products bought together', 'Customers with similar habits', 'Songs, films or books with similar features', 'Survey answers or genes that behave alike'],
+    instead: [['056-tree-diagram', 'You have a fixed hierarchy, like a sitemap'], ['044-correlation-matrix', 'You want to see every pair of items']],
+    features: ['A cluster tree drawn with right angled lines', 'A cut line with three settings: 2, 4 or 8 groups', 'Groups below the cut line get their own color', 'Hover a join point to see which items it holds', 'The tree draws from left to right on load', 'A table that lists the items in each group'],
+    code: `const tree = { h: 0.6, k: [{ h: 0.2, k: [{ n: 'Bread' }, { n: 'Butter' }] }, { h: 0.15, k: [{ n: 'Pasta' }, { n: 'Sauce' }] }] };
+const x = h => 500 - h * 600;
+let row = 0;
+(function draw(n) {
+  if (!n.k) { n.y = 40 + row++ * 50; n.x = x(0); drawText(n.x + 8, n.y + 4, n.n); return; }
+  n.k.forEach(draw);
+  n.y = (n.k[0].y + n.k[n.k.length - 1].y) / 2; n.x = x(n.h);
+  n.k.forEach(c => make('path', { d: 'M' + c.x + ',' + c.y + 'H' + n.x + 'V' + n.y, fill: 'none', stroke: '#171c26', 'stroke-width': 2 }));
+})(tree);`,
+    faq: [
+      ['What is a dendrogram?', 'A dendrogram is a tree diagram that shows how items were grouped by similarity. The point where two branches join shows how different they are.'],
+      ['How do you read a dendrogram?', 'Items that join near zero are very similar. Follow the branches: the further along two items join, the less they have in common.'],
+      ['How do I choose how many groups to use?', 'Look for a place where branches join far apart, leaving a big gap. Cutting in that gap gives natural groups. In the example, a cut at 0.5 gives four clear groups.'],
+      ['What is hierarchical clustering?', 'It is a method that starts with every item on its own and keeps joining the two closest groups until everything is one group. A dendrogram shows every step of that process.'],
+    ],
+  },
+  {
+    num: 58, cat: '06-flow-and-network', slug: '058-org-chart', name: 'Org Chart',
+    example: 'the team structure of a design studio',
+    title: 'Free Org Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free org chart made with HTML, CSS and vanilla JavaScript. Collapsible teams, avatar initials and a phone friendly list view. One file to download.',
+    keywords: 'org chart html, organization chart javascript, org chart template free, company structure chart, team chart',
+    what: [
+      'An org chart, short for organization chart, shows who works in a company and who reports to whom. The leader sits at the top, team leads below, and their team members below them.',
+      'A good org chart helps new staff, clients and partners find the right person fast. Folding teams keeps a big company readable, and a list view makes it work on a phone.',
+    ],
+    glance: { best: 'People, roles and reporting lines', data: 'A name, role and manager for each person', avoid: 'Very large companies without folding or search.' },
+    when: ['Company about and team pages', 'Onboarding guides for new staff', 'Project team structures', 'Clubs, schools and volunteer groups'],
+    instead: [['056-tree-diagram', 'You are showing pages, files or categories'], ['030-circle-packing', 'You only need team sizes, not names']],
+    features: ['Cards with initials, name and role for every person', 'Each team has its own color', 'Click a team lead, or press Enter, to fold the team', 'Folded teams show how many people are hidden', 'Turns into an indented list on phones', 'A table of everyone and who they report to'],
+    code: `const ceo = { n: 'Maya Okafor', r: 'CEO' };
+const leads = [{ n: 'Leo Park', r: 'Design' }, { n: 'Sofia Alvarez', r: 'Engineering' }, { n: 'Grace Mensah', r: 'Clients' }];
+const card = (x, y, p) => { drawRect(x, y, 150, 46, '#e4ecfd'); drawText(x + 10, y + 20, p.n); drawText(x + 10, y + 37, p.r); };
+
+card(225, 10, ceo);
+drawLine(300, 56, 300, 80, '#5c6378', 1.5);
+drawLine(95, 80, 505, 80, '#5c6378', 1.5);
+leads.forEach((p, i) => { const x = 20 + i * 205; drawLine(x + 75, 80, x + 75, 100, '#5c6378', 1.5); card(x, 100, p); });`,
+    faq: [
+      ['What is an org chart?', 'An org chart is a diagram that shows the people in an organization, their roles and who reports to whom.'],
+      ['How do I make an org chart in HTML?', 'Lay out cards in rows by level, draw lines from each manager to their team, and add folding so big teams stay readable. This template does all of that in plain JavaScript.'],
+      ['How do I make an org chart work on a phone?', 'Switch to an indented list below a certain width, with each team listed under its lead. This template does that automatically.'],
+      ['What should each card show?', 'At least a name and a role. A photo or initials helps people recognize each other. Keep extra details, like email, for a tooltip or a profile page.'],
+    ],
+  },
+  {
+    num: 59, cat: '06-flow-and-network', slug: '059-flowchart', name: 'Flowchart',
+    example: 'how an online shop handles a return request',
+    title: 'Free Flowchart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free flowchart made with HTML, CSS and vanilla JavaScript. Steps, decisions and arrows, with example cases that light up their path. One file to download.',
+    keywords: 'flowchart html, flowchart javascript, process diagram html, decision flowchart, workflow diagram free',
+    what: [
+      'A flowchart shows the steps of a process and the choices along the way. Rectangles are steps, diamonds are yes or no questions, and arrows show what happens next.',
+      'It turns a written process into something anyone can follow in seconds. Lighting up the path for a real example, like a faulty item, shows exactly what the customer and the team will go through.',
+    ],
+    glance: { best: 'Processes with steps and decisions', data: 'A list of steps, questions and the arrows between them', avoid: 'Processes with dozens of branches. Split them up.' },
+    when: ['Customer service and returns processes', 'Sign up, approval and support workflows', 'Troubleshooting guides', 'Training material for new staff'],
+    instead: [['051-sankey-diagram', 'You want to show how many people took each path'], ['056-tree-diagram', 'You have a hierarchy, not a process']],
+    features: ['Steps, questions and start and finish shapes in plain SVG', 'Arrows with Yes and No labels', 'Buttons that light up the path for three example cases', 'The chosen path fades in step by step', 'Text wraps to fit each box on any screen', 'A table that writes out each path in words'],
+    code: `const steps = [['Request comes in', 150, 20, 'box'], ['Within 30 days?', 150, 100, 'question'], ['Refund', 150, 190, 'box']];
+
+steps.forEach(([label, x, y, kind]) => {
+  if (kind === 'question') make('polygon', { points: [[x + 90, y], [x + 180, y + 30], [x + 90, y + 60], [x, y + 30]].map(p => p.join(',')).join(' '), fill: '#fff3d6', stroke: '#d9a520' });
+  else drawRect(x, y, 180, 50, '#dcf0ee');
+  drawText(x + 90, y + (kind === 'question' ? 34 : 30), label, 'middle');
+});
+drawLine(240, 70, 240, 100, '#6a645a', 1.5);
+drawLine(240, 160, 240, 190, '#6a645a', 1.5);`,
+    faq: [
+      ['What do the shapes in a flowchart mean?', 'Rounded shapes mark the start and end, rectangles are steps, diamonds are questions with yes or no answers, and arrows show the order.'],
+      ['How do I make a flowchart in HTML?', 'Place each step on a simple grid, draw rectangles and diamonds with SVG, and join them with arrow lines. This template does it in plain JavaScript with no library.'],
+      ['How can a flowchart be interactive?', 'Add example cases that highlight the path they take, like this template does. It helps readers see how the process works for a real situation.'],
+      ['How big should a flowchart be?', 'Keep it to about 15 shapes. If it grows past that, split it into smaller flowcharts that link to each other.'],
+    ],
+  },
+  {
+    num: 60, cat: '06-flow-and-network', slug: '060-radial-tree', name: 'Radial Tree',
+    example: 'every music genre and style in a record shop',
+    title: 'Free Radial Tree in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free radial tree made with HTML, CSS and vanilla JavaScript. A hierarchy laid out in a circle, with path highlights on hover. One file to download.',
+    keywords: 'radial tree, radial tree javascript, radial dendrogram html, circular tree chart, hierarchy circle',
+    what: [
+      'A radial tree is a tree diagram wrapped into a circle. The root sits in the middle, the first level forms an inner ring, and the end items spread around the outside.',
+      'Wrapping the tree gives the outer ring far more room than a straight line would, so it can hold many end items in a compact, eye catching layout.',
+    ],
+    glance: { best: 'Hierarchies with many end items', data: 'A nested list with a value for each end item', avoid: 'When people need to scan names quickly in a list.' },
+    when: ['Music, book or film categories', 'Product ranges in a shop', 'Topics and subtopics of a course', 'Family trees and language families'],
+    instead: [['056-tree-diagram', 'You want names in an easy top to bottom list'], ['025-sunburst-chart', 'Sizes matter more than the links']],
+    features: ['A tree laid out around a circle with curved branches', 'Genre circles sized by records in stock', 'Style labels turn to follow the circle and flip so they are never upside down', 'Hover a style to trace its path back to the middle', 'Dark theme with a color for each genre', 'A table of every style with its stock'],
+    code: `const genres = [['Rock', ['Punk', 'Indie', 'Metal']], ['Jazz', ['Swing', 'Bebop']], ['Pop', ['Dance', 'K-pop']]];
+const cx = 200, cy = 160, inner = 60, outer = 130;
+const all = genres.flatMap(g => g[1]);
+const at = (r, a) => [cx + r * Math.sin(a), cy - r * Math.cos(a)];
+let i = 0;
+
+drawCircle(cx, cy, 8, '#333');
+genres.forEach(([name, styles]) => {
+  const angles = styles.map(() => (i++ + 0.5) / all.length * Math.PI * 2);
+  const [gx, gy] = at(inner, (angles[0] + angles[angles.length - 1]) / 2);
+  drawLine(cx, cy, gx, gy, '#f4a259', 2); drawCircle(gx, gy, 6, '#f4a259');
+  angles.forEach((a, k) => { const [x, y] = at(outer, a); drawLine(gx, gy, x, y, '#f4a259'); drawCircle(x, y, 4, '#f4a259'); drawText(...at(outer + 12, a), styles[k], 'middle'); });
+});`,
+    faq: [
+      ['What is a radial tree?', 'A radial tree is a tree diagram arranged in a circle, with the root in the center and each level forming a ring further out.'],
+      ['Why use a radial tree instead of a normal tree?', 'The outer ring has much more room than a straight edge, so a radial tree fits many end items in a square space.'],
+      ['How do you keep labels readable in a radial tree?', 'Rotate each label to point away from the center, and flip labels on the left half so they read left to right. This template does both.'],
+      ['Is a radial tree the same as a sunburst chart?', 'They show the same kind of data. A radial tree draws branches and dots, while a sunburst fills rings with sized pieces.'],
     ],
   },
 ];

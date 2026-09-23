@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Org Chart Example: Who does what at Brightwave Studio | 100 Free Data Charts</title>
+<meta name="description" content="A working org chart made with HTML, CSS and vanilla JavaScript. Collapsible teams, avatar initials and a phone friendly list view. One file, no library.">
+<link rel="canonical" href="https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/058-org-chart/demo.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* Change these colors to match your brand */
+:root {
+  --bg: #f2f4f8;
+  --card: #ffffff;
+  --ink: #171c29;
+  --muted: #5c6378;
+  --line: #e2e6ee;
+  --accent: #2f6fed;
+  --soft: #e4ecfd;
+}
+* { box-sizing: border-box; margin: 0; }
+body { font-family: "Inter Tight", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; min-height: 100vh; }
+.page { max-width: 1160px; margin: 0 auto; padding: 28px 24px 40px; }
+.brand { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; font-size: .95rem; }
+.logo { font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+.logo b { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); display: inline-block; }
+.brand span:last-child { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px 30px 22px; }
+.head { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+h1 { font-size: clamp(1.35rem, 2.6vw, 1.8rem); line-height: 1.2; }
+.sub { color: var(--muted); margin-top: 6px; max-width: 60ch; }
+.take { margin-top: 14px; padding: 10px 14px; border-radius: 10px; background: var(--soft); font-weight: 500; display: inline-block; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
+.seg button { font: inherit; font-size: .9rem; border: 0; background: none; color: var(--muted); padding: 7px 12px; border-radius: 7px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--card); }
+#legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 4px; min-height: 8px; }
+.key { font: inherit; font-size: .9rem; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: none; color: var(--ink); padding: 5px 11px; border-radius: 99px; cursor: pointer; }
+.key:disabled { cursor: default; opacity: 1; }
+.key i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+.key[aria-pressed="false"] { opacity: .45; text-decoration: line-through; }
+#chart { height: 440px; margin-top: 6px; position: relative; }
+#chart svg { display: block; overflow: visible; }
+.grid { stroke: var(--line); }
+.axis { stroke: var(--muted); stroke-width: 1.2; }
+.tick { fill: var(--muted); font-size: 12px; }
+.label { fill: var(--ink); font-size: 13px; }
+.value { fill: var(--ink); font-size: 12px; font-weight: 700; }
+.hit { cursor: pointer; outline: none; transition: opacity .15s; }
+.hit:hover, .hit:focus-visible { opacity: .8; }
+.hit:focus-visible { stroke: var(--ink); stroke-width: 2; }
+.zone { outline: none; cursor: crosshair; }
+.zone:focus-visible { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 4 4; }
+.note { color: var(--muted); font-size: .85rem; margin-top: 10px; }
+details { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+summary { cursor: pointer; font-weight: 500; }
+table { border-collapse: collapse; margin-top: 12px; font-size: .9rem; width: 100%; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+td { font-variant-numeric: tabular-nums; }
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--ink); color: var(--card); padding: 8px 11px; border-radius: 8px; font-size: .85rem; line-height: 1.4; max-width: 240px; }
+#tip[hidden] { display: none; }
+button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+@media (max-width: 640px) {
+  .page { padding: 16px 12px 30px; }
+  .card { padding: 20px 16px 16px; }
+  #chart { height: 620px; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="brand"><span class="logo"><b aria-hidden="true"></b>Brightwave Studio</span><span>Team structure, September 2026</span></header>
+  <section class="card" aria-labelledby="title">
+    <div class="head">
+      <div>
+        <h1 id="title">Who does what at Brightwave Studio</h1>
+        <p class="sub">Click a team lead, or tab to them and press Enter, to fold their team open or closed. On phones the chart turns into an easy list.</p>
+        <p class="take">15 people in four teams. Design and engineering are the biggest, with four people each.</p>
+      </div>
+      
+    </div>
+    <div id="legend"></div>
+    <figure id="chart" aria-label="Who does what at Brightwave Studio. 15 people in four teams. Design and engineering are the biggest, with four people each. Use Tab to step through each value."></figure>
+    <p class="note">Brightwave Studio and its people are made up for this demo.</p>
+    <details><summary>Show the data as a table</summary><table id="table"></table></details>
+  </section>
+</main>
+<div id="tip" hidden></div>
+<script>
+// Small helpers: SVG elements, scales, tooltip, legend and table.
+const NS = 'http://www.w3.org/2000/svg';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]static/.test(location.search);
+function el(tag, attrs, parent) {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs || {}) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function text(parent, x, y, str, attrs) {
+  const t = el('text', Object.assign({ x, y }, attrs || {}), parent);
+  t.textContent = str;
+  return t;
+}
+function linear(d0, d1, r0, r1) {
+  const f = v => r0 + (v - d0) / (d1 - d0) * (r1 - r0);
+  f.domain = [d0, d1];
+  return f;
+}
+function band(keys, r0, r1, pad) {
+  const step = (r1 - r0) / keys.length;
+  const bw = step * (1 - pad);
+  const f = k => r0 + keys.indexOf(k) * step + (step - bw) / 2;
+  f.bw = bw; f.step = step;
+  return f;
+}
+function niceTicks(min, max, count) {
+  const span = max - min;
+  const raw = span / count;
+  const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const m = raw / p;
+  const step = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+  const out = [];
+  for (let v = Math.ceil(min / step) * step; v <= max + step / 1e6; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+function niceMax(v, count) {
+  const t = niceTicks(0, v, count || 5);
+  const last = t[t.length - 1];
+  return last >= v ? last : last + (t[1] - t[0]);
+}
+function fmt(n, d) { return n.toLocaleString('en-US', { maximumFractionDigits: d == null ? 0 : d }); }
+function tween(dur, delay, fn) {
+  if (reduce) { fn(1); return; }
+  const start = performance.now() + (delay || 0);
+  fn(0);
+  function step(now) {
+    const t = Math.min(1, Math.max(0, (now - start) / dur));
+    fn(1 - Math.pow(1 - t, 3));
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const tip = document.getElementById('tip');
+function showTip(html, x, y) {
+  tip.innerHTML = html;
+  tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let left = x + 14, top = y - h - 12;
+  if (left + w > innerWidth - 8) left = x - w - 14;
+  if (top < 8) top = y + 16;
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+function hideTip() { tip.hidden = true; }
+function bindTip(node, label, html) {
+  node.setAttribute('tabindex', '0');
+  node.setAttribute('role', 'img');
+  node.setAttribute('aria-label', label);
+  node.classList.add('hit');
+  node.addEventListener('mousemove', e => showTip(html, e.clientX, e.clientY));
+  node.addEventListener('mouseleave', hideTip);
+  node.addEventListener('focus', () => { const r = node.getBoundingClientRect(); showTip(html, r.left + r.width / 2, r.top); });
+  node.addEventListener('blur', hideTip);
+}
+function yGrid(g, scale, ticks, x0, x1, format) {
+  ticks.forEach(v => {
+    const y = scale(v);
+    el('line', { x1: x0, x2: x1, y1: y, y2: y, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x0 - 10, y + 4, format(v), { class: 'tick', 'text-anchor': 'end' });
+  });
+}
+function xGrid(g, scale, ticks, y0, y1, format) {
+  ticks.forEach(v => {
+    const x = scale(v);
+    el('line', { x1: x, x2: x, y1: y0, y2: y1, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x, y1 + 20, format(v), { class: 'tick', 'text-anchor': 'middle' });
+  });
+}
+function legend(items, onToggle) {
+  const box = document.getElementById('legend');
+  box.innerHTML = '';
+  items.forEach(it => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'key';
+    b.setAttribute('aria-pressed', 'true');
+    b.innerHTML = '<i style="background:' + it.color + '"></i>' + it.name;
+    if (onToggle) b.onclick = () => {
+      const on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', on);
+      onToggle(it.name, on);
+    };
+    else b.disabled = true;
+    box.appendChild(b);
+  });
+}
+function table(head, rows) {
+  const t = document.getElementById('table');
+  t.innerHTML = '<thead><tr>' + head.map(h => '<th scope="col">' + h + '</th>').join('') + '</tr></thead><tbody>' +
+    rows.map(r => '<tr>' + r.map((c, i) => i ? '<td>' + c + '</td>' : '<th scope="row">' + c + '</th>').join('') + '</tr>').join('') + '</tbody>';
+}
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function linePath(pts, smooth) {
+  if (!smooth) return pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+  let d = 'M' + pts[0][0].toFixed(1) + ',' + pts[0][1].toFixed(1);
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    d += 'C' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ',' + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) + ' ' +
+      (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ',' + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) + ' ' + p2[0].toFixed(1) + ',' + p2[1].toFixed(1);
+  }
+  return d;
+}
+function areaPath(top, bottom, smooth) {
+  return linePath(top, smooth) + linePath(bottom.slice().reverse(), smooth).replace('M', 'L') + 'Z';
+}
+function arcPath(cx, cy, r0, r1, a0, a1) {
+  if (a1 - a0 >= Math.PI * 2 - 1e-6) a1 = a0 + Math.PI * 2 - 1e-4;
+  const large = a1 - a0 > Math.PI ? 1 : 0;
+  const p = (r, a) => (cx + r * Math.sin(a)).toFixed(2) + ',' + (cy - r * Math.cos(a)).toFixed(2);
+  let d = 'M' + p(r1, a0) + 'A' + r1 + ',' + r1 + ' 0 ' + large + ' 1 ' + p(r1, a1);
+  d += r0 > 0 ? 'L' + p(r0, a1) + 'A' + r0 + ',' + r0 + ' 0 ' + large + ' 0 ' + p(r0, a0) + 'Z' : 'L' + cx + ',' + cy + 'Z';
+  return d;
+}
+function polar(cx, cy, r, a) { return [cx + r * Math.sin(a), cy - r * Math.cos(a)]; }
+function quantile(sorted, p) { const i = (sorted.length - 1) * p, lo = Math.floor(i), hi = Math.ceil(i); return sorted[lo] + (sorted[hi] - sorted[lo]) * (i - lo); }
+function kde(values, xs, bw) { const k = 1 / (Math.sqrt(2 * Math.PI) * bw * values.length); return xs.map(x => [x, values.reduce((a, v) => a + Math.exp(-0.5 * Math.pow((x - v) / bw, 2)), 0) * k]); }
+function steps(a, b, n) { return Array.from({ length: n }, (v, i) => a + (b - a) * i / (n - 1)); }
+function seeded(seed) { return () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; }
+let clipCount = 0;
+function reveal(svg, g, x, y, w, h, animate, dur) {
+  const id = 'clip' + (++clipCount);
+  const r = el('rect', { x, y, width: w, height: h }, el('clipPath', { id }, el('defs', {}, svg)));
+  g.setAttribute('clip-path', 'url(#' + id + ')');
+  const draw = t => r.setAttribute('width', w * t);
+  animate ? tween(dur || 1100, 0, draw) : draw(1);
+}
+function scrub(svg, xs, top, bottom, info) {
+  const guide = el('line', { y1: top, y2: bottom, class: 'axis', 'stroke-dasharray': '3 4', opacity: 0 }, svg);
+  const half = xs.length > 1 ? (xs[1] - xs[0]) / 2 : 20;
+  const x0 = xs[0] - half;
+  const zone = el('rect', { x: x0, y: top, width: xs[xs.length - 1] - xs[0] + half * 2, height: bottom - top, fill: 'transparent', tabindex: 0, class: 'zone', role: 'img',
+    'aria-label': 'Chart area. Use the left and right arrow keys to read each value.' }, svg);
+  let cur = -1;
+  function off() { guide.setAttribute('opacity', 0); info(-1, false); hideTip(); }
+  function go(i, cx, cy) {
+    i = Math.max(0, Math.min(xs.length - 1, i)); cur = i;
+    guide.setAttribute('x1', xs[i]); guide.setAttribute('x2', xs[i]); guide.setAttribute('opacity', 1);
+    const r = info(i, true);
+    zone.setAttribute('aria-label', r.label);
+    if (cx == null) { const b = svg.getBoundingClientRect(); cx = b.left + xs[i]; cy = b.top + (r.y != null ? r.y : top + 30); }
+    showTip(r.html, cx, cy);
+  }
+  function near(px) { let best = 0, bd = Infinity; xs.forEach((x, i) => { const d = Math.abs(x - px); if (d < bd) { bd = d; best = i; } }); return best; }
+  zone.addEventListener('mousemove', e => go(near(e.clientX - svg.getBoundingClientRect().left), e.clientX, e.clientY));
+  zone.addEventListener('mouseleave', off);
+  zone.addEventListener('blur', off);
+  zone.addEventListener('focus', () => go(cur < 0 ? xs.length - 1 : cur));
+  zone.addEventListener('keydown', e => {
+    const k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowLeft') { e.preventDefault(); go((cur < 0 ? xs.length - 1 : cur) + (k === 'ArrowRight' ? 1 : -1)); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(xs.length - 1); }
+  });
+  return zone;
+}
+function pointNav(svg, pts, box, info) {
+  const ring = el('circle', { r: 0, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 2.5, opacity: 0, 'pointer-events': 'none' }, svg);
+  const zone = el('rect', { x: box[0], y: box[1], width: box[2] - box[0], height: box[3] - box[1], fill: 'transparent', tabindex: 0, class: 'zone', role: 'img',
+    'aria-label': 'Chart area. Use the arrow keys to move from point to point.' }, svg);
+  const order = pts.map((p, i) => i).sort((a, b) => pts[a].x - pts[b].x || pts[a].y - pts[b].y);
+  let cur = -1;
+  function show(i, cx, cy) {
+    cur = i; const p = pts[i];
+    ring.setAttribute('cx', p.x); ring.setAttribute('cy', p.y); ring.setAttribute('r', (p.r || 5) + 4); ring.setAttribute('opacity', 1);
+    const r = info(i); zone.setAttribute('aria-label', r.label);
+    if (cx == null) { const b = svg.getBoundingClientRect(); cx = b.left + p.x; cy = b.top + p.y - (p.r || 5); }
+    showTip(r.html, cx, cy);
+  }
+  function off() { ring.setAttribute('opacity', 0); hideTip(); }
+  zone.addEventListener('mousemove', e => {
+    const b = svg.getBoundingClientRect(), mx = e.clientX - b.left, my = e.clientY - b.top;
+    let best = -1, bd = Infinity;
+    pts.forEach((p, i) => { const d = Math.hypot(p.x - mx, p.y - my) - (p.r || 0); if (d < bd) { bd = d; best = i; } });
+    if (best >= 0 && bd < 22) show(best, e.clientX, e.clientY); else off();
+  });
+  zone.addEventListener('mouseleave', off);
+  zone.addEventListener('blur', off);
+  zone.addEventListener('focus', () => { if (pts.length) show(cur < 0 ? order[0] : cur); });
+  zone.addEventListener('keydown', e => {
+    const k = e.key;
+    if (!['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(k) || !pts.length) return;
+    e.preventDefault();
+    let n = order.indexOf(cur < 0 ? order[0] : cur);
+    if (k === 'ArrowRight' || k === 'ArrowUp') n++; else if (k === 'ArrowLeft' || k === 'ArrowDown') n--; else if (k === 'Home') n = 0; else n = order.length - 1;
+    show(order[Math.max(0, Math.min(order.length - 1, n))]);
+  });
+  return zone;
+}
+function labelSpot(taken, cands, lw, lh, bounds) {
+  for (const [x, y, a] of cands) {
+    const x0 = a === 'end' ? x - lw : a === 'middle' ? x - lw / 2 : x;
+    const r = [x0 - 2, y - lh, x0 + lw + 2, y + 3];
+    if (bounds && (r[0] < bounds[0] || r[2] > bounds[2] || r[1] < bounds[1] || r[3] > bounds[3])) continue;
+    if (!taken.some(t => r[0] < t[2] && r[2] > t[0] && r[1] < t[3] && r[3] > t[1])) { taken.push(r); return [x, y, a]; }
+  }
+  return null;
+}
+function mount(draw) {
+  const box = document.getElementById('chart');
+  let last = 0;
+  function render(animate) {
+    const w = box.clientWidth, h = box.clientHeight;
+    box.innerHTML = '';
+    const svg = el('svg', { viewBox: '0 0 ' + w + ' ' + h, width: w, height: h }, box);
+    draw(svg, w, h, animate);
+  }
+  new ResizeObserver(() => {
+    if (Math.abs(box.clientWidth - last) < 2) return;
+    const first = last === 0;
+    last = box.clientWidth;
+    render(first);
+  }).observe(box);
+  return render;
+}
+function buttons(onPick) {
+  document.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    onPick(b.dataset.v);
+  });
+}
+
+// The chart
+const TEAM = ['#2f6fed', '#e8590c', '#2b8a3e', '#ae3ec9'];
+const ORG = { n: 'Maya Okafor', r: 'Founder and CEO', kids: [
+  { n: 'Leo Park', r: 'Head of Design', t: 0, kids: [{ n: 'Aisha Rahman', r: 'Senior Designer' }, { n: 'Tom Becker', r: 'Designer' }, { n: 'Priya Nair', r: 'Illustrator' }] },
+  { n: 'Sofia Alvarez', r: 'Head of Engineering', t: 1, kids: [{ n: 'Dan Kowalski', r: 'Front end Developer' }, { n: 'Mei Lin', r: 'Back end Developer' }, { n: 'Omar Haddad', r: 'Developer' }] },
+  { n: 'Grace Mensah', r: 'Client Director', t: 2, kids: [{ n: 'Ben Carter', r: 'Account Manager' }, { n: 'Lucia Rossi', r: 'Project Manager' }] },
+  { n: 'James Walsh', r: 'Operations Manager', t: 3, kids: [{ n: 'Hana Sato', r: 'Finance' }, { n: 'Kofi Asante', r: 'Office and People' }] }
+] };
+ORG.kids.forEach(l => l.kids.forEach(k => k.t = l.t));
+const initials = n => n.split(' ').map(p => p[0]).join('');
+legend(ORG.kids.map(l => ({ name: l.r.replace('Head of ', '').replace(' Director', ' services').replace(' Manager', ''), color: TEAM[l.t] })));
+table(['Name', 'Role', 'Reports to'], [[ORG.n, ORG.r, '']].concat(ORG.kids.flatMap(l => [[l.n, l.r, ORG.n]].concat(l.kids.map(k => [k.n, k.r, l.n])))));
+const render = mount((svg, w, h, animate) => {
+  const small = w < 700;
+  const g = el('g', {}, svg);
+  const card = (x, y, cw, p, color, lead) => {
+    const grp = el('g', { tabindex: 0, role: 'button', class: 'hit' }, g);
+    el('rect', { x, y, width: cw, height: 50, rx: 10, fill: 'var(--card)', stroke: color || 'var(--line)', 'stroke-width': color ? 2 : 1.5 }, grp);
+    el('circle', { cx: x + 25, cy: y + 25, r: 16, fill: color || 'var(--ink)' }, grp);
+    text(grp, x + 25, y + 30, initials(p.n), { 'text-anchor': 'middle', style: 'fill:#fff;font-size:12px;font-weight:700', 'pointer-events': 'none' });
+    text(grp, x + 48, y + 21, p.n, { class: 'label', style: 'font-weight:700;font-size:13px' });
+    text(grp, x + 48, y + 38, p.r + (lead && p.closed ? '  (+' + p.kids.length + ')' : ''), { class: 'tick' });
+    grp.setAttribute('aria-label', p.n + ', ' + p.r + (lead ? '. Team of ' + (p.kids.length + 1) + '. Press Enter to ' + (p.closed ? 'open' : 'fold') + ' the team.' : ''));
+    if (lead) {
+      grp.style.cursor = 'pointer';
+      const toggle = () => { p.closed = !p.closed; render(false); const again = [...document.querySelectorAll('#chart g[role=button]')].find(x2 => x2.getAttribute('aria-label').startsWith(p.n)); if (again) again.focus({ preventScroll: true }); };
+      grp.addEventListener('click', toggle);
+      grp.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+    }
+    return grp;
+  };
+  if (small) {
+    let y = 4; const cw = w - 30;
+    card(0, y, cw, ORG, null, false); y += 64;
+    ORG.kids.forEach(l => {
+      el('path', { d: 'M12,' + (y - 14) + 'V' + (y + 25) + 'H20', fill: 'none', stroke: 'var(--line)', 'stroke-width': 2 }, g);
+      card(20, y, cw - 20, l, TEAM[l.t], true); y += 58;
+      if (!l.closed) l.kids.forEach(k => { el('path', { d: 'M32,' + (y - 8) + 'V' + (y + 25) + 'H40', fill: 'none', stroke: TEAM[l.t], 'stroke-opacity': .4, 'stroke-width': 2 }, g); card(40, y, cw - 40, k, null, false); y += 58; });
+    });
+    svg.setAttribute('height', y); svg.setAttribute('viewBox', '0 0 ' + w + ' ' + y); document.getElementById('chart').style.height = y + 'px';
+  } else {
+    const cw = Math.min(220, (w - 40) / 4 - 16), colW = (w - 20) / 4;
+    const top = 8, y1 = 110, y2 = 196;
+    card(w / 2 - cw / 2, top, cw, ORG, null, false);
+    el('path', { d: 'M' + w / 2 + ',' + (top + 50) + 'V' + (top + 76) + 'M' + (10 + colW / 2) + ',' + (top + 76) + 'H' + (w - 10 - colW / 2), fill: 'none', stroke: 'var(--muted)', 'stroke-width': 1.5 }, g);
+    ORG.kids.forEach((l, i) => {
+      const cx = 10 + colW * i + colW / 2;
+      el('line', { x1: cx, x2: cx, y1: top + 76, y2: y1, stroke: 'var(--muted)', 'stroke-width': 1.5 }, g);
+      card(cx - cw / 2, y1, cw, l, TEAM[l.t], true);
+      if (!l.closed) {
+        el('line', { x1: cx - cw / 2 + 12, x2: cx - cw / 2 + 12, y1: y1 + 50, y2: y2 + (l.kids.length - 1) * 60 + 25, stroke: TEAM[l.t], 'stroke-opacity': .5, 'stroke-width': 1.5 }, g);
+        l.kids.forEach((k, j) => { const y = y2 + j * 60; el('line', { x1: cx - cw / 2 + 12, x2: cx - cw / 2 + 24, y1: y + 25, y2: y + 25, stroke: TEAM[l.t], 'stroke-opacity': .5, 'stroke-width': 1.5 }, g); card(cx - cw / 2 + 24, y, cw - 24, k, null, false); });
+      }
+    });
+  }
+  if (animate && !reduce) { g.style.opacity = 0; g.style.transition = 'opacity .7s'; requestAnimationFrame(() => requestAnimationFrame(() => g.style.opacity = 1)); }
+});
+</script>
+</body>
+</html>
