@@ -39,7 +39,13 @@ const CATEGORIES = [
     desc: '10 free distribution charts made with HTML, CSS and vanilla JavaScript. Histogram, box plot, violin, density, ridgeline, beeswarm, strip plot, pyramid, error bars, ECDF.',
     intro: 'An average only tells part of the story. These charts show how numbers are spread out: where most values sit, how wide the range is, and which ones are unusual. Use a histogram for one set of numbers, a box or violin plot to compare groups, and a beeswarm or strip plot when you want every single value on show. All ten are single HTML files with no library.',
   },
-  { num: 5, slug: '05-relationships', name: 'Relationships', ready: false },
+  {
+    num: 5, slug: '05-relationships', name: 'Relationships', ready: true,
+    keywords: 'scatter plot html, bubble chart javascript, heatmap, correlation matrix, radar chart, parallel coordinates, quadrant chart, contour plot',
+    title: 'Free Relationship Charts in HTML and JavaScript: Scatter, Bubble, Heatmap',
+    desc: '10 free relationship charts made with HTML, CSS and vanilla JavaScript. Scatter, bubble, heatmap, correlation matrix, connected scatter, hexbin, contour, radar, parallel coordinates, quadrant.',
+    intro: 'These charts show how two or more measures relate to each other. Does price drop as miles go up? Which hours are busiest? Which campaign gave the best value? Start with a scatter plot, add size with a bubble chart, or use a heatmap when both measures are categories. Every chart here is one HTML file with no library.',
+  },
   { num: 6, slug: '06-flow-and-network', name: 'Flow and Network', ready: false },
   { num: 7, slug: '07-dashboard-widgets', name: 'Dashboard Widgets', ready: false },
   { num: 8, slug: '08-maps-and-globes', name: 'Maps and Globes', ready: false },
@@ -1335,6 +1341,316 @@ drawLine(x(2.5), y(0), x(2.5), y(1), '#181d2b', 1.5, '6 4');`,
       ['How do you read an ECDF?', 'Pick a value on the bottom axis and go up to the line. The height is the share of values at or below that point. For example, 96% of visits loaded within 2.5 seconds.'],
       ['Why use an ECDF instead of a histogram?', 'An ECDF has no bins to choose, shows every value, and makes it easy to read percentiles and compare groups against a target.'],
       ['How do I find the median on an ECDF?', 'Go across from 50% on the side axis to the line, then down to the bottom axis. That value is the median.'],
+    ],
+  },
+  {
+    num: 41, cat: '05-relationships', slug: '041-scatter-plot', name: 'Scatter Plot',
+    example: 'used car prices against mileage',
+    title: 'Free Scatter Plot in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free scatter plot made with HTML, CSS and vanilla JavaScript. No library. Trend line, groups, hover and arrow key control. One file to download.',
+    keywords: 'scatter plot html, scatter plot javascript, scatter chart without library, svg scatter plot, trend line chart, xy chart',
+    what: [
+      'A scatter plot is a chart that shows the relationship between two numbers. Each item is a dot, placed by one value across the bottom and another up the side.',
+      'The pattern of dots tells the story. Dots that slope down from left to right mean that as one number goes up, the other goes down, like car prices falling as the miles add up. A trend line sums up that pattern in one line.',
+    ],
+    glance: { best: 'Seeing if two numbers move together', data: 'Two numbers for each item', avoid: 'Data over time. Use a line chart.' },
+    when: ['Price against age, size or mileage', 'Ad spend against sales', 'Study hours against test scores', 'Height against weight, or any two measures'],
+    instead: [['042-bubble-chart', 'You have a third number to show as size'], ['046-hexbin-plot', 'You have thousands of points that overlap'], ['011-line-chart', 'One of your numbers is time']],
+    features: ['120 dots in three colors for hatchback, sedan and SUV', 'A least squares trend line worked out in plain JavaScript', 'A label on the line that says what the slope means', 'Hover near a dot, or use the arrow keys, to read each car', 'Hide a car type from the key and the trend line updates', 'A switch to show or hide the trend line'],
+    code: `const cars = [[12000, 24500], [45000, 19800], [78000, 15200], [101000, 12900], [130000, 9100]];
+const x = m => 40 + m / 150000 * 540, y = p => 280 - p / 35000 * 260;
+cars.forEach(([miles, price]) => drawCircle(x(miles), y(price), 6, '#e4572e'));
+
+// trend line (least squares)
+const n = cars.length, mx = cars.reduce((a, c) => a + c[0], 0) / n, my = cars.reduce((a, c) => a + c[1], 0) / n;
+const b = cars.reduce((a, c) => a + (c[0] - mx) * (c[1] - my), 0) / cars.reduce((a, c) => a + (c[0] - mx) ** 2, 0);
+const a = my - b * mx;
+drawLine(x(0), y(a), x(150000), y(a + b * 150000), '#16222e', 2, '7 5');`,
+    faq: [
+      ['What is a scatter plot used for?', 'It shows whether two numbers are related. If the dots form a clear slope, one number tends to change when the other does.'],
+      ['How do I add a trend line to a scatter plot?', 'Work out a least squares line: find the average of each number, then the slope that best fits the dots. This template shows the exact code in about five lines.'],
+      ['Does a scatter plot show cause and effect?', 'No. It shows that two numbers move together, not that one causes the other. Something else may drive both.'],
+      ['What if my dots overlap too much?', 'Make them smaller and see through, or switch to a hexbin plot, which counts dots into hexagons.'],
+    ],
+  },
+  {
+    num: 42, cat: '05-relationships', slug: '042-bubble-chart', name: 'Bubble Chart',
+    example: 'ad campaigns compared on cost, conversion and budget',
+    title: 'Free Bubble Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free bubble chart made with HTML, CSS and vanilla JavaScript. Three numbers per item as x, y and size, grouped by color. One file to download.',
+    keywords: 'bubble chart html, bubble chart javascript, bubble chart without library, svg bubble chart, 3 variable chart',
+    what: [
+      'A bubble chart is a scatter plot where each dot is a bubble of a different size. It shows three numbers at once: one across the bottom, one up the side and one as the size of the bubble.',
+      'Color can add a fourth piece of information, like the channel of each campaign. It is a quick way to spot items that punch above their weight, like a small email campaign that beats big video spend.',
+    ],
+    glance: { best: 'Comparing items on three numbers at once', data: 'Three numbers for each item, plus an optional group', avoid: 'More than about 30 bubbles. It gets crowded.' },
+    when: ['Marketing campaigns by cost, results and budget', 'Countries by income, health and population', 'Products by price, rating and sales', 'Projects by cost, value and team size'],
+    instead: [['041-scatter-plot', 'You only have two numbers'], ['050-quadrant-chart', 'You want to sort items into four groups']],
+    features: ['Bubble area, not width, matches the budget so sizes are honest', 'Four colors for search, social, display and email', 'Labels that move to find space and hide only when there is none', 'A note on the chart that says where the best value is', 'Hover or use the arrow keys to read each campaign', 'Hide a channel from the key'],
+    code: `const campaigns = [['Loyalty points', 0.06, 8.8, 1200], ['Spring sale', 1.10, 4.8, 9000], ['Summer video', 0.35, 1.4, 15000]];
+const x = cpc => 40 + cpc / 1.6 * 540, y = cr => 280 - cr / 10 * 260;
+
+campaigns.forEach(([name, cpc, conv, budget]) => {
+  const r = Math.sqrt(budget) * 0.3; // area matches the budget
+  drawCircle(x(cpc), y(conv), r, '#5ad19a');
+  drawText(x(cpc) + r + 5, y(conv) + 4, name);
+});`,
+    faq: [
+      ['What is a bubble chart?', 'A bubble chart is a scatter plot where each point is a circle sized by a third number. It shows three measures for each item in one view.'],
+      ['How should bubble size be worked out?', 'Scale the area, not the radius. Use the square root of the value for the radius, otherwise big values look far bigger than they are.'],
+      ['How many bubbles can a bubble chart show?', 'Up to about 30 works well. With more, bubbles overlap and labels no longer fit.'],
+      ['What is the difference between a bubble chart and a scatter plot?', 'A scatter plot shows two numbers per item. A bubble chart adds a third one as size.'],
+    ],
+  },
+  {
+    num: 43, cat: '05-relationships', slug: '043-heatmap', name: 'Heatmap',
+    example: 'gym check-ins by day and hour',
+    title: 'Free Heatmap in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free heatmap made with HTML, CSS and vanilla JavaScript. A color grid of busy times with hover and full keyboard control. One file to download.',
+    keywords: 'heatmap html, heatmap javascript, heat map without library, calendar heatmap grid, color grid chart',
+    what: [
+      'A heatmap is a grid of squares where color shows a value. Rows and columns are two categories, like days and hours, and darker squares mean bigger numbers.',
+      'Patterns jump out at once: the after work rush, quiet weekend evenings, busy Monday. People read color faster than numbers, which is why heatmaps are so popular for times and schedules.',
+    ],
+    glance: { best: 'Patterns across two categories, like day and hour', data: 'A number for every row and column pair', avoid: 'When exact values matter more than the pattern.' },
+    when: ['Busy times for shops, gyms or websites', 'Sales by product and month', 'Support tickets by team and weekday', 'Any table of numbers people need to scan fast'],
+    instead: [['044-correlation-matrix', 'You want to show how measures relate to each other'], ['020-horizon-chart', 'You have one long time series per row']],
+    features: ['A 7 by 17 grid built from plain SVG squares', 'One color scale from pale to deep purple', 'Numbers inside the squares when there is room', 'Arrow keys move around the grid one square at a time', 'Tooltips with the share of the busiest hour', 'Short labels on phones and a full data table'],
+    code: `const days = ['Mon', 'Tue', 'Wed'];
+const counts = [[27, 40, 30, 15, 60, 103], [31, 48, 33, 14, 57, 95], [30, 50, 32, 13, 51, 90]];
+const max = 103, size = 40;
+
+counts.forEach((row, i) => {
+  drawText(40, 60 + i * size + 25, days[i], 'end');
+  row.forEach((v, j) => {
+    const t = v / max;
+    const color = 'rgb(' + Math.round(247 - 173 * t) + ',' + Math.round(240 - 220 * t) + ',' + Math.round(252 - 142 * t) + ')';
+    drawRect(50 + j * size, 60 + i * size, size - 3, size - 3, color);
+  });
+});`,
+    faq: [
+      ['What is a heatmap used for?', 'A heatmap shows patterns in a grid of numbers using color. It is common for busy times, schedules, sales by month and website clicks.'],
+      ['How do I choose colors for a heatmap?', 'Use one color going from light to dark for values that only go up. Use two colors meeting at a neutral middle when values can be above or below a midpoint.'],
+      ['Should I show numbers in a heatmap?', 'If there is room, yes. Color shows the pattern and the numbers give the exact value. On small screens, keep the numbers in the tooltip.'],
+      ['Is a heatmap the same as a choropleth map?', 'No. A heatmap is a grid. A choropleth colors areas on a real map, like countries or regions.'],
+    ],
+  },
+  {
+    num: 44, cat: '05-relationships', slug: '044-correlation-matrix', name: 'Correlation Matrix',
+    example: 'what drives daily sales at a cafe',
+    title: 'Free Correlation Matrix in HTML and JavaScript (Live Demo)',
+    desc: 'Free correlation matrix made with HTML, CSS and vanilla JavaScript. Color coded correlation values with plain English tooltips. One file to download.',
+    keywords: 'correlation matrix, correlation heatmap javascript, correlation chart html, correlogram, pearson correlation chart',
+    what: [
+      'A correlation matrix is a grid that shows how strongly each pair of measures rises and falls together. Each square holds a number from -1 to +1, and color makes the strong links easy to spot.',
+      'A value near +1 means the two go up together, near -1 means one goes up as the other goes down, and near 0 means there is no clear link. Only half the grid is shown, because the other half would repeat it.',
+    ],
+    glance: { best: 'Finding which measures are linked', data: 'Several numbers recorded for the same items or days', avoid: 'Proving cause and effect. It only shows links.' },
+    when: ['Sales against weather, footfall and day of week', 'Survey questions that tend to be answered alike', 'Health, fitness or sensor readings', 'Choosing which measures to track'],
+    instead: [['041-scatter-plot', 'You want to look closely at one pair'], ['043-heatmap', 'Your grid is two categories, not pairs of measures']],
+    features: ['Correlation values shown in a lower triangle so nothing repeats', 'Blue for together, red for opposite, fading to white near zero', 'Tooltips that explain each value in plain English', 'Every square can be reached with the Tab key', 'Numbers inside squares when there is room', 'A full correlation table for copying'],
+    code: `const names = ['Temperature', 'Iced drinks', 'Hot drinks'];
+const m = [[1, 0.86, -0.55], [0.86, 1, -0.36], [-0.55, -0.36, 1]];
+const size = 70;
+
+for (let i = 0; i < names.length; i++) {
+  for (let j = 0; j <= i; j++) {
+    const r = m[i][j], alpha = 0.1 + Math.abs(r) * 0.9;
+    drawRect(120 + j * size, 20 + i * size, size - 4, size - 4, (r >= 0 ? 'rgba(43,108,176,' : 'rgba(201,60,60,') + alpha + ')');
+    drawText(120 + j * size + 33, 20 + i * size + 38, r.toFixed(2), 'middle');
+  }
+  drawText(110, 20 + i * size + 38, names[i], 'end');
+}`,
+    faq: [
+      ['What is a correlation matrix?', 'It is a table of correlation values for every pair of measures, usually colored so strong links stand out. It is a quick way to see what is linked to what.'],
+      ['What is a good correlation value?', 'As a rough guide, above 0.7 or below -0.7 is strong, 0.4 to 0.7 is moderate, and below 0.2 is almost no link. What counts as useful depends on your field.'],
+      ['Why is only half of the matrix shown?', 'The grid is a mirror image: temperature against iced drinks is the same as iced drinks against temperature. Showing half avoids repeating every number.'],
+      ['Does correlation mean causation?', 'No. Two things can rise together because a third thing drives both. Weekends raise both footfall and pastry sales, for example.'],
+    ],
+  },
+  {
+    num: 45, cat: '05-relationships', slug: '045-connected-scatter-plot', name: 'Connected Scatter Plot',
+    example: 'monthly bike share trips against average temperature',
+    title: 'Free Connected Scatter Plot in HTML and JavaScript (Live Demo)',
+    desc: 'Free connected scatter plot made with HTML, CSS and vanilla JavaScript. Two measures over time joined in order, with a trend line. One file to download.',
+    keywords: 'connected scatter plot, connected scatter javascript, scatter plot with lines html, two variables over time chart',
+    what: [
+      'A connected scatter plot is a scatter plot where the dots are joined in time order. Each dot is one moment, placed by two measures, and the line shows the path from one moment to the next.',
+      'It shows how two things moved together over time. In this example, trips climb with temperature through spring, dip below the trend during the summer holidays, then come back down in autumn.',
+    ],
+    glance: { best: 'Two measures that change together over time', data: 'Two numbers for each point in time', avoid: 'Audiences new to charts. Label the path clearly.' },
+    when: ['Sales against price month by month', 'Trips or visitors against temperature', 'Two economic measures over the years', 'Speed against distance during a race'],
+    instead: [['012-multi-line-chart', 'You want both measures on a simple time axis'], ['041-scatter-plot', 'The order of the points does not matter']],
+    features: ['Twelve months joined by arrows so the order is clear', 'Month names beside every dot', 'A dashed trend line to compare each month against', 'July and August marked in a second color', 'Tooltips that say how far above or below the trend each month was', 'Arrow key support and a data table'],
+    code: `const temp = [3, 9, 17, 24, 19, 8], trips = [27, 44, 74, 88, 84, 43];
+const names = ['Jan', 'Mar', 'May', 'Jul', 'Sep', 'Nov'];
+const x = t => 40 + t / 26 * 540, y = n => 280 - (n - 20) / 80 * 260;
+const pts = temp.map((t, i) => [x(t), y(trips[i])]);
+
+make('path', { d: 'M' + pts.map(p => p.join(',')).join('L'), fill: 'none', stroke: '#0f8b7d', 'stroke-width': 2 });
+pts.forEach((p, i) => { drawCircle(p[0], p[1], 6, '#0f8b7d'); drawText(p[0] + 10, p[1] + 4, names[i]); });`,
+    faq: [
+      ['What is a connected scatter plot?', 'It is a scatter plot with the points joined in time order, so you can see how two measures changed together from one period to the next.'],
+      ['How do you read a connected scatter plot?', 'Follow the line from the first point to the last. Moving right means the bottom measure grew, moving up means the side measure grew.'],
+      ['Why add arrows to the line?', 'Without arrows, readers may not know which end is the start. Arrows and labels make the direction of time obvious.'],
+      ['When is a connected scatter plot better than two line charts?', 'When the link between the two measures is the story. Two line charts show each measure over time, but make it harder to see how they move together.'],
+    ],
+  },
+  {
+    num: 46, cat: '05-relationships', slug: '046-hexbin-plot', name: 'Hexbin Plot',
+    example: 'distance and fare for 3,000 taxi rides',
+    title: 'Free Hexbin Plot in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free hexbin plot made with HTML, CSS and vanilla JavaScript. Thousands of points grouped into hexagons, colored by count. One file to download.',
+    keywords: 'hexbin plot, hexbin chart javascript, hexagonal binning html, dense scatter plot, 2d histogram',
+    what: [
+      'A hexbin plot is a scatter plot for large data. Instead of drawing thousands of dots that pile on top of each other, it counts the points that fall in each hexagon and colors the hexagon by that count.',
+      'You can see where most of the data sits, which a crowded scatter plot hides. Hexagons are used instead of squares because they fit together neatly and their centers are all the same distance apart.',
+    ],
+    glance: { best: 'Thousands of points on two measures', data: 'Two numbers for each item, ideally 1,000 or more', avoid: 'Small data sets. A scatter plot shows each point.' },
+    when: ['Taxi or delivery rides by distance and price', 'Website visits by time on page and pages seen', 'Sensor readings with many samples', 'Property sales by size and price'],
+    instead: [['041-scatter-plot', 'You have fewer than about 500 points'], ['043-heatmap', 'Both of your measures are categories']],
+    features: ['3,000 rides counted into hexagons in plain JavaScript', 'A color scale from pale to deep blue by number of rides', 'A dashed line for the average fare formula', 'Hover or use the arrow keys to read each hexagon', 'Smaller hexagons on phones', 'A summary table by distance band'],
+    code: `const rides = [[2.1, 7.9], [4.5, 12.1], [4.8, 12.6], [5.1, 13.0], [12.4, 27.5], [4.6, 12.2]];
+const R = 14, dx = R * Math.sqrt(3), dy = R * 1.5;
+const x = km => 40 + km / 30 * 540, y = f => 280 - f / 70 * 260;
+const bins = {};
+
+rides.forEach(([km, fare]) => {
+  const row = Math.round(y(fare) / dy), col = Math.round((x(km) - (row % 2 ? dx / 2 : 0)) / dx);
+  const key = row + ',' + col;
+  bins[key] = (bins[key] || 0) + 1;
+});
+Object.entries(bins).forEach(([key, n]) => {
+  const [row, col] = key.split(',').map(Number), cx = col * dx + (row % 2 ? dx / 2 : 0), cy = row * dy;
+  const pts = [0, 1, 2, 3, 4, 5].map(k => (cx + R * Math.cos(Math.PI / 3 * k + Math.PI / 6)) + ',' + (cy + R * Math.sin(Math.PI / 3 * k + Math.PI / 6)));
+  make('polygon', { points: pts.join(' '), fill: n > 1 ? '#1f4fd1' : '#a9bff5' });
+});`,
+    faq: [
+      ['What is a hexbin plot?', 'It is a chart that groups many points into hexagon shaped bins and colors each hexagon by how many points it holds. It is used when a scatter plot has too many dots to read.'],
+      ['Why use hexagons instead of squares?', 'Hexagons fit together with no gaps and are closer to circles, so each bin covers a more even area. This makes patterns look smoother and fairer than with squares.'],
+      ['How big should the hexagons be?', 'Big enough that most hexagons hold several points, small enough to keep the shape. Try a few sizes. This template uses smaller hexagons on phones.'],
+      ['Is a hexbin plot the same as a 2D histogram?', 'It is one kind of 2D histogram. A 2D histogram can use squares or hexagons. Hexbin simply means it uses hexagons.'],
+    ],
+  },
+  {
+    num: 47, cat: '05-relationships', slug: '047-contour-plot', name: 'Contour Plot',
+    example: 'a hill walk with height lines and a trail',
+    title: 'Free Contour Plot in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free contour plot made with HTML, CSS and vanilla JavaScript. Height lines drawn with marching squares, a trail and hover height. One file to download.',
+    keywords: 'contour plot, contour map javascript, contour lines html, marching squares, topographic map chart, height map chart',
+    what: [
+      'A contour plot shows a surface on a flat map using lines. Each line joins points that share the same value, like the same height on a hill. Close lines mean a steep slope, far apart lines mean gentle ground.',
+      'Hikers know these lines from maps, but the same chart works for any value that changes across two measures, like temperature across a region or profit across different prices and ad budgets.',
+    ],
+    glance: { best: 'A value that changes smoothly across two measures', data: 'A value for every point on a grid', avoid: 'Scattered data without a smooth surface.' },
+    when: ['Hills and trail maps', 'Temperature or rainfall across an area', 'Results across two settings, like price and budget', 'Signal strength or noise across a room'],
+    instead: [['043-heatmap', 'Your grid has only a few rows and columns'], ['046-hexbin-plot', 'You have raw points, not a surface']],
+    features: ['Height lines every 50 meters drawn with marching squares in plain JavaScript', 'A soft color fill from green lowland to pale summit', 'Thicker lines every 200 meters', 'A trail that draws itself from the car park to the top', 'Hover anywhere, or move a marker with the arrow keys, to read the height', 'A table of heights along the trail'],
+    code: `// Color a grid of cells by height (the base of a contour map)
+const height = (x, y) => 150 + 460 * Math.exp(-(((x - 0.6) / 0.18) ** 2 + ((y - 0.45) / 0.2) ** 2));
+const cols = 40, rows = 25, cell = 14;
+
+for (let j = 0; j < rows; j++) {
+  for (let i = 0; i < cols; i++) {
+    const z = height(i / cols, j / rows), t = (z - 150) / 460;
+    drawRect(i * cell, j * cell, cell, cell, 'rgb(' + Math.round(200 - 40 * t) + ',' + Math.round(225 - 90 * t) + ',' + Math.round(180 - 80 * t) + ')');
+  }
+}`,
+    faq: [
+      ['What is a contour plot?', 'A contour plot draws lines that join points with the same value on a flat map. It is the same idea as the height lines on a hiking map.'],
+      ['How are contour lines drawn?', 'With an algorithm called marching squares. It looks at each small square of a grid, checks which corners are above the chosen height, and draws a short line through the square where the height is crossed.'],
+      ['What do lines close together mean?', 'They mean the value changes quickly over a short distance. On a hill map, that is a steep slope.'],
+      ['Can I use contour plots for business data?', 'Yes. Any result that depends on two settings, like profit across price and ad spend, can be shown as a contour plot to find the best area.'],
+    ],
+  },
+  {
+    num: 48, cat: '05-relationships', slug: '048-radar-chart', name: 'Radar Chart',
+    example: 'three laptops scored on six features',
+    title: 'Free Radar Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free radar chart made with HTML, CSS and vanilla JavaScript. Compare several items across many scores, with toggles and tooltips. One file to download.',
+    keywords: 'radar chart html, spider chart javascript, radar chart without library, web chart, star chart comparison',
+    what: [
+      'A radar chart, also called a spider chart, shows several scores on axes that spread out from a center, like spokes on a wheel. Each item is a shape joining its scores, and bigger shapes mean higher scores.',
+      'The shape shows strengths and weak spots at a glance. A spiky shape is great at a few things and weak at others, while a round shape is a good all rounder.',
+    ],
+    glance: { best: 'Comparing 2 or 3 items across 5 to 8 scores', data: 'A score on the same scale for each feature', avoid: 'Many items. Shapes pile up and hide each other.' },
+    when: ['Product comparisons and reviews', 'Player or team skills', 'Survey scores across several topics', 'Staff or course feedback'],
+    instead: [['002-grouped-bar-chart', 'You need exact comparisons of each score'], ['049-parallel-coordinates', 'You have many items to compare']],
+    features: ['Six axes with rings at 2, 4, 6, 8 and 10', 'See through shapes so all three laptops stay visible', 'A dot for each score with its own tooltip and Tab stop', 'Hide a laptop from the key', 'Shapes grow out from the center on load', 'Short axis names on phones'],
+    code: `const axes = ['Battery', 'Speed', 'Screen', 'Weight', 'Value', 'Build'];
+const scores = [9, 6, 7, 9, 6, 8];
+const cx = 200, cy = 160, R = 120;
+const at = (r, i) => [cx + r * Math.sin(i / axes.length * Math.PI * 2), cy - r * Math.cos(i / axes.length * Math.PI * 2)];
+
+axes.forEach((a, i) => { const [x, y] = at(R, i); drawLine(cx, cy, x, y, '#e3e4ef'); drawText(...at(R + 16, i), a, 'middle'); });
+make('polygon', { points: scores.map((s, i) => at(R * s / 10, i).join(',')).join(' '), fill: '#4f46e5', 'fill-opacity': 0.2, stroke: '#4f46e5', 'stroke-width': 2 });`,
+    faq: [
+      ['What is a radar chart used for?', 'It compares a few items across several scores on the same scale, like laptops on battery, speed and screen. The shapes show strengths and weak spots.'],
+      ['Is a radar chart the same as a spider chart?', 'Yes. Radar chart, spider chart, web chart and star chart all mean the same thing.'],
+      ['How many items can a radar chart compare?', 'Two or three. With more, the shapes overlap too much. Use small multiples, one radar per item, if you have more.'],
+      ['What are the problems with radar charts?', 'The area of a shape depends on the order of the axes, and exact values are hard to read. Keep scores on one scale and use bars when precision matters.'],
+    ],
+  },
+  {
+    num: 49, cat: '05-relationships', slug: '049-parallel-coordinates', name: 'Parallel Coordinates Chart',
+    example: 'rental flats compared on six measures',
+    title: 'Free Parallel Coordinates Chart in HTML and JavaScript (Live Demo)',
+    desc: 'Free parallel coordinates chart made with HTML, CSS and vanilla JavaScript. Filter many items across many measures by dragging on the axes. One file to download.',
+    keywords: 'parallel coordinates, parallel coordinates chart javascript, parallel coordinates html, multi dimensional chart, brushing filter chart',
+    what: [
+      'A parallel coordinates chart shows many measures side by side as vertical axes. Each item is a line that crosses every axis at its value, so you can follow one flat across rent, size, rooms, distance and more.',
+      'Its real power is filtering. Drag on an axis to keep only the items in that range, and the rest fade away. It turns a big table into a tool for finding the few options that tick every box.',
+    ],
+    glance: { best: 'Filtering many items across many measures', data: 'Several numbers for each item', avoid: 'Readers who need a quick, simple picture.' },
+    when: ['Choosing a flat, car or laptop from many options', 'Comparing products on many specs', 'Finding patterns in survey or sensor data', 'Screening candidates, suppliers or stocks'],
+    instead: [['048-radar-chart', 'You only compare two or three items'], ['044-correlation-matrix', 'You want to see which measures are linked']],
+    features: ['Six axes, each with its own scale and units', 'Drag up or down on any axis to filter, click to clear', 'Quick filter buttons for common searches', 'A live count of how many flats match', 'Hover any line to see every value for that flat', 'Short axis names on phones and a full data table'],
+    code: `const axes = [['Rent', 400, 1800], ['Size', 30, 115], ['Km to center', 0, 15]];
+const flats = [[1450, 62, 3.2], [980, 41, 9.5], [1720, 98, 1.4]];
+const x = i => 60 + i * 240, y = (v, [, lo, hi]) => 280 - (v - lo) / (hi - lo) * 250;
+
+axes.forEach((a, i) => { drawLine(x(i), 30, x(i), 280, '#221e1a', 1.5); drawText(x(i), 20, a[0], 'middle'); });
+flats.forEach(f => {
+  const pts = f.map((v, i) => x(i) + ',' + y(v, axes[i]));
+  make('path', { d: 'M' + pts.join('L'), fill: 'none', stroke: '#b45309', 'stroke-width': 2 });
+});`,
+    faq: [
+      ['What is a parallel coordinates chart?', 'It is a chart with several vertical axes side by side, one per measure. Each item is drawn as a line that crosses every axis at its value.'],
+      ['What is brushing in parallel coordinates?', 'Brushing means dragging along an axis to select a range. Only items inside all selected ranges stay highlighted, which makes it a powerful filter.'],
+      ['How many lines can a parallel coordinates chart show?', 'Hundreds, if the lines are thin and see through. Filtering is what keeps it useful with many items.'],
+      ['Does the order of the axes matter?', 'Yes. Patterns between two measures are easiest to see when their axes sit next to each other. Put related measures side by side.'],
+    ],
+  },
+  {
+    num: 50, cat: '05-relationships', slug: '050-quadrant-chart', name: 'Quadrant Chart',
+    example: 'app features sorted by effort and impact',
+    title: 'Free Quadrant Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free quadrant chart made with HTML, CSS and vanilla JavaScript. A priority matrix with draggable points and keyboard control. One file to download.',
+    keywords: 'quadrant chart, priority matrix javascript, 2x2 matrix html, effort impact matrix, draggable chart',
+    what: [
+      'A quadrant chart is a scatter plot split into four boxes by two lines. Each box is a group with its own meaning, like do first, plan it, maybe later and skip for now.',
+      'It is the chart behind the effort and impact matrix used by product and project teams. Placing every idea on one grid makes it easy to agree on what to do next, and dragging the dots makes it a working planning tool.',
+    ],
+    glance: { best: 'Sorting items into four clear groups', data: 'Two scores for each item', avoid: 'Data where the dividing lines have no real meaning.' },
+    when: ['Product roadmaps and feature planning', 'Task lists by urgency and importance', 'Suppliers by cost and quality', 'Customers by value and growth'],
+    instead: [['042-bubble-chart', 'You also want to show a third number as size'], ['041-scatter-plot', 'There are no natural groups']],
+    features: ['Four tinted areas with titles and short explanations', 'Drag any dot to a new place and its group updates', 'Tab to a dot and move it with the arrow keys', 'Labels that move to avoid overlapping', 'The data table updates as you move dots', 'Tooltips with both scores and the group'],
+    code: `const features = [['Faster search', 3, 8], ['Offline mode', 8, 8], ['CSV export', 2, 4.4], ['Team chat', 9, 4]];
+const x = v => 40 + v * 54, y = v => 290 - v * 27;
+const groups = ['#16a34a', '#2563eb', '#ca8a04', '#dc2626'];
+
+drawLine(x(5), y(0), x(5), y(10), '#5c6377');
+drawLine(x(0), y(5), x(10), y(5), '#5c6377');
+features.forEach(([name, effort, impact]) => {
+  const g = impact > 5 ? (effort <= 5 ? 0 : 1) : (effort <= 5 ? 2 : 3);
+  drawCircle(x(effort), y(impact), 9, groups[g]);
+  drawText(x(effort) + 14, y(impact) + 4, name);
+});`,
+    faq: [
+      ['What is a quadrant chart?', 'A quadrant chart is a scatter plot divided into four areas by a horizontal and a vertical line. Each area represents a group, like quick wins or big projects.'],
+      ['What is an effort and impact matrix?', 'It is a quadrant chart with effort on one axis and impact on the other. It helps teams pick work that gives the most value for the least effort.'],
+      ['Where should the dividing lines go?', 'Usually at the middle of each scale, or at a meaningful value like a target or an average. Say what the lines mean so readers trust the groups.'],
+      ['Can I move the dots in this template?', 'Yes. Drag any dot with a mouse or finger, or tab to it and use the arrow keys. The group and the data table update as you go.'],
     ],
   },
 ];

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parallel Coordinates Chart Example: Find a flat that ticks every box | 100 Free Data Charts</title>
+<meta name="description" content="A working parallel coordinates chart made with HTML, CSS and vanilla JavaScript. Filter many items across many measures by dragging on the axes. One file, no library.">
+<link rel="canonical" href="https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/049-parallel-coordinates/demo.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* Change these colors to match your brand */
+:root {
+  --bg: #f3f1ee;
+  --card: #ffffff;
+  --ink: #221e1a;
+  --muted: #6a625a;
+  --line: #e8e3dd;
+  --accent: #b45309;
+  --soft: #f8e8d5;
+}
+* { box-sizing: border-box; margin: 0; }
+body { font-family: "Work Sans", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; min-height: 100vh; }
+.page { max-width: 1160px; margin: 0 auto; padding: 28px 24px 40px; }
+.brand { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; font-size: .95rem; }
+.logo { font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+.logo b { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); display: inline-block; }
+.brand span:last-child { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px 30px 22px; }
+.head { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+h1 { font-size: clamp(1.35rem, 2.6vw, 1.8rem); line-height: 1.2; }
+.sub { color: var(--muted); margin-top: 6px; max-width: 60ch; }
+.take { margin-top: 14px; padding: 10px 14px; border-radius: 10px; background: var(--soft); font-weight: 500; display: inline-block; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
+.seg button { font: inherit; font-size: .9rem; border: 0; background: none; color: var(--muted); padding: 7px 12px; border-radius: 7px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--card); }
+#legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 4px; min-height: 8px; }
+.key { font: inherit; font-size: .9rem; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: none; color: var(--ink); padding: 5px 11px; border-radius: 99px; cursor: pointer; }
+.key:disabled { cursor: default; opacity: 1; }
+.key i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+.key[aria-pressed="false"] { opacity: .45; text-decoration: line-through; }
+#chart { height: 440px; margin-top: 6px; position: relative; }
+#chart svg { display: block; overflow: visible; }
+.grid { stroke: var(--line); }
+.axis { stroke: var(--muted); stroke-width: 1.2; }
+.tick { fill: var(--muted); font-size: 12px; }
+.label { fill: var(--ink); font-size: 13px; }
+.value { fill: var(--ink); font-size: 12px; font-weight: 700; }
+.hit { cursor: pointer; outline: none; transition: opacity .15s; }
+.hit:hover, .hit:focus-visible { opacity: .8; }
+.hit:focus-visible { stroke: var(--ink); stroke-width: 2; }
+.zone { outline: none; cursor: crosshair; }
+.zone:focus-visible { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 4 4; }
+.note { color: var(--muted); font-size: .85rem; margin-top: 10px; }
+details { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+summary { cursor: pointer; font-weight: 500; }
+table { border-collapse: collapse; margin-top: 12px; font-size: .9rem; width: 100%; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+td { font-variant-numeric: tabular-nums; }
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--ink); color: var(--card); padding: 8px 11px; border-radius: 8px; font-size: .85rem; line-height: 1.4; max-width: 240px; }
+#tip[hidden] { display: none; }
+button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+@media (max-width: 640px) {
+  .page { padding: 16px 12px 30px; }
+  .card { padding: 20px 16px 16px; }
+  #chart { height: 420px; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="brand"><span class="logo"><b aria-hidden="true"></b>Keyhouse Lettings</span><span>30 flats to rent, September 2026</span></header>
+  <section class="card" aria-labelledby="title">
+    <div class="head">
+      <div>
+        <h1 id="title">Find a flat that ticks every box</h1>
+        <p class="sub">Each line is one flat, crossing six measures. Drag up or down on any axis to keep only flats in that range. Click an axis again to clear it.</p>
+        <p class="take">Only 6 of 30 flats cost under $1,500 a month and sit within 5 km of the center.</p>
+      </div>
+      <div class="seg" role="group" aria-label="Quick filters"><button type="button" data-v="all" aria-pressed="true">All flats</button><button type="button" data-v="cheap" aria-pressed="false">Under $1,500 and near the center</button><button type="button" data-v="big" aria-pressed="false">3 or more rooms</button></div>
+    </div>
+    <div id="legend"></div>
+    <figure id="chart" aria-label="Find a flat that ticks every box. Only 6 of 30 flats cost under $1,500 a month and sit within 5 km of the center. Use Tab to step through each value."></figure>
+    <p class="note">Source: Keyhouse Lettings listings. Sample data for this demo.</p>
+    <details><summary>Show the data as a table</summary><table id="table"></table></details>
+  </section>
+</main>
+<div id="tip" hidden></div>
+<script>
+// Small helpers: SVG elements, scales, tooltip, legend and table.
+const NS = 'http://www.w3.org/2000/svg';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]static/.test(location.search);
+function el(tag, attrs, parent) {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs || {}) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function text(parent, x, y, str, attrs) {
+  const t = el('text', Object.assign({ x, y }, attrs || {}), parent);
+  t.textContent = str;
+  return t;
+}
+function linear(d0, d1, r0, r1) {
+  const f = v => r0 + (v - d0) / (d1 - d0) * (r1 - r0);
+  f.domain = [d0, d1];
+  return f;
+}
+function band(keys, r0, r1, pad) {
+  const step = (r1 - r0) / keys.length;
+  const bw = step * (1 - pad);
+  const f = k => r0 + keys.indexOf(k) * step + (step - bw) / 2;
+  f.bw = bw; f.step = step;
+  return f;
+}
+function niceTicks(min, max, count) {
+  const span = max - min;
+  const raw = span / count;
+  const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const m = raw / p;
+  const step = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+  const out = [];
+  for (let v = Math.ceil(min / step) * step; v <= max + step / 1e6; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+function niceMax(v, count) {
+  const t = niceTicks(0, v, count || 5);
+  const last = t[t.length - 1];
+  return last >= v ? last : last + (t[1] - t[0]);
+}
+function fmt(n, d) { return n.toLocaleString('en-US', { maximumFractionDigits: d == null ? 0 : d }); }
+function tween(dur, delay, fn) {
+  if (reduce) { fn(1); return; }
+  const start = performance.now() + (delay || 0);
+  fn(0);
+  function step(now) {
+    const t = Math.min(1, Math.max(0, (now - start) / dur));
+    fn(1 - Math.pow(1 - t, 3));
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const tip = document.getElementById('tip');
+function showTip(html, x, y) {
+  tip.innerHTML = html;
+  tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let left = x + 14, top = y - h - 12;
+  if (left + w > innerWidth - 8) left = x - w - 14;
+  if (top < 8) top = y + 16;
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+function hideTip() { tip.hidden = true; }
+function bindTip(node, label, html) {
+  node.setAttribute('tabindex', '0');
+  node.setAttribute('role', 'img');
+  node.setAttribute('aria-label', label);
+  node.classList.add('hit');
+  node.addEventListener('mousemove', e => showTip(html, e.clientX, e.clientY));
+  node.addEventListener('mouseleave', hideTip);
+  node.addEventListener('focus', () => { const r = node.getBoundingClientRect(); showTip(html, r.left + r.width / 2, r.top); });
+  node.addEventListener('blur', hideTip);
+}
+function yGrid(g, scale, ticks, x0, x1, format) {
+  ticks.forEach(v => {
+    const y = scale(v);
+    el('line', { x1: x0, x2: x1, y1: y, y2: y, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x0 - 10, y + 4, format(v), { class: 'tick', 'text-anchor': 'end' });
+  });
+}
+function xGrid(g, scale, ticks, y0, y1, format) {
+  ticks.forEach(v => {
+    const x = scale(v);
+    el('line', { x1: x, x2: x, y1: y0, y2: y1, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x, y1 + 20, format(v), { class: 'tick', 'text-anchor': 'middle' });
+  });
+}
+function legend(items, onToggle) {
+  const box = document.getElementById('legend');
+  box.innerHTML = '';
+  items.forEach(it => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'key';
+    b.setAttribute('aria-pressed', 'true');
+    b.innerHTML = '<i style="background:' + it.color + '"></i>' + it.name;
+    if (onToggle) b.onclick = () => {
+      const on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', on);
+      onToggle(it.name, on);
+    };
+    else b.disabled = true;
+    box.appendChild(b);
+  });
+}
+function table(head, rows) {
+  const t = document.getElementById('table');
+  t.innerHTML = '<thead><tr>' + head.map(h => '<th scope="col">' + h + '</th>').join('') + '</tr></thead><tbody>' +
+    rows.map(r => '<tr>' + r.map((c, i) => i ? '<td>' + c + '</td>' : '<th scope="row">' + c + '</th>').join('') + '</tr>').join('') + '</tbody>';
+}
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function linePath(pts, smooth) {
+  if (!smooth) return pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+  let d = 'M' + pts[0][0].toFixed(1) + ',' + pts[0][1].toFixed(1);
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    d += 'C' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ',' + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) + ' ' +
+      (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ',' + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) + ' ' + p2[0].toFixed(1) + ',' + p2[1].toFixed(1);
+  }
+  return d;
+}
+function areaPath(top, bottom, smooth) {
+  return linePath(top, smooth) + linePath(bottom.slice().reverse(), smooth).replace('M', 'L') + 'Z';
+}
+function arcPath(cx, cy, r0, r1, a0, a1) {
+  if (a1 - a0 >= Math.PI * 2 - 1e-6) a1 = a0 + Math.PI * 2 - 1e-4;
+  const large = a1 - a0 > Math.PI ? 1 : 0;
+  const p = (r, a) => (cx + r * Math.sin(a)).toFixed(2) + ',' + (cy - r * Math.cos(a)).toFixed(2);
+  let d = 'M' + p(r1, a0) + 'A' + r1 + ',' + r1 + ' 0 ' + large + ' 1 ' + p(r1, a1);
+  d += r0 > 0 ? 'L' + p(r0, a1) + 'A' + r0 + ',' + r0 + ' 0 ' + large + ' 0 ' + p(r0, a0) + 'Z' : 'L' + cx + ',' + cy + 'Z';
+  return d;
+}
+function polar(cx, cy, r, a) { return [cx + r * Math.sin(a), cy - r * Math.cos(a)]; }
+function quantile(sorted, p) { const i = (sorted.length - 1) * p, lo = Math.floor(i), hi = Math.ceil(i); return sorted[lo] + (sorted[hi] - sorted[lo]) * (i - lo); }
+function kde(values, xs, bw) { const k = 1 / (Math.sqrt(2 * Math.PI) * bw * values.length); return xs.map(x => [x, values.reduce((a, v) => a + Math.exp(-0.5 * Math.pow((x - v) / bw, 2)), 0) * k]); }
+function steps(a, b, n) { return Array.from({ length: n }, (v, i) => a + (b - a) * i / (n - 1)); }
+function seeded(seed) { return () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; }
+let clipCount = 0;
+function reveal(svg, g, x, y, w, h, animate, dur) {
+  const id = 'clip' + (++clipCount);
+  const r = el('rect', { x, y, width: w, height: h }, el('clipPath', { id }, el('defs', {}, svg)));
+  g.setAttribute('clip-path', 'url(#' + id + ')');
+  const draw = t => r.setAttribute('width', w * t);
+  animate ? tween(dur || 1100, 0, draw) : draw(1);
+}
+function scrub(svg, xs, top, bottom, info) {
+  const guide = el('line', { y1: top, y2: bottom, class: 'axis', 'stroke-dasharray': '3 4', opacity: 0 }, svg);
+  const half = xs.length > 1 ? (xs[1] - xs[0]) / 2 : 20;
+  const x0 = xs[0] - half;
+  const zone = el('rect', { x: x0, y: top, width: xs[xs.length - 1] - xs[0] + half * 2, height: bottom - top, fill: 'transparent', tabindex: 0, class: 'zone', role: 'img',
+    'aria-label': 'Chart area. Use the left and right arrow keys to read each value.' }, svg);
+  let cur = -1;
+  function off() { guide.setAttribute('opacity', 0); info(-1, false); hideTip(); }
+  function go(i, cx, cy) {
+    i = Math.max(0, Math.min(xs.length - 1, i)); cur = i;
+    guide.setAttribute('x1', xs[i]); guide.setAttribute('x2', xs[i]); guide.setAttribute('opacity', 1);
+    const r = info(i, true);
+    zone.setAttribute('aria-label', r.label);
+    if (cx == null) { const b = svg.getBoundingClientRect(); cx = b.left + xs[i]; cy = b.top + (r.y != null ? r.y : top + 30); }
+    showTip(r.html, cx, cy);
+  }
+  function near(px) { let best = 0, bd = Infinity; xs.forEach((x, i) => { const d = Math.abs(x - px); if (d < bd) { bd = d; best = i; } }); return best; }
+  zone.addEventListener('mousemove', e => go(near(e.clientX - svg.getBoundingClientRect().left), e.clientX, e.clientY));
+  zone.addEventListener('mouseleave', off);
+  zone.addEventListener('blur', off);
+  zone.addEventListener('focus', () => go(cur < 0 ? xs.length - 1 : cur));
+  zone.addEventListener('keydown', e => {
+    const k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowLeft') { e.preventDefault(); go((cur < 0 ? xs.length - 1 : cur) + (k === 'ArrowRight' ? 1 : -1)); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(xs.length - 1); }
+  });
+  return zone;
+}
+function pointNav(svg, pts, box, info) {
+  const ring = el('circle', { r: 0, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 2.5, opacity: 0, 'pointer-events': 'none' }, svg);
+  const zone = el('rect', { x: box[0], y: box[1], width: box[2] - box[0], height: box[3] - box[1], fill: 'transparent', tabindex: 0, class: 'zone', role: 'img',
+    'aria-label': 'Chart area. Use the arrow keys to move from point to point.' }, svg);
+  const order = pts.map((p, i) => i).sort((a, b) => pts[a].x - pts[b].x || pts[a].y - pts[b].y);
+  let cur = -1;
+  function show(i, cx, cy) {
+    cur = i; const p = pts[i];
+    ring.setAttribute('cx', p.x); ring.setAttribute('cy', p.y); ring.setAttribute('r', (p.r || 5) + 4); ring.setAttribute('opacity', 1);
+    const r = info(i); zone.setAttribute('aria-label', r.label);
+    if (cx == null) { const b = svg.getBoundingClientRect(); cx = b.left + p.x; cy = b.top + p.y - (p.r || 5); }
+    showTip(r.html, cx, cy);
+  }
+  function off() { ring.setAttribute('opacity', 0); hideTip(); }
+  zone.addEventListener('mousemove', e => {
+    const b = svg.getBoundingClientRect(), mx = e.clientX - b.left, my = e.clientY - b.top;
+    let best = -1, bd = Infinity;
+    pts.forEach((p, i) => { const d = Math.hypot(p.x - mx, p.y - my) - (p.r || 0); if (d < bd) { bd = d; best = i; } });
+    if (best >= 0 && bd < 22) show(best, e.clientX, e.clientY); else off();
+  });
+  zone.addEventListener('mouseleave', off);
+  zone.addEventListener('blur', off);
+  zone.addEventListener('focus', () => { if (pts.length) show(cur < 0 ? order[0] : cur); });
+  zone.addEventListener('keydown', e => {
+    const k = e.key;
+    if (!['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(k) || !pts.length) return;
+    e.preventDefault();
+    let n = order.indexOf(cur < 0 ? order[0] : cur);
+    if (k === 'ArrowRight' || k === 'ArrowUp') n++; else if (k === 'ArrowLeft' || k === 'ArrowDown') n--; else if (k === 'Home') n = 0; else n = order.length - 1;
+    show(order[Math.max(0, Math.min(order.length - 1, n))]);
+  });
+  return zone;
+}
+function labelSpot(taken, cands, lw, lh, bounds) {
+  for (const [x, y, a] of cands) {
+    const x0 = a === 'end' ? x - lw : a === 'middle' ? x - lw / 2 : x;
+    const r = [x0 - 2, y - lh, x0 + lw + 2, y + 3];
+    if (bounds && (r[0] < bounds[0] || r[2] > bounds[2] || r[1] < bounds[1] || r[3] > bounds[3])) continue;
+    if (!taken.some(t => r[0] < t[2] && r[2] > t[0] && r[1] < t[3] && r[3] > t[1])) { taken.push(r); return [x, y, a]; }
+  }
+  return null;
+}
+function mount(draw) {
+  const box = document.getElementById('chart');
+  let last = 0;
+  function render(animate) {
+    const w = box.clientWidth, h = box.clientHeight;
+    box.innerHTML = '';
+    const svg = el('svg', { viewBox: '0 0 ' + w + ' ' + h, width: w, height: h }, box);
+    draw(svg, w, h, animate);
+  }
+  new ResizeObserver(() => {
+    if (Math.abs(box.clientWidth - last) < 2) return;
+    const first = last === 0;
+    last = box.clientWidth;
+    render(first);
+  }).observe(box);
+  return render;
+}
+function buttons(onPick) {
+  document.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    onPick(b.dataset.v);
+  });
+}
+
+// The chart
+const DATA = [["Flat A1",1010,63,2,5.8,10,3],["Flat B1",1660,89,3,3.3,69,4],["Flat C1",730,55,2,10.8,60,7],["Flat D1",570,49,1,11.9,52,6],["Flat E1",1350,74,2,3.3,30,5],["Flat F1",1580,93,3,4.4,10,1],["Flat G1",980,64,2,9.4,31,5],["Flat H1",1770,104,4,4.3,52,4],["Flat I1",1100,65,2,8.3,65,6],["Flat J1",1410,76,3,1.3,48,6],["Flat K1",1060,74,2,9.5,65,6],["Flat L1",1210,68,2,5.3,59,5],["Flat M1",1030,82,3,10,43,4],["Flat N1",510,48,1,11.3,54,6],["Flat O1",1430,100,4,11.1,4,1],["Flat P1",1250,83,3,11.2,35,3],["Flat Q1",1260,99,4,12.3,58,7],["Flat R1",1420,97,4,11.5,24,4],["Flat S1",930,71,2,13.8,46,4],["Flat T1",1180,54,2,1.1,59,4],["Flat U1",850,52,2,9.3,34,5],["Flat V1",1030,68,2,4.6,26,4],["Flat W1",410,44,1,12,26,2],["Flat X1",1120,70,2,8.1,60,7],["Flat Y1",920,59,2,9.9,33,5],["Flat Z1",1650,102,4,7.2,58,7],["Flat A2",1470,70,2,2.2,45,4],["Flat B2",690,43,1,5.5,37,6],["Flat C2",1340,82,3,9.4,2,1],["Flat D2",1470,84,3,3.2,49,5]];
+const AX = [['Rent', 1, 400, 1800, v => '$' + fmt(v)], ['Size', 2, 30, 115, v => v + ' m\u00b2'], ['Rooms', 3, 1, 4, v => v], ['To center', 4, 0, 15, v => v + ' km'], ['Building age', 5, 0, 75, v => v + ' yrs'], ['Energy rating', 6, 1, 7, v => 'ABCDEFG'[v - 1]]];
+let brush = {};
+legend([{ name: 'Matches your filters', color: 'var(--accent)' }, { name: 'Filtered out', color: '#d6d0c8' }]);
+table(['Flat', 'Rent', 'Size', 'Rooms', 'To center', 'Age', 'Energy'], DATA.map(d => [d[0], '$' + fmt(d[1]), d[2] + ' m\u00b2', d[3], d[4] + ' km', d[5] + ' yrs', 'ABCDEFG'[d[6] - 1]]));
+const keep = d => Object.entries(brush).every(([k, [a, b]]) => d[AX[k][1]] >= a && d[AX[k][1]] <= b);
+const render = mount((svg, w, h, animate) => {
+  const small = w < 600;
+  const m = { t: 36, r: small ? 24 : 50, b: 44, l: small ? 24 : 50 };
+  const xs = AX.map((a, i) => m.l + i * (w - m.l - m.r) / (AX.length - 1));
+  const ys = AX.map(a => linear(a[2], a[3], h - m.b, m.t));
+  const g = el('g', {}, svg);
+  const lineFor = d => AX.map((a, i) => [xs[i], ys[i](d[a[1]])]);
+  DATA.slice().sort((a, b) => keep(a) - keep(b)).forEach(d => {
+    const ok = keep(d);
+    const p = el('path', { d: linePath(lineFor(d), false), fill: 'none', stroke: ok ? 'var(--accent)' : '#d6d0c8', 'stroke-width': ok ? 2 : 1.2, 'stroke-opacity': ok ? .8 : .7 }, g);
+    const hit = el('path', { d: linePath(lineFor(d), false), fill: 'none', stroke: 'transparent', 'stroke-width': 10 }, g);
+    hit.addEventListener('mousemove', e => { p.setAttribute('stroke-width', 4); showTip('<b>' + d[0] + '</b><br>' + AX.map(a => a[0] + ': ' + a[4](d[a[1]])).join('<br>'), e.clientX, e.clientY); });
+    hit.addEventListener('mouseleave', () => { p.setAttribute('stroke-width', ok ? 2 : 1.2); hideTip(); });
+  });
+  if (animate && !reduce) { g.style.opacity = 0; g.style.transition = 'opacity .8s'; requestAnimationFrame(() => requestAnimationFrame(() => g.style.opacity = 1)); }
+  AX.forEach((a, i) => {
+    const ax = el('g', {}, svg);
+    el('line', { x1: xs[i], x2: xs[i], y1: m.t, y2: h - m.b, stroke: 'var(--ink)', 'stroke-width': 1.5 }, ax);
+    text(ax, xs[i], m.t - 16, small ? ['Rent', 'Size', 'Rooms', 'Km', 'Age', 'Energy'][i] : a[0], { class: 'label', 'text-anchor': i === 0 ? 'start' : i === AX.length - 1 ? 'end' : 'middle', style: 'font-weight:700' });
+    text(ax, xs[i] + 5, m.t + 4, a[4](a[3]), { class: 'tick' });
+    text(ax, xs[i] + 5, h - m.b + 14, a[4](a[2]), { class: 'tick' });
+    if (brush[i]) { const lo = Math.max(a[2], brush[i][0]), hi = Math.min(a[3], brush[i][1]); el('rect', { x: xs[i] - 8, y: ys[i](hi), width: 16, height: ys[i](lo) - ys[i](hi), rx: 4, fill: 'var(--accent)', 'fill-opacity': .25, stroke: 'var(--accent)' }, ax); }
+    const grab = el('rect', { x: xs[i] - 16, y: m.t, width: 32, height: h - m.t - m.b, fill: 'transparent', style: 'cursor:ns-resize' }, ax);
+    let start = null, box = null;
+    grab.addEventListener('pointerdown', e => { e.preventDefault(); grab.setPointerCapture(e.pointerId); start = e.clientY - svg.getBoundingClientRect().top; box = el('rect', { x: xs[i] - 8, width: 16, y: start, height: 0, rx: 4, fill: 'var(--accent)', 'fill-opacity': .25 }, ax); });
+    grab.addEventListener('pointermove', e => { if (start == null) return; const cur = Math.max(m.t, Math.min(h - m.b, e.clientY - svg.getBoundingClientRect().top)); box.setAttribute('y', Math.min(start, cur)); box.setAttribute('height', Math.abs(cur - start)); });
+    grab.addEventListener('pointerup', e => {
+      if (start == null) return;
+      const end = Math.max(m.t, Math.min(h - m.b, e.clientY - svg.getBoundingClientRect().top));
+      const inv = v => a[2] + (h - m.b - v) / (h - m.b - m.t) * (a[3] - a[2]);
+      if (Math.abs(end - start) < 4) delete brush[i]; else brush[i] = [inv(Math.max(start, end)), inv(Math.min(start, end))];
+      start = null; render(false);
+    });
+  });
+  const count = DATA.filter(keep).length;
+  text(svg, w - m.r, h - 4, count + ' of ' + DATA.length + ' flats match', { class: 'value', 'text-anchor': 'end' });
+});
+buttons(v => { brush = v === 'cheap' ? { 0: [0, 1499], 3: [0, 5] } : v === 'big' ? { 2: [3, 4] } : {}; render(false); });
+</script>
+</body>
+</html>
