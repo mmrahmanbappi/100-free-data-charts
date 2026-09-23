@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KPI Cards with Sparklines Example: How the shop is doing | 100 Free Data Charts</title>
+<meta name="description" content="Working KPI cards with sparklines made with HTML, CSS and vanilla JavaScript. Big numbers, change badges and mini charts with a range switch. One file, no library.">
+<link rel="canonical" href="https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/063-kpi-cards/demo.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* Change these colors to match your brand */
+:root {
+  --bg: #f3f4f1;
+  --card: #ffffff;
+  --ink: #1c211b;
+  --muted: #62695f;
+  --line: #e5e8e2;
+  --accent: #3f7d4e;
+  --soft: #e3efe5;
+}
+* { box-sizing: border-box; margin: 0; }
+body { font-family: "Inter Tight", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; min-height: 100vh; }
+.page { max-width: 1160px; margin: 0 auto; padding: 28px 24px 40px; }
+.brand { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; font-size: .95rem; }
+.logo { font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+.logo b { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); display: inline-block; }
+.brand span:last-child { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px 30px 22px; }
+.head { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+h1 { font-size: clamp(1.35rem, 2.6vw, 1.8rem); line-height: 1.2; }
+.sub { color: var(--muted); margin-top: 6px; max-width: 60ch; }
+.take { margin-top: 14px; padding: 10px 14px; border-radius: 10px; background: var(--soft); font-weight: 500; display: inline-block; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
+.seg button { font: inherit; font-size: .9rem; border: 0; background: none; color: var(--muted); padding: 7px 12px; border-radius: 7px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--card); }
+#legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 4px; min-height: 8px; }
+.key { font: inherit; font-size: .9rem; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: none; color: var(--ink); padding: 5px 11px; border-radius: 99px; cursor: pointer; }
+.key:disabled { cursor: default; opacity: 1; }
+.key i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+.key[aria-pressed="false"] { opacity: .45; text-decoration: line-through; }
+#chart { height: 420px; margin-top: 6px; position: relative; }
+#chart svg { display: block; overflow: visible; }
+.grid { stroke: var(--line); }
+.axis { stroke: var(--muted); stroke-width: 1.2; }
+.tick { fill: var(--muted); font-size: 12px; }
+.label { fill: var(--ink); font-size: 13px; }
+.value { fill: var(--ink); font-size: 12px; font-weight: 700; }
+.hit { cursor: pointer; outline: none; transition: opacity .15s; }
+.hit:hover, .hit:focus-visible { opacity: .8; }
+.hit:focus-visible { stroke: var(--ink); stroke-width: 2; }
+.zone { outline: none; cursor: crosshair; }
+.zone:focus-visible { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 4 4; }
+.note { color: var(--muted); font-size: .85rem; margin-top: 10px; }
+details { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+summary { cursor: pointer; font-weight: 500; }
+table { border-collapse: collapse; margin-top: 12px; font-size: .9rem; width: 100%; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+td { font-variant-numeric: tabular-nums; }
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--ink); color: var(--card); padding: 8px 11px; border-radius: 8px; font-size: .85rem; line-height: 1.4; max-width: 240px; }
+#tip[hidden] { display: none; }
+button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+:root { --up: #2f8a4c; --down: #c8423a; }
+#chart { height: auto !important; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.kpi { border: 1px solid var(--line); border-radius: 14px; padding: 18px 18px 10px; }
+.kpi h2 { font-size: .95rem; font-weight: 500; color: var(--muted); }
+.kpi .big { font-size: 2rem; font-weight: 700; margin: 6px 0 4px; font-variant-numeric: tabular-nums; }
+.kpi .badge { display: inline-block; font-size: .85rem; font-weight: 700; padding: 3px 8px; border-radius: 99px; }
+.kpi .badge.good { background: #e2f3e7; color: var(--up); }
+.kpi .badge.bad { background: #fbe4e2; color: var(--down); }
+.kpi .vs { font-size: .8rem; color: var(--muted); margin-left: 6px; }
+.kpi svg { display: block; width: 100%; height: 64px; margin-top: 10px; overflow: visible; }
+@media (max-width: 640px) {
+  .page { padding: 16px 12px 30px; }
+  .card { padding: 20px 16px 16px; }
+  #chart { height: 380px; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="brand"><span class="logo"><b aria-hidden="true"></b>Mossy Mug Shop</span><span>Online store, to 22 September 2026</span></header>
+  <section class="card" aria-labelledby="title">
+    <div class="head">
+      <div>
+        <h1 id="title">How the shop is doing</h1>
+        <p class="sub">Four key numbers with a small trend line each. The badge compares with the period before. Hover a trend line to read any day.</p>
+        <p class="take">Revenue is up 5.9% on the previous 30 days, and the return rate dipped slightly to 6.6%.</p>
+      </div>
+      <div class="seg" role="group" aria-label="Time range"><button type="button" data-v="30" aria-pressed="true">Last 30 days</button><button type="button" data-v="7" aria-pressed="false">Last 7 days</button><button type="button" data-v="90" aria-pressed="false">Last 90 days</button></div>
+    </div>
+    <div id="legend"></div>
+    <figure id="chart" aria-label="How the shop is doing. Revenue is up 5.9% on the previous 30 days, and the return rate dipped slightly to 6.6%. Use Tab to step through each value."></figure>
+    <p class="note">Source: Mossy Mug store data. Sample data for this demo.</p>
+    <details><summary>Show the data as a table</summary><table id="table"></table></details>
+  </section>
+</main>
+<div id="tip" hidden></div>
+<script>
+// Small helpers: SVG elements, scales, tooltip, legend and table.
+const NS = 'http://www.w3.org/2000/svg';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]static/.test(location.search);
+function el(tag, attrs, parent) {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs || {}) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function text(parent, x, y, str, attrs) {
+  const t = el('text', Object.assign({ x, y }, attrs || {}), parent);
+  t.textContent = str;
+  return t;
+}
+function linear(d0, d1, r0, r1) {
+  const f = v => r0 + (v - d0) / (d1 - d0) * (r1 - r0);
+  f.domain = [d0, d1];
+  return f;
+}
+function band(keys, r0, r1, pad) {
+  const step = (r1 - r0) / keys.length;
+  const bw = step * (1 - pad);
+  const f = k => r0 + keys.indexOf(k) * step + (step - bw) / 2;
+  f.bw = bw; f.step = step;
+  return f;
+}
+function niceTicks(min, max, count) {
+  const span = max - min;
+  const raw = span / count;
+  const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const m = raw / p;
+  const step = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+  const out = [];
+  for (let v = Math.ceil(min / step) * step; v <= max + step / 1e6; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+function niceMax(v, count) {
+  const t = niceTicks(0, v, count || 5);
+  const last = t[t.length - 1];
+  return last >= v ? last : last + (t[1] - t[0]);
+}
+function fmt(n, d) { return n.toLocaleString('en-US', { maximumFractionDigits: d == null ? 0 : d }); }
+function tween(dur, delay, fn) {
+  if (reduce) { fn(1); return; }
+  const start = performance.now() + (delay || 0);
+  fn(0);
+  function step(now) {
+    const t = Math.min(1, Math.max(0, (now - start) / dur));
+    fn(1 - Math.pow(1 - t, 3));
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const tip = document.getElementById('tip');
+function showTip(html, x, y) {
+  tip.innerHTML = html;
+  tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let left = x + 14, top = y - h - 12;
+  if (left + w > innerWidth - 8) left = x - w - 14;
+  if (top < 8) top = y + 16;
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+function hideTip() { tip.hidden = true; }
+function bindTip(node, label, html) {
+  node.setAttribute('tabindex', '0');
+  node.setAttribute('role', 'img');
+  node.setAttribute('aria-label', label);
+  node.classList.add('hit');
+  node.addEventListener('mousemove', e => showTip(html, e.clientX, e.clientY));
+  node.addEventListener('mouseleave', hideTip);
+  node.addEventListener('focus', () => { const r = node.getBoundingClientRect(); showTip(html, r.left + r.width / 2, r.top); });
+  node.addEventListener('blur', hideTip);
+}
+function yGrid(g, scale, ticks, x0, x1, format) {
+  ticks.forEach(v => {
+    const y = scale(v);
+    el('line', { x1: x0, x2: x1, y1: y, y2: y, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x0 - 10, y + 4, format(v), { class: 'tick', 'text-anchor': 'end' });
+  });
+}
+function xGrid(g, scale, ticks, y0, y1, format) {
+  ticks.forEach(v => {
+    const x = scale(v);
+    el('line', { x1: x, x2: x, y1: y0, y2: y1, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x, y1 + 20, format(v), { class: 'tick', 'text-anchor': 'middle' });
+  });
+}
+function legend(items, onToggle) {
+  const box = document.getElementById('legend');
+  box.innerHTML = '';
+  items.forEach(it => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'key';
+    b.setAttribute('aria-pressed', 'true');
+    b.innerHTML = '<i style="background:' + it.color + '"></i>' + it.name;
+    if (onToggle) b.onclick = () => {
+      const on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', on);
+      onToggle(it.name, on);
+    };
+    else b.disabled = true;
+    box.appendChild(b);
+  });
+}
+function table(head, rows) {
+  const t = document.getElementById('table');
+  t.innerHTML = '<thead><tr>' + head.map(h => '<th scope="col">' + h + '</th>').join('') + '</tr></thead><tbody>' +
+    rows.map(r => '<tr>' + r.map((c, i) => i ? '<td>' + c + '</td>' : '<th scope="row">' + c + '</th>').join('') + '</tr>').join('') + '</tbody>';
+}
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function linePath(pts, smooth) {
+  if (!smooth) return pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+  let d = 'M' + pts[0][0].toFixed(1) + ',' + pts[0][1].toFixed(1);
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    d += 'C' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ',' + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) + ' ' +
+      (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ',' + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) + ' ' + p2[0].toFixed(1) + ',' + p2[1].toFixed(1);
+  }
+  return d;
+}
+function areaPath(top, bottom, smooth) {
+  return linePath(top, smooth) + linePath(bottom.slice().reverse(), smooth).replace('M', 'L') + 'Z';
+}
+function arcPath(cx, cy, r0, r1, a0, a1) {
+  if (a1 - a0 >= Math.PI * 2 - 1e-6) {
+    const q = (r, a) => (cx + r * Math.sin(a)).toFixed(2) + ',' + (cy - r * Math.cos(a)).toFixed(2);
+    let full = 'M' + q(r1, a0) + 'A' + r1 + ',' + r1 + ' 0 1 1 ' + q(r1, a0 + Math.PI) + 'A' + r1 + ',' + r1 + ' 0 1 1 ' + q(r1, a0) + 'Z';
+    if (r0 > 0) full += 'M' + q(r0, a0) + 'A' + r0 + ',' + r0 + ' 0 1 0 ' + q(r0, a0 + Math.PI) + 'A' + r0 + ',' + r0 + ' 0 1 0 ' + q(r0, a0) + 'Z';
+    return full;
+  }
+  const large = a1 - a0 > Math.PI ? 1 : 0;
+  const p = (r, a) => (cx + r * Math.sin(a)).toFixed(2) + ',' + (cy - r * Math.cos(a)).toFixed(2);
+  let d = 'M' + p(r1, a0) + 'A' + r1 + ',' + r1 + ' 0 ' + large + ' 1 ' + p(r1, a1);
+  d += r0 > 0 ? 'L' + p(r0, a1) + 'A' + r0 + ',' + r0 + ' 0 ' + large + ' 0 ' + p(r0, a0) + 'Z' : 'L' + cx + ',' + cy + 'Z';
+  return d;
+}
+function polar(cx, cy, r, a) { return [cx + r * Math.sin(a), cy - r * Math.cos(a)]; }
+function quantile(sorted, p) { const i = (sorted.length - 1) * p, lo = Math.floor(i), hi = Math.ceil(i); return sorted[lo] + (sorted[hi] - sorted[lo]) * (i - lo); }
+function kde(values, xs, bw) { const k = 1 / (Math.sqrt(2 * Math.PI) * bw * values.length); return xs.map(x => [x, values.reduce((a, v) => a + Math.exp(-0.5 * Math.pow((x - v) / bw, 2)), 0) * k]); }
+function steps(a, b, n) { return Array.from({ length: n }, (v, i) => a + (b - a) * i / (n - 1)); }
+function seeded(seed) { return () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; }
+let clipCount = 0;
+function reveal(svg, g, x, y, w, h, animate, dur) {
+  const id = 'clip' + (++clipCount);
+  const r = el('rect', { x, y, width: w, height: h }, el('clipPath', { id }, el('defs', {}, svg)));
+  g.setAttribute('clip-path', 'url(#' + id + ')');
+  const draw = t => r.setAttribute('width', w * t);
+  animate ? tween(dur || 1100, 0, draw) : draw(1);
+}
+function scrub(svg, xs, top, bottom, info) {
+  const guide = el('line', { y1: top, y2: bottom, class: 'axis', 'stroke-dasharray': '3 4', opacity: 0 }, svg);
+  const half = xs.length > 1 ? (xs[1] - xs[0]) / 2 : 20;
+  const x0 = xs[0] - half;
+  const zone = el('rect', { x: x0, y: top, width: xs[xs.length - 1] - xs[0] + half * 2, height: bottom - top, fill: 'transparent', tabindex: 0, class: 'zone', role: 'img',
+    'aria-label': 'Chart area. Use the left and right arrow keys to read each value.' }, svg);
+  let cur = -1;
+  function off() { guide.setAttribute('opacity', 0); info(-1, false); hideTip(); }
+  function go(i, cx, cy) {
+    i = Math.max(0, Math.min(xs.length - 1, i)); cur = i;
+    guide.setAttribute('x1', xs[i]); guide.setAttribute('x2', xs[i]); guide.setAttribute('opacity', 1);
+    const r = info(i, true);
+    zone.setAttribute('aria-label', r.label);
+    if (cx == null) { const b = svg.getBoundingClientRect(); cx = b.left + xs[i]; cy = b.top + (r.y != null ? r.y : top + 30); }
+    showTip(r.html, cx, cy);
+  }
+  function near(px) { let best = 0, bd = Infinity; xs.forEach((x, i) => { const d = Math.abs(x - px); if (d < bd) { bd = d; best = i; } }); return best; }
+  zone.addEventListener('mousemove', e => go(near(e.clientX - svg.getBoundingClientRect().left), e.clientX, e.clientY));
+  zone.addEventListener('mouseleave', off);
+  zone.addEventListener('blur', off);
+  zone.addEventListener('focus', () => go(cur < 0 ? xs.length - 1 : cur));
+  zone.addEventListener('keydown', e => {
+    const k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowLeft') { e.preventDefault(); go((cur < 0 ? xs.length - 1 : cur) + (k === 'ArrowRight' ? 1 : -1)); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(xs.length - 1); }
+  });
+  return zone;
+}
+function pointNav(svg, pts, box, info) {
+  const ring = el('circle', { r: 0, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 2.5, opacity: 0, 'pointer-events': 'none' }, svg);
+  const zone = el('rect', { x: box[0], y: box[1], width: box[2] - box[0], height: box[3] - box[1], fill: 'transparent', tabindex: 0, class: 'zone', role: 'img',
+    'aria-label': 'Chart area. Use the arrow keys to move from point to point.' }, svg);
+  const order = pts.map((p, i) => i).sort((a, b) => pts[a].x - pts[b].x || pts[a].y - pts[b].y);
+  let cur = -1;
+  function show(i, cx, cy) {
+    cur = i; const p = pts[i];
+    ring.setAttribute('cx', p.x); ring.setAttribute('cy', p.y); ring.setAttribute('r', (p.r || 5) + 4); ring.setAttribute('opacity', 1);
+    const r = info(i); zone.setAttribute('aria-label', r.label);
+    if (cx == null) { const b = svg.getBoundingClientRect(); cx = b.left + p.x; cy = b.top + p.y - (p.r || 5); }
+    showTip(r.html, cx, cy);
+  }
+  function off() { ring.setAttribute('opacity', 0); hideTip(); }
+  zone.addEventListener('mousemove', e => {
+    const b = svg.getBoundingClientRect(), mx = e.clientX - b.left, my = e.clientY - b.top;
+    let best = -1, bd = Infinity;
+    pts.forEach((p, i) => { const d = Math.hypot(p.x - mx, p.y - my) - (p.r || 0); if (d < bd) { bd = d; best = i; } });
+    if (best >= 0 && bd < 22) show(best, e.clientX, e.clientY); else off();
+  });
+  zone.addEventListener('mouseleave', off);
+  zone.addEventListener('blur', off);
+  zone.addEventListener('focus', () => { if (pts.length) show(cur < 0 ? order[0] : cur); });
+  zone.addEventListener('keydown', e => {
+    const k = e.key;
+    if (!['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(k) || !pts.length) return;
+    e.preventDefault();
+    let n = order.indexOf(cur < 0 ? order[0] : cur);
+    if (k === 'ArrowRight' || k === 'ArrowUp') n++; else if (k === 'ArrowLeft' || k === 'ArrowDown') n--; else if (k === 'Home') n = 0; else n = order.length - 1;
+    show(order[Math.max(0, Math.min(order.length - 1, n))]);
+  });
+  return zone;
+}
+function labelSpot(taken, cands, lw, lh, bounds) {
+  for (const [x, y, a] of cands) {
+    const x0 = a === 'end' ? x - lw : a === 'middle' ? x - lw / 2 : x;
+    const r = [x0 - 2, y - lh, x0 + lw + 2, y + 3];
+    if (bounds && (r[0] < bounds[0] || r[2] > bounds[2] || r[1] < bounds[1] || r[3] > bounds[3])) continue;
+    if (!taken.some(t => r[0] < t[2] && r[2] > t[0] && r[1] < t[3] && r[3] > t[1])) { taken.push(r); return [x, y, a]; }
+  }
+  return null;
+}
+function mount(draw) {
+  const box = document.getElementById('chart');
+  let last = 0;
+  function render(animate) {
+    const w = box.clientWidth, h = box.clientHeight;
+    box.innerHTML = '';
+    const svg = el('svg', { viewBox: '0 0 ' + w + ' ' + h, width: w, height: h }, box);
+    draw(svg, w, h, animate);
+  }
+  new ResizeObserver(() => {
+    if (Math.abs(box.clientWidth - last) < 2) return;
+    const first = last === 0;
+    last = box.clientWidth;
+    render(first);
+  }).observe(box);
+  return render;
+}
+function buttons(onPick) {
+  document.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    onPick(b.dataset.v);
+  });
+}
+
+// The chart
+const K = {"visits":[2644,3429,3437,2637,2501,2700,2910,2364,3686,3166,2540,2372,2436,2399,2790,3456,3416,2953,2597,2720,2797,2741,3466,3343,2837,3072,3052,2783,2600,3601,3183,3135,2750,2504,2637,2991,3887,3708,2737,2567,2801,2839,2582,3485,3560,2575,2633,2788,3118,3182,3445,3528,2751,2905,2709,2875,3148,4136,4117,2899,2985,3028,2813,2867,4108,3602,2920,3070,3130,2939,3349,3809,3904,2752,3207,3037,3254,3006,4028,3985,3441,3221,2908,3239,3497,4424,4067,3203,3257,3271,3416,3495,3853,3785,2933,3023,3260,3122,3004,3863,4405,3346,3072,2966,3601,3026,4072,4083,3689,3645,3218,3219,3176,3952,3899,3476,3133,3478,3113,2974,4680,4581,3000,3716,3106,3637,3649,4326,4611,3627,3411,3549,3788,3102,4345,4410,3453,3383,3549,3838,3375,4909,4856,3694,3386,3261,3968,3789,4660,4033,3820,3669,3979,3675,3409,4298,4549,3859,3366,3520,3475,3834,4976,5151,4012,3438,3648,4049,3850,4229,5068,4145,3443,4040,3937,4150,5062,4542,3502,3612],"orders":[103,141,134,99,91,108,112,99,147,115,94,97,86,87,105,139,127,101,107,106,111,99,118,116,103,125,125,114,90,128,132,124,114,86,92,122,133,136,104,91,98,111,95,142,129,91,110,113,119,110,141,141,108,108,97,109,109,171,173,112,114,110,101,116,146,140,102,111,127,107,115,139,144,94,116,111,114,109,147,154,135,117,114,115,128,157,162,119,129,134,126,144,151,152,102,122,131,116,111,162,175,116,113,109,138,115,164,165,137,149,125,115,109,156,153,139,111,145,116,101,190,172,114,134,116,145,128,148,160,128,143,125,156,125,162,164,133,141,131,142,122,178,201,136,124,132,164,140,187,167,159,148,147,149,126,167,188,149,131,137,127,132,176,201,149,135,137,143,160,176,203,148,130,165,163,164,185,156,120,143],"rev":[6113,8490,7584,5999,5151,6048,6534,5424,7844,6019,5075,5734,4597,4719,5957,7682,7568,5803,6308,5607,6309,6004,6644,6311,6020,7093,7459,6676,4981,6993,7921,6576,6893,5177,5191,7562,7073,7389,5962,4950,5941,6154,5381,7586,7749,5683,6534,6085,7236,6524,8114,8743,6744,5893,5237,6033,5996,10102,10758,6855,6472,6400,5735,7266,8498,8704,5544,6860,7264,5909,7004,8713,8156,5588,7377,6219,6388,6234,8822,8852,7881,6562,7037,6644,7904,9568,10259,7221,7973,8281,7896,8843,9565,9659,6138,6760,7820,6958,6806,9930,11010,6872,7192,6195,7659,7396,9844,10360,8508,9502,7073,6583,6884,8787,9322,8896,7089,9199,7485,6062,10718,10123,7333,8208,7593,8467,8386,9407,9703,7580,9311,8060,10170,7584,10258,10296,8367,8900,8209,8016,7874,10638,11567,7818,7810,8229,9487,7966,11973,11025,9685,8993,9655,9052,7641,9857,11200,8655,7766,8878,7968,7611,11349,13154,8573,7738,8954,9551,10237,10151,13097,9822,8020,10701,10524,10634,11125,9207,7786,9473],"ret":[6,8,11,7,5,9,6,6,9,8,5,7,5,5,7,7,7,7,6,6,7,8,9,9,8,10,9,9,6,11,9,10,6,7,7,9,11,8,6,5,7,6,6,9,7,6,9,7,8,6,11,10,8,8,5,7,7,9,12,9,8,9,8,9,12,12,6,8,9,8,6,9,8,7,6,9,9,7,8,12,8,8,6,9,8,8,12,9,11,8,10,10,9,9,8,7,10,6,6,10,12,7,7,6,9,10,9,12,11,9,8,8,9,9,12,10,9,9,9,8,11,14,8,11,6,12,10,10,13,8,7,9,9,10,10,9,11,9,7,8,8,15,11,7,10,11,12,11,14,10,10,11,8,9,8,10,11,13,10,10,9,7,12,11,12,9,8,9,13,13,14,12,7,8,13,10,11,9,9,7]};
+const N = K.rev.length;
+const day = i => { const d = new Date(2026, 8, 22 - (N - 1 - i)); return d.getDate() + ' ' + MONTHS[d.getMonth()]; };
+const sum = (a, s, e) => a.slice(s, e).reduce((x, y) => x + y, 0);
+const CARDS = [
+  { t: 'Revenue', f: (s, e) => sum(K.rev, s, e), fmt: v => '$' + fmt(Math.round(v)), daily: i => K.rev[i], dfmt: v => '$' + fmt(v), good: 1 },
+  { t: 'Orders', f: (s, e) => sum(K.orders, s, e), fmt: v => fmt(v), daily: i => K.orders[i], dfmt: v => fmt(v) + ' orders', good: 1 },
+  { t: 'Average order', f: (s, e) => sum(K.rev, s, e) / sum(K.orders, s, e), fmt: v => '$' + v.toFixed(2), daily: i => K.rev[i] / K.orders[i], dfmt: v => '$' + v.toFixed(2), good: 1 },
+  { t: 'Return rate', f: (s, e) => sum(K.ret, s, e) / sum(K.orders, s, e) * 100, fmt: v => v.toFixed(1) + '%', daily: i => K.ret[i] / K.orders[i] * 100, dfmt: v => v.toFixed(1) + '%', good: -1 }
+];
+let range = 30;
+legend([{ name: 'Better than before', color: 'var(--up)' }, { name: 'Worse than before', color: 'var(--down)' }]);
+const box = document.getElementById('chart');
+function render(animate) {
+  const s = N - range, p = N - range * 2;
+  table(['Measure', 'This period', 'Period before', 'Change'], CARDS.map(c => { const a = c.f(s, N), b = c.f(p, s); return [c.t, c.fmt(a), c.fmt(b), ((a - b) / b * 100 >= 0 ? '+' : '') + ((a - b) / b * 100).toFixed(1) + '%']; }));
+  box.innerHTML = '<div class="kpis">' + CARDS.map(c => {
+    const a = c.f(s, N), b = c.f(p, s), ch = (a - b) / b * 100, good = ch * c.good >= 0;
+    return '<article class="kpi"><h2>' + c.t + '</h2><p class="big">' + c.fmt(a) + '</p><span class="badge ' + (good ? 'good' : 'bad') + '">' + (ch >= 0 ? '+' : '') + ch.toFixed(1) + '%</span><span class="vs">vs previous ' + range + ' days</span><svg></svg></article>';
+  }).join('') + '</div>';
+  box.querySelectorAll('svg').forEach((svg, k) => {
+    const c = CARDS[k], w = svg.clientWidth || 240, h = 64, vals = [];
+    for (let i = s; i < N; i++) vals.push(c.daily(i));
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+    const lo = Math.min(...vals), hi = Math.max(...vals);
+    const x = linear(0, vals.length - 1, 2, w - 2), y = linear(lo, hi, h - 4, 4);
+    const pts = vals.map((v, i) => [x(i), y(v)]);
+    const g = el('g', {}, svg);
+    el('path', { d: areaPath(pts, pts.map(q => [q[0], h]), false), fill: 'var(--soft)' }, g);
+    el('path', { d: linePath(pts, false), fill: 'none', stroke: 'var(--accent)', 'stroke-width': 2, 'stroke-linejoin': 'round' }, g);
+    reveal(svg, g, 0, 0, w, h, animate, 900);
+    const dot = el('circle', { r: 4, fill: 'var(--ink)', opacity: 0 }, svg);
+    scrub(svg, pts.map(q => q[0]), 0, h, (i, on) => {
+      dot.setAttribute('opacity', on ? 1 : 0); if (!on) return;
+      dot.setAttribute('cx', pts[i][0]); dot.setAttribute('cy', pts[i][1]);
+      return { y: pts[i][1], label: c.t + ' on ' + day(s + i) + ': ' + c.dfmt(vals[i]), html: '<b>' + c.t + '</b><br>' + day(s + i) + ': ' + c.dfmt(vals[i]) };
+    });
+  });
+}
+let lastW = 0;
+new ResizeObserver(() => { if (Math.abs(box.clientWidth - lastW) < 2) return; const first = !lastW; lastW = box.clientWidth; render(first); }).observe(box);
+buttons(v => { range = +v; render(true); });
+</script>
+</body>
+</html>

@@ -215,7 +215,12 @@ function areaPath(top, bottom, smooth) {
   return linePath(top, smooth) + linePath(bottom.slice().reverse(), smooth).replace('M', 'L') + 'Z';
 }
 function arcPath(cx, cy, r0, r1, a0, a1) {
-  if (a1 - a0 >= Math.PI * 2 - 1e-6) a1 = a0 + Math.PI * 2 - 1e-4;
+  if (a1 - a0 >= Math.PI * 2 - 1e-6) {
+    const q = (r, a) => (cx + r * Math.sin(a)).toFixed(2) + ',' + (cy - r * Math.cos(a)).toFixed(2);
+    let full = 'M' + q(r1, a0) + 'A' + r1 + ',' + r1 + ' 0 1 1 ' + q(r1, a0 + Math.PI) + 'A' + r1 + ',' + r1 + ' 0 1 1 ' + q(r1, a0) + 'Z';
+    if (r0 > 0) full += 'M' + q(r0, a0) + 'A' + r0 + ',' + r0 + ' 0 1 0 ' + q(r0, a0 + Math.PI) + 'A' + r0 + ',' + r0 + ' 0 1 0 ' + q(r0, a0) + 'Z';
+    return full;
+  }
   const large = a1 - a0 > Math.PI ? 1 : 0;
   const p = (r, a) => (cx + r * Math.sin(a)).toFixed(2) + ',' + (cy - r * Math.cos(a)).toFixed(2);
   let d = 'M' + p(r1, a0) + 'A' + r1 + ',' + r1 + ' 0 ' + large + ' 1 ' + p(r1, a1);

@@ -53,7 +53,13 @@ const CATEGORIES = [
     desc: '10 free flow and network charts made with HTML, CSS and vanilla JavaScript. Sankey, chord, arc, network graph, alluvial, tree, dendrogram, org chart, flowchart, radial tree.',
     intro: 'Some data is about connections: where people go next, who knows whom, how a company or a website is organized. These charts show flows between steps, links between people and the shape of hierarchies. Every layout, from the Sankey bands to the force directed network, is written in plain JavaScript in a single HTML file.',
   },
-  { num: 7, slug: '07-dashboard-widgets', name: 'Dashboard Widgets', ready: false },
+  {
+    num: 7, slug: '07-dashboard-widgets', name: 'Dashboard Widgets', ready: true,
+    keywords: 'gauge chart html, progress ring javascript, kpi card, calendar heatmap, gantt chart, waterfall chart, word cloud, pictogram, radial bar chart, timeline',
+    title: 'Free Dashboard Widgets in HTML and JavaScript: Gauge, KPI Cards, Gantt',
+    desc: '10 free dashboard widgets made with HTML, CSS and vanilla JavaScript. Gauge, progress rings, KPI cards, calendar heatmap, Gantt, waterfall, word cloud, pictogram, radial bar, timeline.',
+    intro: 'Dashboards need more than bars and lines. These ten widgets cover the pieces people ask for most: a gauge for a score, rings for daily goals, KPI cards with trend lines, a year of activity, a project plan, a profit breakdown, a word cloud and more. Each one is a single HTML file with no library, ready to drop into your own dashboard.',
+  },
   { num: 8, slug: '08-maps-and-globes', name: 'Maps and Globes', ready: false },
   { num: 9, slug: '09-3d-charts', name: '3D Charts', ready: false },
   { num: 10, slug: '10-3d-science-and-space', name: '3D Science and Space', ready: false },
@@ -1978,6 +1984,321 @@ genres.forEach(([name, styles]) => {
       ['Why use a radial tree instead of a normal tree?', 'The outer ring has much more room than a straight edge, so a radial tree fits many end items in a square space.'],
       ['How do you keep labels readable in a radial tree?', 'Rotate each label to point away from the center, and flip labels on the left half so they read left to right. This template does both.'],
       ['Is a radial tree the same as a sunburst chart?', 'They show the same kind of data. A radial tree draws branches and dots, while a sunburst fills rings with sized pieces.'],
+    ],
+  },
+  {
+    num: 61, cat: '07-dashboard-widgets', slug: '061-gauge-chart', name: 'Gauge Chart',
+    example: 'a hotel Net Promoter Score by quarter',
+    title: 'Free Gauge Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free gauge chart made with HTML, CSS and vanilla JavaScript. No library. Colored zones, an animated needle and a quarter switch. One file to download.',
+    keywords: 'gauge chart html, gauge chart javascript, speedometer chart, dial chart without library, nps gauge, kpi gauge',
+    what: [
+      'A gauge chart shows one number on a dial, like the speedometer in a car. A needle points to the value, and colored zones show at a glance whether it is poor, good or great.',
+      'Gauges work well for a single score that people check often, like a Net Promoter Score or server load. The zones give the number meaning without anyone needing to know what a good score is.',
+    ],
+    glance: { best: 'One score against clear zones', data: 'One number and the limits of each zone', avoid: 'Comparing many scores. Use a bullet chart.' },
+    when: ['Customer satisfaction and NPS scores', 'Server, battery or storage levels', 'Sales against a monthly target', 'Health or quality scores on a dashboard'],
+    instead: [['009-bullet-chart', 'You need to compare several scores in little space'], ['062-progress-ring', 'You are tracking progress toward goals'], ['023-semi-donut-chart', 'The total is made of several parts']],
+    features: ['A half circle dial with four colored zones', 'A needle that swings from the last value to the new one', 'The score counts up in the middle as the needle moves', 'A quarter switch to compare the year', 'The zone name appears in its own color', 'Tooltips on each zone and a data table'],
+    code: `const score = 47, cx = 220, cy = 220, r = 160;
+const angle = v => (-90 + (v + 100) / 200 * 180) * Math.PI / 180;   // -100 to +100 across the top
+const zones = [[-100, 0, '#e5484d'], [0, 30, '#f5a524'], [30, 70, '#46a758'], [70, 100, '#1d6b3a']];
+const pt = (rad, v) => (cx + rad * Math.sin(angle(v))) + ',' + (cy - rad * Math.cos(angle(v)));
+
+zones.forEach(([a, b, color]) => make('path', { fill: color,
+  d: 'M' + pt(r, a) + 'A' + r + ',' + r + ' 0 0 1 ' + pt(r, b) + 'L' + pt(r * 0.74, b) + 'A' + r * 0.74 + ',' + r * 0.74 + ' 0 0 0 ' + pt(r * 0.74, a) + 'Z' }));
+make('line', { x1: cx, y1: cy, x2: pt(r * 0.7, score).split(',')[0], y2: pt(r * 0.7, score).split(',')[1], stroke: '#2a2014', 'stroke-width': 5 });
+drawCircle(cx, cy, 10, '#2a2014');`,
+    faq: [
+      ['What is a gauge chart used for?', 'A gauge shows a single value against a scale with colored zones, like a speedometer. It is used for scores and levels that people check often.'],
+      ['How do I make a gauge chart without a library?', 'Draw the zones as SVG arc paths across a half circle, then draw a needle rotated to the angle of your value. This template does it in plain JavaScript.'],
+      ['What is a Net Promoter Score?', 'It asks customers how likely they are to recommend you from 0 to 10. The share of 9s and 10s minus the share of 0 to 6 gives a score from -100 to +100.'],
+      ['Are gauge charts a good idea?', 'For one key number with clear zones, yes. For several numbers they take a lot of space, and a bullet chart shows the same thing more compactly.'],
+    ],
+  },
+  {
+    num: 62, cat: '07-dashboard-widgets', slug: '062-progress-ring', name: 'Progress Ring Chart',
+    example: 'daily goals in a language learning app',
+    title: 'Free Progress Ring Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free progress ring chart made with HTML, CSS and vanilla JavaScript. Concentric goal rings that fill up, with day and week views. One file to download.',
+    keywords: 'progress ring, progress circle javascript, activity rings html, goal ring chart, circular progress bar css',
+    what: [
+      'A progress ring shows how close you are to a goal as a ring that fills up. An empty ring means you have not started, a full ring means the goal is done, and a second lap means you went past it.',
+      'Stacking a few rings inside each other shows several goals at once in a small space. People love closing rings, which is why fitness and learning apps use them to keep users coming back.',
+    ],
+    glance: { best: 'Progress toward two to four goals', data: 'A current value and a target for each goal', avoid: 'Comparing sizes between goals. Use bars.' },
+    when: ['Daily goals in fitness, learning or health apps', 'Project or course completion', 'Fundraising or savings progress', 'Team targets on a dashboard'],
+    instead: [['061-gauge-chart', 'You show one score against zones, not a goal'], ['009-bullet-chart', 'You track many targets side by side']],
+    features: ['Three rings inside each other, each with its own color', 'Rings fill up with a rounded end cap', 'Goals past 100% show a second lap', 'A switch between today, yesterday and this week', 'Big numbers and what is left to go beside the rings', 'Tooltips and a data table'],
+    code: `const goals = [[18, 20, '#ff6b6b'], [34, 40, '#4dabf7'], [3, 3, '#51cf66']];
+const cx = 160, cy = 160, width = 28;
+const pt = (r, a) => (cx + r * Math.sin(a)) + ',' + (cy - r * Math.cos(a));
+
+goals.forEach(([done, target, color], i) => {
+  const r = 130 - i * (width + 6), a = Math.min(done / target, 0.9999) * Math.PI * 2;
+  make('circle', { cx, cy, r, fill: 'none', stroke: color, 'stroke-opacity': 0.2, 'stroke-width': width });
+  make('path', { d: 'M' + pt(r, 0) + 'A' + r + ',' + r + ' 0 ' + (a > Math.PI ? 1 : 0) + ' 1 ' + pt(r, a), fill: 'none', stroke: color, 'stroke-width': width, 'stroke-linecap': 'round' });
+});`,
+    faq: [
+      ['What is a progress ring?', 'A progress ring is a circle that fills up as you get closer to a goal. It is a round version of a progress bar.'],
+      ['How do I make a circular progress bar in HTML?', 'Draw a faint full circle as the track, then draw an SVG arc from the top to the angle of your progress. A round line cap gives it the familiar look.'],
+      ['How do I show more than 100%?', 'Draw a second, slightly thinner arc on top for the part past the goal, like this template does. People instantly read it as an extra lap.'],
+      ['How many rings should I use?', 'Two to four. More than that and the inner rings get too small to read.'],
+    ],
+  },
+  {
+    num: 63, cat: '07-dashboard-widgets', slug: '063-kpi-cards', name: 'KPI Cards with Sparklines',
+    example: 'revenue, orders, average order and returns for an online shop',
+    title: 'Free KPI Cards with Sparklines in HTML and JavaScript (Live Demo)',
+    desc: 'Free KPI cards with sparklines made with HTML, CSS and vanilla JavaScript. Big numbers, change badges and mini charts with a range switch. One file to download.',
+    keywords: 'kpi cards html, kpi dashboard template, stat cards css, metric cards with sparkline, dashboard cards javascript',
+    what: [
+      'KPI cards show the few numbers that matter most, each on its own card with a big value, a badge for the change since last period and a tiny trend line. KPI stands for key performance indicator.',
+      'They sit at the top of most dashboards because they answer the first question anyone asks: how are we doing right now? The badge color tells you if the change is good or bad, which is not always the same as up or down.',
+    ],
+    glance: { best: 'The top numbers at the head of a dashboard', data: 'A daily value for each measure over two periods', avoid: 'Showing more than about six cards. Pick what matters.' },
+    when: ['Online shop and app dashboards', 'Weekly or monthly reports', 'Team and project dashboards', 'Finance and sales summaries'],
+    instead: [['017-sparkline', 'You want many small trends in a table'], ['011-line-chart', 'One measure needs a full size chart']],
+    features: ['Four cards in a grid that stacks on phones', 'Change badges in green or red, with return rate treated as better when it falls', 'A sparkline in every card with hover values for each day', 'A switch between 7, 30 and 90 days', 'Every number is worked out from the daily data', 'A data table with this period and the one before'],
+    code: `const days = [8620, 9140, 8890, 9760, 10210, 9980, 10640];
+const total = days.reduce((a, b) => a + b, 0), before = 61200;
+const change = (total - before) / before * 100;
+const x = i => 20 + i * 36, lo = Math.min(...days), hi = Math.max(...days), y = v => 150 - (v - lo) / (hi - lo) * 40;
+
+drawRect(10, 10, 240, 160, '#ffffff');
+drawText(24, 40, 'Revenue');
+drawText(24, 80, '$' + total.toLocaleString('en-US'));
+drawText(24, 105, (change >= 0 ? '+' : '') + change.toFixed(1) + '% vs last week');
+make('path', { d: 'M' + days.map((v, i) => x(i) + ',' + y(v)).join('L'), fill: 'none', stroke: '#3f7d4e', 'stroke-width': 2 });`,
+    faq: [
+      ['What is a KPI card?', 'A KPI card is a small box on a dashboard showing one key number, how it changed since the last period, and often a tiny trend line.'],
+      ['How many KPI cards should a dashboard have?', 'Three to six. Choose the numbers people act on. Too many cards and none of them stand out.'],
+      ['Should the change badge be green when the number goes up?', 'Only if up is good. For costs, return rates or complaints, a drop is good news, so the badge should be green when they fall. This template handles that.'],
+      ['What should I compare against?', 'The period just before is the most common choice, as used here. The same period last year works better for seasonal businesses.'],
+    ],
+  },
+  {
+    num: 64, cat: '07-dashboard-widgets', slug: '064-calendar-heatmap', name: 'Calendar Heatmap',
+    example: 'a year of code changes on an open source project',
+    title: 'Free Calendar Heatmap in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free calendar heatmap made with HTML, CSS and vanilla JavaScript. A full year of daily activity in the style of a GitHub contribution graph. One file to download.',
+    keywords: 'calendar heatmap, github contribution graph html, calendar heatmap javascript, daily activity chart, year heatmap',
+    what: [
+      'A calendar heatmap shows a year as a grid of small squares, one per day, arranged in weeks. The darker the square, the more activity on that day.',
+      'Most people know it from GitHub profiles. It makes habits and patterns visible: busy weeks, quiet holidays, weekends off and streaks of daily work.',
+    ],
+    glance: { best: 'Daily activity over a whole year', data: 'A number for every day', avoid: 'Data that is not daily. Use a bar or line chart.' },
+    when: ['Code commits or writing streaks', 'Workouts, study or habit tracking', 'Daily sales or bookings', 'Support tickets or website visits by day'],
+    instead: [['043-heatmap', 'You compare hours against days of the week'], ['011-line-chart', 'You care about the trend more than single days']],
+    features: ['365 squares laid out in weeks, Monday to Sunday', 'Five shades from no activity to 10 or more', 'Month labels across the top', 'Arrow keys move day by day and week by week', 'Scrolls sideways on phones so squares stay readable', 'A monthly summary table'],
+    code: `const counts = Array.from({ length: 365 }, (v, i) => (i * 7919) % 11 > 6 ? (i * 31) % 12 : 0);
+const shades = ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'];
+const level = v => v === 0 ? 0 : v <= 2 ? 1 : v <= 5 ? 2 : v <= 9 ? 3 : 4;
+const firstDay = 2, size = 10; // 1 January 2025 was a Wednesday
+
+counts.forEach((v, i) => {
+  const k = i + firstDay;
+  drawRect(20 + Math.floor(k / 7) * size, 20 + (k % 7) * size, size - 2, size - 2, shades[level(v)]);
+});`,
+    faq: [
+      ['What is a calendar heatmap?', 'A calendar heatmap is a grid of days, usually a year, where the color of each square shows how much happened on that day.'],
+      ['How do I make a GitHub style contribution graph?', 'Put each day in a column for its week and a row for its weekday, then color it by its count in four or five steps. This template shows the full code.'],
+      ['How many color steps should I use?', 'Four or five, plus one for zero. More steps are hard to tell apart.'],
+      ['How do I make it work on a phone?', 'A full year needs about 53 columns, which is too many for a phone. Let the calendar scroll sideways, as this template does, so the squares stay big enough to tap.'],
+    ],
+  },
+  {
+    num: 65, cat: '07-dashboard-widgets', slug: '065-gantt-chart', name: 'Gantt Chart',
+    example: 'a cafe renovation plan with tasks and milestones',
+    title: 'Free Gantt Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free Gantt chart made with HTML, CSS and vanilla JavaScript. Tasks, progress, milestones, links between tasks and a today line. One file to download.',
+    keywords: 'gantt chart html, gantt chart javascript, project timeline chart, gantt without library, project plan chart',
+    what: [
+      'A Gantt chart shows a project plan as bars on a timeline. Each task gets a row, and its bar runs from its start date to its end date. The filled part shows how much is done.',
+      'Arrows show which tasks must finish before others can start, diamonds mark key dates, and a today line shows at a glance what is on track and what is running late.',
+    ],
+    glance: { best: 'Project plans with dates and order', data: 'A start date, end date and progress for each task', avoid: 'Hundreds of tasks. Group them into phases.' },
+    when: ['Building, renovation and event projects', 'Software releases and marketing launches', 'Course and training schedules', 'Any plan you share with a team or client'],
+    instead: [['070-timeline', 'You show past events, not a plan'], ['059-flowchart', 'Order matters but dates do not']],
+    features: ['Task bars with a darker part for progress', 'Tasks colored by phase', 'Arrows that show which task comes first', 'Diamond milestones and a dashed today line', 'Tooltips with days left or start date', 'A switch to hide the arrows and a full task table'],
+    code: `const tasks = [['Permits', '2026-08-10', '2026-08-28', 100], ['Plumbing', '2026-09-07', '2026-09-25', 80], ['Painting', '2026-10-12', '2026-10-21', 0]];
+const start = new Date('2026-08-01'), end = new Date('2026-11-01');
+const x = d => 120 + (new Date(d) - start) / (end - start) * 460;
+
+tasks.forEach(([name, from, to, done], i) => {
+  const y = 30 + i * 40;
+  drawText(110, y + 18, name, 'end');
+  drawRect(x(from), y, x(to) - x(from), 24, '#f0c9b8');
+  drawRect(x(from), y, (x(to) - x(from)) * done / 100, 24, '#b5552d');
+});
+drawLine(x('2026-09-23'), 20, x('2026-09-23'), 150, '#b5552d', 2, '5 4'); // today`,
+    faq: [
+      ['What is a Gantt chart?', 'A Gantt chart is a bar chart of a project plan, with one bar per task placed on a timeline from its start to its end date.'],
+      ['Who invented the Gantt chart?', 'It is named after Henry Gantt, an American engineer who made it popular around 1910 for planning factory work.'],
+      ['What do the arrows in a Gantt chart mean?', 'They are dependencies. An arrow from one task to another means the second cannot start until the first is finished.'],
+      ['How do I show progress in a Gantt chart?', 'Fill part of each bar in a darker color, sized to the share that is done, and add a today line so late tasks stand out.'],
+    ],
+  },
+  {
+    num: 66, cat: '07-dashboard-widgets', slug: '066-waterfall-chart', name: 'Waterfall Chart',
+    example: 'how a bakery turns sales into profit',
+    title: 'Free Waterfall Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free waterfall chart made with HTML, CSS and vanilla JavaScript. Shows how a starting value becomes a final total through gains and losses. One file to download.',
+    keywords: 'waterfall chart html, waterfall chart javascript, bridge chart, profit and loss chart, cash flow chart',
+    what: [
+      'A waterfall chart shows how you get from one number to another, step by step. Each bar starts where the last one ended, going up for money in and down for money out, and the final bar shows the result.',
+      'It is the clearest way to explain a profit and loss statement to people who do not read accounts. You can see at once which costs take the biggest bites out of sales.',
+    ],
+    glance: { best: 'Explaining how a total was built up', data: 'A list of positive and negative amounts in order', avoid: 'Data over time. Use a line or bar chart.' },
+    when: ['Profit and loss for a business', 'Cash flow over a month or year', 'Budget changes from last year to this year', 'Explaining changes in headcount or stock'],
+    instead: [['010-diverging-bar-chart', 'Each item stands on its own and does not add up'], ['003-stacked-bar-chart', 'You want to show parts of a total at several points in time']],
+    features: ['Floating bars that start where the last one ended', 'Green for money in, red for money out, dark blue for the result', 'Dashed lines joining each step', 'Values in thousands above every bar', 'Tooltips with the running total', 'Tilted labels on phones and a full data table'],
+    code: `const steps = [['Sales', 186400], ['Ingredients', -61200], ['Staff', -58900], ['Rent', -21600]];
+const y = v => 280 - v / 200000 * 260;
+let total = 0;
+
+steps.forEach(([name, v], i) => {
+  const from = total, to = total + v;
+  drawRect(40 + i * 110, y(Math.max(from, to)), 80, Math.abs(y(from) - y(to)), v >= 0 ? '#2f8a57' : '#d0463b');
+  drawText(80 + i * 110, 298, name, 'middle');
+  total = to;
+});
+drawRect(40 + steps.length * 110, y(total), 80, y(0) - y(total), '#28435e');`,
+    faq: [
+      ['What is a waterfall chart?', 'A waterfall chart shows how a starting value is changed by a series of increases and decreases to reach a final value. Each bar floats where the previous one ended.'],
+      ['What is a waterfall chart used for?', 'Mostly for finance: profit and loss, cash flow and budget changes. It is also handy for explaining any change made of several parts.'],
+      ['Is a waterfall chart the same as a bridge chart?', 'Yes. It is also called a bridge chart, a cascade chart or a flying bricks chart.'],
+      ['Should the axis start at zero?', 'Yes. The bars show amounts, so starting at zero keeps their sizes honest.'],
+    ],
+  },
+  {
+    num: 67, cat: '07-dashboard-widgets', slug: '067-word-cloud', name: 'Word Cloud',
+    example: 'words guests use in hotel reviews',
+    title: 'Free Word Cloud in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free word cloud made with HTML, CSS and vanilla JavaScript. Words sized by count and colored by sentiment, with a spiral layout and filters. One file to download.',
+    keywords: 'word cloud html, word cloud javascript, tag cloud, word cloud without library, review word cloud',
+    what: [
+      'A word cloud shows a set of words where the size of each word matches how often it appears. The biggest words are the ones people use most.',
+      'It is a quick, friendly way to sum up a pile of text like reviews or survey answers. Coloring words by meaning, like praise and complaints, turns it from decoration into something you can act on.',
+    ],
+    glance: { best: 'A quick feel for common words in text', data: 'A list of words with a count for each', avoid: 'Exact comparisons. Use a bar chart.' },
+    when: ['Customer reviews and survey answers', 'Common search terms on your site', 'Topics in comments or support tickets', 'Themes from workshops and interviews'],
+    instead: [['005-horizontal-bar-chart', 'You need an exact ranking of words'], ['026-waffle-chart', 'You want shares of a few answers']],
+    features: ['A spiral layout that places the biggest words first without overlaps', 'Word sizes measured with canvas so they fit exactly', 'Green for praise, red for complaints, gray for topics', 'Filters for praise and complaints only', 'Every word has a tooltip and a Tab stop', 'A table of every word and its count'],
+    code: `const words = [['friendly', 142], ['clean', 128], ['location', 118], ['small', 48], ['noisy', 41]];
+const ctx = document.createElement('canvas').getContext('2d');
+const placed = [], cx = 300, cy = 150;
+
+words.forEach(([word, count]) => {
+  const size = 14 + Math.sqrt(count) * 3; ctx.font = size + 'px sans-serif';
+  const w = ctx.measureText(word).width, h = size;
+  for (let t = 0; t < 2000; t++) {
+    const x = cx + t * 0.9 * Math.cos(t * 0.35) - w / 2, y = cy + t * 0.6 * Math.sin(t * 0.35);
+    if (placed.some(p => x < p.x + p.w && x + w > p.x && y - h < p.y && y > p.y - p.h)) continue;
+    placed.push({ x, y, w, h });
+    make('text', { x, y, 'font-size': size }).textContent = word;
+    break;
+  }
+});`,
+    faq: [
+      ['What is a word cloud?', 'A word cloud is a picture of words where each word is sized by how often it appears in a text. It is also called a tag cloud.'],
+      ['How does a word cloud place the words?', 'It starts at the center and moves outward along a spiral, placing each word at the first spot where it does not overlap any word already placed. Bigger words go first.'],
+      ['Are word clouds useful?', 'For a quick overview, yes. They are not good for exact comparisons, so pair them with a bar chart of the top words when numbers matter.'],
+      ['Should I remove common words?', 'Yes. Words like the, and or very should be dropped before counting, or they will crowd out the words that tell you something.'],
+    ],
+  },
+  {
+    num: 68, cat: '07-dashboard-widgets', slug: '068-pictogram-chart', name: 'Pictogram Chart',
+    example: 'trees planted by a charity each year',
+    title: 'Free Pictogram Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free pictogram chart made with HTML, CSS and vanilla JavaScript. Icons stand for amounts, with part icons for the remainder. One file to download.',
+    keywords: 'pictogram chart, pictograph javascript, icon chart html, isotype chart, infographic chart',
+    what: [
+      'A pictogram chart uses rows of small icons to show amounts. Each icon stands for a fixed number, like 100 trees, and a part icon shows what is left over.',
+      'Icons make numbers feel real and memorable, which is why pictograms are popular in reports, infographics and charity updates. Counting trees is more engaging than reading a bar.',
+    ],
+    glance: { best: 'Friendly counts for reports and infographics', data: 'A number for each group and a value per icon', avoid: 'Very large ranges or precise comparisons.' },
+    when: ['Charity and impact reports', 'People, homes or items counted by year', 'School and community newsletters', 'Infographics for social media'],
+    instead: [['026-waffle-chart', 'You want to show shares out of 100'], ['005-horizontal-bar-chart', 'You need exact comparisons']],
+    features: ['Tree icons drawn as a single SVG path, no images', 'Part icons clipped to show the exact remainder', 'Faint outlines behind each icon so part trees read clearly', 'A lighter color for this year so far', 'Icons appear one by one on load', 'Totals beside every row and in the data table'],
+    code: `const years = [['2021', 340], ['2022', 520], ['2023', 610]];
+const per = 100, size = 34;
+const tree = (x, y, s) => 'M' + (x + s / 2) + ',' + y + 'L' + (x + s) + ',' + (y + s * 0.8) + 'H' + (x + s * 0.6) + 'V' + (y + s) + 'H' + (x + s * 0.4) + 'V' + (y + s * 0.8) + 'H' + x + 'Z';
+
+years.forEach(([year, count], row) => {
+  const y = 20 + row * 50;
+  drawText(50, y + 24, year, 'end');
+  for (let i = 0; i < count / per; i++) {
+    const part = Math.min(1, count / per - i);
+    make('path', { d: tree(60 + i * size, y, size - 4), fill: '#2f8a3a', 'fill-opacity': part < 1 ? 0.4 : 1 });
+  }
+});`,
+    faq: [
+      ['What is a pictogram chart?', 'A pictogram chart uses repeated icons to show quantities, where each icon stands for a set amount. It is also called a pictograph or isotype chart.'],
+      ['How do I show a part of an icon?', 'Clip the last icon to a rectangle as wide as the remainder, like 40% of the icon for 40 trees when each icon is 100. This template uses an SVG clipPath for that.'],
+      ['What should each icon stand for?', 'Pick a round number that keeps rows between about 3 and 15 icons. Say what one icon means in the legend.'],
+      ['Who invented pictograms for data?', 'Otto and Marie Neurath developed the Isotype system in Vienna in the 1920s, which set the rules for picture charts that are still used today.'],
+    ],
+  },
+  {
+    num: 69, cat: '07-dashboard-widgets', slug: '069-radial-bar-chart', name: 'Radial Bar Chart',
+    example: 'monthly sales for a surf shop',
+    title: 'Free Radial Bar Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free radial bar chart made with HTML, CSS and vanilla JavaScript. Bars arranged in a circle, ideal for months or hours. One file to download.',
+    keywords: 'radial bar chart, circular bar chart javascript, circular barplot html, polar bar chart, seasonal chart',
+    what: [
+      'A radial bar chart puts bars in a circle instead of a row. Each bar grows outward from the middle, and the whole set goes around like a clock.',
+      'It suits data that repeats in a cycle, like months of the year or hours of the day, because December sits right next to January again. The shape of a busy season jumps out at once.',
+    ],
+    glance: { best: 'Values that follow a cycle, like months or hours', data: 'A value for each step of the cycle', avoid: 'Exact comparisons. Outer bars look bigger than they are.' },
+    when: ['Sales or visitors by month', 'Traffic or calls by hour of day', 'Rainfall or temperature through the year', 'Eye catching summaries for reports'],
+    instead: [['001-bar-chart', 'You need exact comparisons'], ['048-radar-chart', 'You compare several items across the same measures']],
+    features: ['Twelve bars drawn as SVG arc shapes around a circle', 'Bars colored by season', 'Rings for $25k steps with labels', 'The yearly total in the middle', 'Bars grow outward one after another on load', 'Tooltips with each month and its share of the year'],
+    code: `const sales = [18, 21, 29, 41, 58, 79, 96, 92, 64, 38, 24, 31];
+const cx = 200, cy = 180, inner = 40;
+const pt = (r, a) => (cx + r * Math.sin(a)) + ',' + (cy - r * Math.cos(a));
+const step = Math.PI * 2 / 12;
+
+sales.forEach((v, i) => {
+  const a0 = i * step + 0.03, a1 = (i + 1) * step - 0.03, outer = inner + v * 1.3;
+  make('path', { fill: '#fbbf24', d: 'M' + pt(outer, a0) + 'A' + outer + ',' + outer + ' 0 0 1 ' + pt(outer, a1) + 'L' + pt(inner, a1) + 'A' + inner + ',' + inner + ' 0 0 0 ' + pt(inner, a0) + 'Z' });
+});`,
+    faq: [
+      ['What is a radial bar chart?', 'A radial bar chart is a bar chart wrapped into a circle, with each bar growing outward from the center.'],
+      ['When should I use a radial bar chart?', 'For values that follow a cycle, like months or hours, where the end joins back to the start. It also makes a striking summary graphic.'],
+      ['What are the downsides of a radial bar chart?', 'Bars on the outside cover more area than bars near the middle, so differences can look bigger than they are. Use a normal bar chart when precision matters.'],
+      ['What is the difference between a radial bar chart and a pie chart?', 'In a pie chart the angle of each slice shows its share. In a radial bar chart every bar has the same angle and the length shows the value.'],
+    ],
+  },
+  {
+    num: 70, cat: '07-dashboard-widgets', slug: '070-timeline', name: 'Timeline',
+    example: 'the history of a solar installer from 2014 to 2026',
+    title: 'Free Timeline Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free timeline made with HTML, CSS and vanilla JavaScript. Events in order with categories, details on hover and a phone friendly layout. One file to download.',
+    keywords: 'timeline html, timeline chart javascript, company history timeline, vertical timeline css, event timeline',
+    what: [
+      'A timeline shows events in the order they happened, placed along a line by date. Spacing the events by real time shows fast and slow periods, not just the order.',
+      'Timelines are perfect for company histories, project stories and personal milestones. Color by category helps readers pick out the kinds of events that matter to them.',
+    ],
+    glance: { best: 'Events in date order', data: 'A date, a title and a short note for each event', avoid: 'Lots of events on the same day. Group them.' },
+    when: ['Company history and about pages', 'Project milestones and launches', 'Product release history', 'Personal, school or family stories'],
+    instead: [['065-gantt-chart', 'You show a plan with start and end dates'], ['016-step-line-chart', 'You track a value that changes at each event']],
+    features: ['Events placed by real date along a line', 'Cards above and below the line so they never overlap', 'Colors for milestones, products and company news', 'Tooltips with the full story of each event', 'Turns into a top to bottom list on phones', 'A table of every event with its details'],
+    code: `const events = [[2014.2, 'Founded'], [2016.5, '100 homes'], [2021.7, '1,000 homes'], [2026.6, '5,000 homes']];
+const x = year => 40 + (year - 2014) / 13 * 520, mid = 150;
+
+drawLine(20, mid, 580, mid, '#e9e5d6', 5);
+events.forEach(([year, title], i) => {
+  const up = i % 2 === 0, y = up ? mid - 60 : mid + 60;
+  drawLine(x(year), mid, x(year), y, '#e8a300', 2);
+  drawCircle(x(year), mid, 7, '#e8a300');
+  drawText(x(year), y + (up ? -6 : 16), title, 'middle');
+});`,
+    faq: [
+      ['How do I make a timeline in HTML?', 'Draw a line, place a dot for each event at a position based on its date, and add a label above or below. This template does it in SVG with plain JavaScript.'],
+      ['Should events be spaced by date or evenly?', 'By date, when the gaps matter, like seven years to the first 1,000 installs. Even spacing is fine when only the order matters.'],
+      ['How do I stop timeline labels overlapping?', 'Alternate them above and below the line and vary the height of the connecting lines, like this template does.'],
+      ['How do I make a timeline work on a phone?', 'Switch to a vertical timeline that runs top to bottom, with text beside each dot. This template does that automatically below 640 pixels.'],
     ],
   },
 ];
