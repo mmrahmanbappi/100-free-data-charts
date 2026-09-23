@@ -25,7 +25,13 @@ const CATEGORIES = [
     desc: '10 free time series charts made with HTML, CSS and vanilla JavaScript. Line, multi line, area, stacked area, streamgraph, step, sparkline, candlestick, slope, horizon.',
     intro: 'These charts show how numbers change over days, months and years. Start with a simple line chart, add more lines to compare, fill the area to show volume, or use a candlestick chart for prices. Every chart has a crosshair you can move with your mouse or the arrow keys, and every one is a single HTML file with no library.',
   },
-  { num: 3, slug: '03-part-to-whole', name: 'Part to Whole', ready: false },
+  {
+    num: 3, slug: '03-part-to-whole', name: 'Part to Whole', ready: true,
+    keywords: 'pie chart html, donut chart javascript, treemap, sunburst chart, waffle chart, funnel chart, marimekko chart, circle packing',
+    title: 'Free Part to Whole Charts in HTML and JavaScript: Pie, Donut, Treemap',
+    desc: '10 free part to whole charts made with HTML, CSS and vanilla JavaScript. Pie, donut, semi donut, treemap, sunburst, waffle, Marimekko, funnel, icicle, circle packing.',
+    intro: 'These charts show how a whole splits into parts: how people paid, where money goes, what fills a drive. Use a pie or donut for a few simple shares, a waffle when you want people to picture the numbers, and a treemap, sunburst or icicle for nested data. Each chart is one HTML file with no library.',
+  },
   { num: 4, slug: '04-distribution', name: 'Distribution', ready: false },
   { num: 5, slug: '05-relationships', name: 'Relationships', ready: false },
   { num: 6, slug: '06-flow-and-network', name: 'Flow and Network', ready: false },
@@ -680,6 +686,337 @@ values.forEach((v, i) => {
       ['Why use a horizon chart instead of a line chart?', 'A horizon chart shows the same detail in about a quarter of the height. That lets you stack many series and compare them, which would be a mess with many lines.'],
       ['How many bands should a horizon chart use?', 'Two to four bands work best. Three, like this template, is a good balance between detail and how easy it is to read.'],
       ['What data works in a horizon chart?', 'Any series with a clear baseline, like normal temperature, a target or zero change. Values above the baseline use one color and values below use another.'],
+    ],
+  },
+  {
+    num: 21, cat: '03-part-to-whole', slug: '021-pie-chart', name: 'Pie Chart',
+    example: 'how customers paid at a cafe',
+    title: 'Free Pie Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free pie chart made with HTML, CSS and vanilla JavaScript. No library. Labels with lines, slices that pop out on hover, keyboard support. One file to download.',
+    keywords: 'pie chart html, pie chart javascript, pie chart without library, svg pie chart, pie chart css, free pie chart template',
+    what: [
+      'A pie chart is a circle divided into slices, where each slice shows one part of a whole. The bigger the share, the bigger the slice, and all the slices together make 100%.',
+      'Pie charts are easy to understand because everyone has cut a pie or a pizza. They work best with two to five parts where one or two clearly stand out, like card and phone payments against cash.',
+    ],
+    glance: { best: 'A few shares of one whole, 2 to 5 slices', data: 'A name and a percent or count for each part', avoid: 'Many slices or slices of almost equal size. Use bars.' },
+    when: ['How customers paid', 'Share of votes, answers or sales between a few options', 'Budget split into a few big parts', 'Simple reports and slides for a general audience'],
+    instead: [['022-donut-chart', 'You want to show the total in the middle'], ['026-waffle-chart', 'You want people to picture each percent'], ['001-bar-chart', 'You have more than 5 parts or need exact comparisons']],
+    features: ['Slices drawn with SVG arc paths in plain JavaScript', 'Labels outside the pie with thin lines, so small slices stay readable', 'Slices pop out when you hover or tab to them', 'Largest slice starts at 12 o clock and runs clockwise', 'The pie sweeps open on load', 'Keyboard support and a data table'],
+    code: `const slices = [['Card', 46, '#7a4b2a'], ['Phone', 31, '#c98b4f'], ['Cash', 17, '#8fa37e'], ['Gift card', 6, '#d9c3a5']];
+const cx = 200, cy = 150, r = 120;
+let start = 0;
+
+slices.forEach(([name, pct, color]) => {
+  const end = start + pct / 100 * Math.PI * 2;
+  const x1 = cx + r * Math.sin(start), y1 = cy - r * Math.cos(start);
+  const x2 = cx + r * Math.sin(end), y2 = cy - r * Math.cos(end);
+  const large = end - start > Math.PI ? 1 : 0;
+  make('path', { d: 'M' + cx + ',' + cy + 'L' + x1 + ',' + y1 + 'A' + r + ',' + r + ' 0 ' + large + ' 1 ' + x2 + ',' + y2 + 'Z', fill: color });
+  start = end;
+});`,
+    faq: [
+      ['How do I make a pie chart in HTML without a library?', 'Draw each slice as an SVG path: a line from the center to the edge, an arc along the edge, and back to the center. Work out the angles from each share. This template does it in plain JavaScript.'],
+      ['How many slices should a pie chart have?', 'Two to five. With more slices, the small ones become thin and hard to compare. Group small parts into Other, or use a bar chart.'],
+      ['Should pie chart slices be sorted?', 'Yes. Start the biggest slice at 12 o clock and go clockwise from largest to smallest. It makes the chart much easier to read.'],
+      ['Can I make a pie chart with CSS only?', 'Yes, with a conic-gradient background you can draw a simple pie in CSS. SVG is better when you need hover, tooltips, labels and keyboard support, like in this template.'],
+    ],
+  },
+  {
+    num: 22, cat: '03-part-to-whole', slug: '022-donut-chart', name: 'Donut Chart',
+    example: 'workouts logged by members of a fitness app',
+    title: 'Free Donut Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free donut chart made with HTML, CSS and vanilla JavaScript. Total in the middle, hover details, toggles and keyboard support. One file to download.',
+    keywords: 'donut chart html, doughnut chart javascript, donut chart without library, svg donut chart, ring chart css',
+    what: [
+      'A donut chart is a pie chart with a hole in the middle. The ring shows the parts of a whole, and the empty center is a handy place for the total or for details about the part you point at.',
+      'Because people read the length of the ring rather than the size of a wedge, many find donut charts a little easier to compare than pies. They also look lighter on dashboards.',
+    ],
+    glance: { best: 'A few shares with the total shown in the middle', data: 'A name and a count for each part', avoid: 'More than 6 parts. The ring gets too busy.' },
+    when: ['Dashboard summaries with a total', 'Workout, task or ticket types', 'Budget or time split into a few parts', 'App screens with little space'],
+    instead: [['021-pie-chart', 'You want the most familiar chart for a general audience'], ['023-semi-donut-chart', 'You are showing progress toward a goal']],
+    features: ['A ring drawn with SVG arc paths', 'The total in the center changes to the share of the part you hover', 'Hide any part from the key and the ring rebuilds', 'Thick card colored gaps between parts', 'Dark theme with bright colors', 'Keyboard support and a data table'],
+    code: `const parts = [['Running', 471, '#4ade80'], ['Cycling', 298, '#38bdf8'], ['Strength', 223, '#f472b6']];
+const total = parts.reduce((a, p) => a + p[1], 0);
+const cx = 200, cy = 150, r = 120, inner = 75;
+let start = 0;
+const pt = (rad, a) => (cx + rad * Math.sin(a)) + ',' + (cy - rad * Math.cos(a));
+
+parts.forEach(([name, n, color]) => {
+  const end = start + n / total * Math.PI * 2, big = end - start > Math.PI ? 1 : 0;
+  make('path', { fill: color, d: 'M' + pt(r, start) + 'A' + r + ',' + r + ' 0 ' + big + ' 1 ' + pt(r, end) +
+    'L' + pt(inner, end) + 'A' + inner + ',' + inner + ' 0 ' + big + ' 0 ' + pt(inner, start) + 'Z' });
+  start = end;
+});
+drawText(cx, cy + 6, total, 'middle');`,
+    faq: [
+      ['What is the difference between a pie chart and a donut chart?', 'A donut chart is a pie with the middle cut out. The data is the same, but the empty center can hold a total or a label, and many people find the ring easier to read.'],
+      ['Is it donut chart or doughnut chart?', 'Both spellings are used and mean the same thing. Donut is more common in American English and in search.'],
+      ['How thick should the ring be?', 'About a third to a half of the radius. Too thin and the colors are hard to see, too thick and it looks like a pie again.'],
+      ['What should go in the middle of a donut chart?', 'The total is the most useful choice. You can also show the share of the part the reader is pointing at, like this template does.'],
+    ],
+  },
+  {
+    num: 23, cat: '03-part-to-whole', slug: '023-semi-donut-chart', name: 'Semi Donut Chart',
+    example: 'a fundraising appeal and the money still needed',
+    title: 'Free Semi Donut Chart in HTML and JavaScript (Live Demo)',
+    desc: 'Free semi donut chart made with HTML, CSS and vanilla JavaScript. A half circle progress chart with parts and a goal. One file to download.',
+    keywords: 'semi donut chart, half donut chart javascript, half pie chart html, progress gauge chart, fundraising progress chart',
+    what: [
+      'A semi donut chart, or half donut, is a donut chart cut in half. The ring runs from left to right over the top, which makes it look like a gauge and works well for progress toward a goal.',
+      'Each colored part shows how much one source added, and a gray part shows what is still missing. The big number in the middle tells the main story at a glance.',
+    ],
+    glance: { best: 'Progress toward a goal, split by source', data: 'A goal and an amount for each part', avoid: 'Data that is not a share of a fixed total.' },
+    when: ['Fundraising and donation drives', 'Sales toward a monthly target', 'Storage or budget used against a limit', 'Seats filled in a hall or class'],
+    instead: [['022-donut-chart', 'There is no goal, only parts of a total'], ['009-bullet-chart', 'You need to track several goals side by side']],
+    features: ['A half ring drawn from left to right over the top', 'A gray part for the money still needed', 'The amount in the middle counts up as the ring fills', 'Start and goal values at each end', 'Tooltips with each share of the goal', 'Keyboard support and a data table'],
+    code: `const goal = 50000;
+const parts = [[18400, '#1d8a6f'], [11200, '#58b89b'], [7300, '#f2b33d']];
+parts.push([goal - parts.reduce((a, p) => a + p[0], 0), '#dfe7e4']); // still needed
+const cx = 200, cy = 200, r = 150, inner = 95;
+const pt = (rad, a) => (cx + rad * Math.sin(a)) + ',' + (cy - rad * Math.cos(a));
+let start = -Math.PI / 2; // 9 o clock
+
+parts.forEach(([amount, color]) => {
+  const end = start + amount / goal * Math.PI;
+  make('path', { fill: color, d: 'M' + pt(r, start) + 'A' + r + ',' + r + ' 0 0 1 ' + pt(r, end) +
+    'L' + pt(inner, end) + 'A' + inner + ',' + inner + ' 0 0 0 ' + pt(inner, start) + 'Z' });
+  start = end;
+});`,
+    faq: [
+      ['What is a semi donut chart used for?', 'It is used for progress toward a goal, like money raised or sales against target, because the half ring reads like a gauge filling up.'],
+      ['How is a semi donut different from a gauge chart?', 'A gauge usually has one value and a needle. A semi donut can show several parts in different colors, so you can see where the progress came from.'],
+      ['How do I draw a half donut in SVG?', 'Use the same arc paths as a donut, but spread the angles over 180 degrees instead of 360, starting at 9 o clock and ending at 3 o clock.'],
+      ['Should I show the amount still needed?', 'Yes. A gray part for what is left makes the gap clear and turns the chart into a call to action.'],
+    ],
+  },
+  {
+    num: 24, cat: '03-part-to-whole', slug: '024-treemap', name: 'Treemap',
+    example: 'bookshop sales by section and genre',
+    title: 'Free Treemap Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free treemap made with HTML, CSS and vanilla JavaScript. Nested boxes sized by value with a squarified layout written from scratch. One file to download.',
+    keywords: 'treemap, treemap javascript, treemap html, squarified treemap, nested rectangle chart, treemap without library',
+    what: [
+      'A treemap shows parts of a whole as boxes, where the size of each box matches its value. Boxes can sit inside bigger boxes, so a treemap shows groups and the items inside them at the same time.',
+      'It uses every pixel of space, which makes it great for data with many items. The squarified layout used here keeps boxes close to square, so they are easier to compare and to label.',
+    ],
+    glance: { best: 'Many items grouped into categories', data: 'A group, a name and a value for each item', avoid: 'Small differences that must be compared exactly.' },
+    when: ['Sales by category and product', 'Budget by department and project', 'Disk or storage use by folder', 'Market size by sector and company'],
+    instead: [['025-sunburst-chart', 'You want the hierarchy to be more visible as rings'], ['029-icicle-chart', 'You want to zoom into levels of a hierarchy'], ['005-horizontal-bar-chart', 'You only have one level and need exact ranking']],
+    features: ['A squarified treemap layout in about 20 lines of JavaScript', 'Two levels: sections and the genres inside them', 'Each section has its own color with lighter shades for genres', 'Labels show only where they fit', 'Tooltips with the share of the whole shop', 'Keyboard support and a full data table'],
+    code: `// Slice a rectangle into strips, one box per item (simple treemap)
+const items = [['Mystery', 84], ['Romance', 67], ['Cooking', 45], ['Travel', 22]];
+const total = items.reduce((a, i) => a + i[1], 0);
+let x = 0, y = 0, w = 600, h = 300;
+
+items.forEach(([name, value], i) => {
+  const share = value / items.slice(i).reduce((a, it) => a + it[1], 0);
+  if (w >= h) { const bw = w * share; drawRect(x, y, bw - 2, h - 2, '#b5473a'); drawText(x + 8, y + 20, name); x += bw; w -= bw; }
+  else { const bh = h * share; drawRect(x, y, w - 2, bh - 2, '#b5473a'); drawText(x + 8, y + 20, name); y += bh; h -= bh; }
+});`,
+    faq: [
+      ['What is a treemap used for?', 'A treemap shows how a total splits into many parts and groups, using box size for value. It is common for sales, budgets, storage and market data.'],
+      ['What is a squarified treemap?', 'It is a layout method that keeps boxes as close to square as possible. Square boxes are easier to compare and have more room for labels than long thin strips.'],
+      ['How many levels can a treemap show?', 'Two levels is the sweet spot. You can nest more, but the smaller boxes quickly become too small to read. Use zooming for deeper data.'],
+      ['Is a treemap better than a pie chart?', 'For many items, yes. A pie gets unreadable after five slices, while a treemap can show dozens of items and their groups in the same space.'],
+    ],
+  },
+  {
+    num: 25, cat: '03-part-to-whole', slug: '025-sunburst-chart', name: 'Sunburst Chart',
+    example: 'where a city sends its household waste',
+    title: 'Free Sunburst Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free sunburst chart made with HTML, CSS and vanilla JavaScript. Two rings of nested data with details in the center on hover. One file to download.',
+    keywords: 'sunburst chart, sunburst chart javascript, sunburst html, multi level pie chart, radial hierarchy chart',
+    what: [
+      'A sunburst chart shows nested data as rings. The inner ring holds the main groups, and each outer ring splits those groups into smaller parts. The angle of each piece shows its share of the whole.',
+      'It is like a pie chart with extra layers. You can see the big split first and then follow any piece outward to see what it is made of, like recycled waste splitting into paper, plastic, glass and metal.',
+    ],
+    glance: { best: 'Two or three levels of nested shares', data: 'A group, a part and a value for each item', avoid: 'Comparing sizes in the outer ring exactly.' },
+    when: ['Waste, energy or water broken down by type', 'Budget by department and team', 'Website traffic by channel and source', 'Survey answers by group and subgroup'],
+    instead: [['024-treemap', 'You want to use space more efficiently'], ['022-donut-chart', 'You only have one level of data']],
+    features: ['Two rings drawn with SVG arc paths', 'A piece with no parts can fill both rings', 'The center shows the total, then the share of whatever you point at', 'Names inside pieces that have enough room', 'The rings sweep open on load', 'Keyboard support and a full data table'],
+    code: `const groups = [
+  { color: '#2c7a4b', kids: [8200, 2600, 4100, 1900] },
+  { color: '#7d746b', kids: [9800, 2300] }
+];
+const total = groups.flatMap(g => g.kids).reduce((a, b) => a + b, 0);
+const cx = 200, cy = 150;
+const pt = (r, a) => (cx + r * Math.sin(a)) + ',' + (cy - r * Math.cos(a));
+const arc = (r0, r1, a0, a1, fill) => make('path', { fill, stroke: '#fff', d: 'M' + pt(r1, a0) + 'A' + r1 + ',' + r1 + ' 0 ' + (a1 - a0 > Math.PI ? 1 : 0) + ' 1 ' + pt(r1, a1) + 'L' + pt(r0, a1) + 'A' + r0 + ',' + r0 + ' 0 ' + (a1 - a0 > Math.PI ? 1 : 0) + ' 0 ' + pt(r0, a0) + 'Z' });
+let a = 0;
+
+groups.forEach(g => {
+  const sum = g.kids.reduce((s, v) => s + v, 0);
+  arc(40, 90, a, a + sum / total * Math.PI * 2, g.color);   // inner ring
+  g.kids.forEach(v => { const b = a + v / total * Math.PI * 2; arc(92, 140, a, b, g.color); a = b; }); // outer ring
+});`,
+    faq: [
+      ['What is a sunburst chart?', 'A sunburst chart is a set of rings that shows nested data. The inner ring holds the top level groups and each ring further out shows the parts inside them.'],
+      ['When should I use a sunburst chart?', 'Use it when your data has two or three levels and you want people to see both the big split and what each group is made of.'],
+      ['How is a sunburst different from a donut chart?', 'A donut chart has one ring. A sunburst has several, one for each level of the data.'],
+      ['How many rings should a sunburst chart have?', 'Two or three. Past that, the outer pieces get very thin and the chart is hard to read.'],
+    ],
+  },
+  {
+    num: 26, cat: '03-part-to-whole', slug: '026-waffle-chart', name: 'Waffle Chart',
+    example: 'how 100 new customers found a furniture shop',
+    title: 'Free Waffle Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free waffle chart made with HTML, CSS and vanilla JavaScript. 100 squares that make percentages easy to picture, with highlight on click. One file to download.',
+    keywords: 'waffle chart, waffle chart javascript, waffle chart html css, square pie chart, percentage grid chart',
+    what: [
+      'A waffle chart is a grid of 100 squares where each square stands for 1%. The squares are colored by group, so 34 blue squares means 34 out of every 100.',
+      'People find it easier to picture 34 out of 100 people than a 34% slice of a pie. That makes waffle charts a friendly choice for reports and websites aimed at a general audience.',
+    ],
+    glance: { best: 'Percentages that people should be able to picture', data: 'Whole number shares that add up to 100', avoid: 'Many small groups or decimals.' },
+    when: ['How customers found you', 'Survey results for a general audience', 'Share of people in each group', 'Charity and public health reports'],
+    instead: [['021-pie-chart', 'You want the quickest chart for two or three shares'], ['004-100-percent-stacked-bar', 'You want to compare shares across several groups']],
+    features: ['100 squares in a 10 by 10 grid, filled in reading order', 'A list with the big numbers next to the grid', 'Click a source in the key to pick it out and fade the rest', 'The squares fill in one by one on load', 'Hover any square to see its group', 'Stacks on phones with the list under the grid'],
+    code: `const groups = [['Friends and family', 34, '#3d5a80'], ['Web search', 27, '#98c1d9'], ['Instagram', 18, '#ee6c4d'], ['Walked past', 12, '#e0b04b'], ['Ads', 9, '#6b9080']];
+const size = 28, gap = 4;
+let i = 0;
+
+groups.forEach(([name, count, color]) => {
+  for (let n = 0; n < count; n++, i++) {
+    const col = i % 10, row = Math.floor(i / 10);
+    drawRect(col * size, row * size, size - gap, size - gap, color);
+  }
+});`,
+    faq: [
+      ['What is a waffle chart?', 'A waffle chart is a 10 by 10 grid of squares where each square is 1%. Colored squares show how many out of every 100 belong to each group.'],
+      ['Why use a waffle chart instead of a pie chart?', 'Counting squares is easier than judging angles. Saying 34 out of 100 also feels more real to most readers than a 34% slice.'],
+      ['What if my percentages have decimals?', 'Round them to whole numbers and make sure they still add up to 100. If the decimals matter, use a bar chart instead.'],
+      ['Is a waffle chart the same as a square pie chart?', 'Yes. Square pie chart and waffle chart are two names for the same idea.'],
+    ],
+  },
+  {
+    num: 27, cat: '03-part-to-whole', slug: '027-marimekko-chart', name: 'Marimekko Chart',
+    example: 'e-bike market share by region and brand',
+    title: 'Free Marimekko Chart in HTML and JavaScript (Live Demo)',
+    desc: 'Free Marimekko chart made with HTML, CSS and vanilla JavaScript. Variable width columns show market size and share at once. One file to download.',
+    keywords: 'marimekko chart, mekko chart javascript, mosaic plot html, variable width stacked bar, market share chart',
+    what: [
+      'A Marimekko chart, often called a Mekko chart, is a 100% stacked bar chart where each column has a different width. The width shows how big each group is, and the colors inside show the shares within it.',
+      'It answers two questions in one picture: which markets are biggest, and who leads in each one. Consultants and market researchers use it to show market share by region or segment.',
+    ],
+    glance: { best: 'Market share across segments of different size', data: 'A size for each group and shares inside each group', avoid: 'Audiences who have never seen one. Add a short guide.' },
+    when: ['Market share by region and brand', 'Sales by channel and product', 'Customers by age group and plan', 'Budget by department and type of cost'],
+    instead: [['004-100-percent-stacked-bar', 'All groups are the same size or size does not matter'], ['024-treemap', 'You care more about the size of each piece than the share']],
+    features: ['Column widths set by how many bikes each region bought', 'Brand shares stacked to 100% inside each column', 'Percent labels inside every piece that has room', 'Tooltips with the share, the number of bikes and the share of all sales', 'Pieces grow into place on load', 'Keyboard support and a data table'],
+    code: `const regions = [['North', 42, [38, 27, 21, 14]], ['South', 30, [22, 35, 25, 18]]];
+const colors = ['#e76f51', '#2a9d8f', '#e9c46a', '#9aa5b5'];
+const total = regions.reduce((a, r) => a + r[1], 0);
+let x = 40;
+
+regions.forEach(([name, size, shares]) => {
+  const w = size / total * 520;
+  let y = 280;
+  shares.forEach((pct, i) => {
+    const h = pct / 100 * 260;
+    drawRect(x, y - h, w - 3, h - 1, colors[i]);
+    y -= h;
+  });
+  drawText(x + w / 2, 298, name, 'middle');
+  x += w;
+});`,
+    faq: [
+      ['What is a Marimekko chart?', 'It is a stacked bar chart where each bar has a different width. Width shows the size of each group and the stacked colors show the shares inside it.'],
+      ['Why is it called a Marimekko chart?', 'It is named after the Finnish design company Marimekko, because the blocks of color look like their bold printed fabrics.'],
+      ['What is the difference between a Marimekko chart and a mosaic plot?', 'They are very close. Mosaic plot is the name used in statistics, often for counts in a table. Marimekko is the business name, usually for market share.'],
+      ['How do I read a Marimekko chart?', 'Read the widths first to see which groups are biggest, then read the colors inside each column to see who leads in that group.'],
+    ],
+  },
+  {
+    num: 28, cat: '03-part-to-whole', slug: '028-funnel-chart', name: 'Funnel Chart',
+    example: 'shoppers moving from first visit to purchase in an online shop',
+    title: 'Free Funnel Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free funnel chart made with HTML, CSS and vanilla JavaScript for sales and sign up steps. Drop off between steps and two views. One file to download.',
+    keywords: 'funnel chart, funnel chart javascript, sales funnel chart html, conversion funnel chart, checkout funnel',
+    what: [
+      'A funnel chart shows how many people make it through each step of a process, like visiting a shop, adding to cart and buying. Each step is a bar, and the bars get narrower as people drop out.',
+      'It shows where you lose the most people, which is where you should work first. The lost number between steps is often more useful than the step totals themselves.',
+    ],
+    glance: { best: 'Steps in a process where people drop out', data: 'A name and a count for each step, in order', avoid: 'Steps that are not in a fixed order.' },
+    when: ['Online shop checkout steps', 'Sign up and onboarding flows', 'Sales pipelines from lead to deal', 'Job applications from applied to hired'],
+    instead: [['005-horizontal-bar-chart', 'You want exact comparisons without the funnel shape'], ['078-sankey-diagram', 'People can take different paths between steps']],
+    features: ['Centered bars that shrink with each step', 'Soft shapes between bars that show the flow', 'The number and share lost between every step', 'A switch between share of all visitors and step to step', 'Bars grow out from the middle on load', 'Keyboard support and a full data table'],
+    code: `const steps = [['Visited', 48200], ['Viewed a product', 21700], ['Added to cart', 7900], ['Bought', 2600]];
+const cx = 320, maxW = 400, rowH = 60;
+
+steps.forEach(([name, count], i) => {
+  const w = count / steps[0][1] * maxW;
+  drawRect(cx - w / 2, i * rowH, w, 40, '#5a3fd1');
+  drawText(cx - maxW / 2 - 10, i * rowH + 25, name, 'end');
+  drawText(cx + maxW / 2 + 10, i * rowH + 25, (count / steps[0][1] * 100).toFixed(1) + '%');
+});`,
+    faq: [
+      ['What is a funnel chart used for?', 'It shows how many people pass through each step of a process and where they drop out. It is most common for sales, sign ups and checkout flows.'],
+      ['How do I calculate conversion in a funnel?', 'Divide the count at a step by the count at the first step for overall conversion, or by the step before it for step to step conversion. This template shows both.'],
+      ['Which step should I fix first?', 'Start with the step that loses the largest share of people. In the example, most shoppers who view a product never add it to the cart.'],
+      ['Should a funnel chart have a funnel shape?', 'The shape helps people recognize it, but the bar widths must match the numbers. Avoid funnels drawn as fixed cones, because they hide the real drop off.'],
+    ],
+  },
+  {
+    num: 29, cat: '03-part-to-whole', slug: '029-icicle-chart', name: 'Icicle Chart',
+    example: 'what is filling up a laptop drive',
+    title: 'Free Icicle Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free icicle chart made with HTML, CSS and vanilla JavaScript. A zoomable hierarchy for folders, budgets or sitemaps. Click to zoom in and out. One file to download.',
+    keywords: 'icicle chart, icicle chart javascript, zoomable icicle html, partition chart, hierarchy chart, disk usage chart',
+    what: [
+      'An icicle chart shows a hierarchy as rows of blocks. The first column is the whole, the next column splits it into groups, and the next splits each group again. Block height shows size.',
+      'It is the flat, rectangle version of a sunburst, and it is easier to label. Clicking a block zooms in so its parts fill the whole height, which makes deep data easy to dig into.',
+    ],
+    glance: { best: 'Hierarchies you want to zoom into', data: 'A path of levels and a value for each leaf', avoid: 'Only one level. Use a bar chart.' },
+    when: ['Disk or cloud storage use by folder', 'Budgets by department, team and line item', 'Website sections and pages by traffic', 'Company structure by headcount'],
+    instead: [['024-treemap', 'You want every item visible at once in a compact box'], ['025-sunburst-chart', 'You want a round, more visual layout']],
+    features: ['Three columns: all files, folders and what is inside them', 'Click a block to zoom in, click the left block to zoom out', 'Smooth animated zoom between levels', 'Works with the Enter key for keyboard users', 'Labels hide or shorten when a block is too small', 'A data table with every folder'],
+    code: `const tree = [['Photos', [['Family', 58], ['Travel', 31]]], ['Videos', [['Home videos', 61], ['Downloads', 23]]]];
+const total = tree.reduce((a, [, kids]) => a + kids.reduce((s, k) => s + k[1], 0), 0);
+const h = 300, colW = 180;
+let y = 0;
+
+drawRect(0, 0, colW - 2, h, '#16202c');                       // the whole
+tree.forEach(([name, kids]) => {
+  const size = kids.reduce((s, k) => s + k[1], 0);
+  drawRect(colW, y, colW - 2, size / total * h - 2, '#3a6ea5'); // folder
+  let ky = y;
+  kids.forEach(([, v]) => { drawRect(colW * 2, ky, colW - 2, v / total * h - 2, '#7fa3cc'); ky += v / total * h; });
+  y += size / total * h;
+});`,
+    faq: [
+      ['What is an icicle chart?', 'An icicle chart shows a hierarchy as columns of blocks. Each column splits the one before it into smaller parts, and the size of each block matches its value.'],
+      ['What is the difference between an icicle chart and a sunburst chart?', 'They show the same data. The sunburst bends the levels into rings, and the icicle keeps them as straight columns, which makes labels easier to read.'],
+      ['How do I zoom in an icicle chart?', 'Click a block. Its parts spread out to fill the full height. Click the first block, or the same block again, to zoom back out.'],
+      ['Why is it called an icicle chart?', 'When drawn from top to bottom, the blocks hang down like icicles from a roof. This template draws it left to right, which fits labels better.'],
+    ],
+  },
+  {
+    num: 30, cat: '03-part-to-whole', slug: '030-circle-packing', name: 'Circle Packing Chart',
+    example: 'staff at a food company grouped by department and team',
+    title: 'Free Circle Packing Chart in HTML and JavaScript (Live Demo)',
+    desc: 'Free circle packing chart made with HTML, CSS and vanilla JavaScript. Nested circles sized by value, with a packing layout written from scratch. One file to download.',
+    keywords: 'circle packing chart, circle packing javascript, packed bubble chart html, nested circles chart, bubble hierarchy',
+    what: [
+      'A circle packing chart shows groups as big circles with smaller circles packed inside them. The area of each circle matches its value, so bigger teams get bigger circles.',
+      'It uses space less efficiently than a treemap, but the round shapes make the groups very easy to see. It is a friendly way to show the structure of a company, a budget or a collection.',
+    ],
+    glance: { best: 'Groups and the items inside them, shown softly', data: 'A group, a name and a value for each item', avoid: 'Comparing values exactly. Circle areas are hard to judge.' },
+    when: ['Company teams by headcount', 'Products grouped by category', 'Topics grouped by theme', 'Budgets for a public or general audience'],
+    instead: [['024-treemap', 'You want to use space fully and compare sizes more easily'], ['002-grouped-bar-chart', 'You need exact comparisons']],
+    features: ['A packing layout where each circle touches two others', 'Circle area, not radius, matches headcount so sizes are honest', 'Department circles with their teams packed inside', 'The layout turns sideways on wide screens to use the space', 'Names shorten to fit small circles', 'Tooltips, keyboard support and a data table'],
+    code: `// Place circles side by side, sized by area (simple version of packing)
+const teams = [['Drivers', 31], ['Prep cooks', 22], ['Cashiers', 18], ['Chefs', 14]];
+let x = 20;
+
+teams.forEach(([name, people]) => {
+  const r = Math.sqrt(people) * 10; // area matches the value
+  drawCircle(x + r, 150, r, '#c05a2e');
+  drawText(x + r, 154, name, 'middle');
+  x += r * 2 + 8;
+});`,
+    faq: [
+      ['What is a circle packing chart?', 'It is a chart that shows groups as large circles with smaller circles packed inside them. Each circle area matches a value, like the number of people in a team.'],
+      ['Why use the square root for circle size?', 'A circle area grows with the square of its radius. Using the square root of the value for the radius makes the area match the value, so a team twice as big looks twice as big.'],
+      ['How do you pack circles without overlap?', 'Place the largest circle first, then put each next circle where it touches two circles already placed without overlapping any, choosing the spot closest to the center. This template does that in plain JavaScript.'],
+      ['Is circle packing better than a treemap?', 'A treemap is more exact and uses space better. Circle packing is easier on the eye and makes the groups stand out, so it suits a general audience.'],
     ],
   },
 ];

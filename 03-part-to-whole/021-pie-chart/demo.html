@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pie Chart Example: How our customers paid | 100 Free Data Charts</title>
+<meta name="description" content="A working pie chart made with HTML, CSS and vanilla JavaScript. Labels with lines, slices that pop out on hover, keyboard support. One file, no library.">
+<link rel="canonical" href="https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/021-pie-chart/demo.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* Change these colors to match your brand */
+:root {
+  --bg: #f5f1ec;
+  --card: #ffffff;
+  --ink: #2a211b;
+  --muted: #6e6259;
+  --line: #ebe4dc;
+  --accent: #7a4b2a;
+  --soft: #f1e7dd;
+}
+* { box-sizing: border-box; margin: 0; }
+body { font-family: "Poppins", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; min-height: 100vh; }
+.page { max-width: 1160px; margin: 0 auto; padding: 28px 24px 40px; }
+.brand { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; font-size: .95rem; }
+.logo { font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+.logo b { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); display: inline-block; }
+.brand span:last-child { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px 30px 22px; }
+.head { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+h1 { font-size: clamp(1.35rem, 2.6vw, 1.8rem); line-height: 1.2; }
+.sub { color: var(--muted); margin-top: 6px; max-width: 60ch; }
+.take { margin-top: 14px; padding: 10px 14px; border-radius: 10px; background: var(--soft); font-weight: 500; display: inline-block; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
+.seg button { font: inherit; font-size: .9rem; border: 0; background: none; color: var(--muted); padding: 7px 12px; border-radius: 7px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--card); }
+#legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 4px; min-height: 8px; }
+.key { font: inherit; font-size: .9rem; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: none; color: var(--ink); padding: 5px 11px; border-radius: 99px; cursor: pointer; }
+.key:disabled { cursor: default; opacity: 1; }
+.key i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+.key[aria-pressed="false"] { opacity: .45; text-decoration: line-through; }
+#chart { height: 420px; margin-top: 6px; position: relative; }
+#chart svg { display: block; overflow: visible; }
+.grid { stroke: var(--line); }
+.axis { stroke: var(--muted); stroke-width: 1.2; }
+.tick { fill: var(--muted); font-size: 12px; }
+.label { fill: var(--ink); font-size: 13px; }
+.value { fill: var(--ink); font-size: 12px; font-weight: 700; }
+.hit { cursor: pointer; outline: none; transition: opacity .15s; }
+.hit:hover, .hit:focus-visible { opacity: .8; }
+.hit:focus-visible { stroke: var(--ink); stroke-width: 2; }
+.zone { outline: none; cursor: crosshair; }
+.zone:focus-visible { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 4 4; }
+.note { color: var(--muted); font-size: .85rem; margin-top: 10px; }
+details { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+summary { cursor: pointer; font-weight: 500; }
+table { border-collapse: collapse; margin-top: 12px; font-size: .9rem; width: 100%; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+td { font-variant-numeric: tabular-nums; }
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--ink); color: var(--card); padding: 8px 11px; border-radius: 8px; font-size: .85rem; line-height: 1.4; max-width: 240px; }
+#tip[hidden] { display: none; }
+button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+@media (max-width: 640px) {
+  .page { padding: 16px 12px 30px; }
+  .card { padding: 20px 16px 16px; }
+  #chart { height: 380px; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="brand"><span class="logo"><b aria-hidden="true"></b>Cornerstone Cafe</span><span>Sales in August 2026</span></header>
+  <section class="card" aria-labelledby="title">
+    <div class="head">
+      <div>
+        <h1 id="title">How our customers paid</h1>
+        <p class="sub">Share of all sales by payment method. Hover a slice or use Tab to read each one.</p>
+        <p class="take">Card and phone payments make up 77% of sales. Cash is down to 17%.</p>
+      </div>
+      
+    </div>
+    <div id="legend"></div>
+    <figure id="chart" aria-label="How our customers paid. Card and phone payments make up 77% of sales. Cash is down to 17%. Use Tab to step through each value."></figure>
+    <p class="note">Source: Cornerstone Cafe till reports. Sample data for this demo.</p>
+    <details><summary>Show the data as a table</summary><table id="table"></table></details>
+  </section>
+</main>
+<div id="tip" hidden></div>
+<script>
+// Small helpers: SVG elements, scales, tooltip, legend and table.
+const NS = 'http://www.w3.org/2000/svg';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]static/.test(location.search);
+function el(tag, attrs, parent) {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs || {}) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function text(parent, x, y, str, attrs) {
+  const t = el('text', Object.assign({ x, y }, attrs || {}), parent);
+  t.textContent = str;
+  return t;
+}
+function linear(d0, d1, r0, r1) {
+  const f = v => r0 + (v - d0) / (d1 - d0) * (r1 - r0);
+  f.domain = [d0, d1];
+  return f;
+}
+function band(keys, r0, r1, pad) {
+  const step = (r1 - r0) / keys.length;
+  const bw = step * (1 - pad);
+  const f = k => r0 + keys.indexOf(k) * step + (step - bw) / 2;
+  f.bw = bw; f.step = step;
+  return f;
+}
+function niceTicks(min, max, count) {
+  const span = max - min;
+  const raw = span / count;
+  const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const m = raw / p;
+  const step = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+  const out = [];
+  for (let v = Math.ceil(min / step) * step; v <= max + step / 1e6; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+function niceMax(v, count) {
+  const t = niceTicks(0, v, count || 5);
+  const last = t[t.length - 1];
+  return last >= v ? last : last + (t[1] - t[0]);
+}
+function fmt(n, d) { return n.toLocaleString('en-US', { maximumFractionDigits: d == null ? 0 : d }); }
+function tween(dur, delay, fn) {
+  if (reduce) { fn(1); return; }
+  const start = performance.now() + (delay || 0);
+  fn(0);
+  function step(now) {
+    const t = Math.min(1, Math.max(0, (now - start) / dur));
+    fn(1 - Math.pow(1 - t, 3));
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const tip = document.getElementById('tip');
+function showTip(html, x, y) {
+  tip.innerHTML = html;
+  tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let left = x + 14, top = y - h - 12;
+  if (left + w > innerWidth - 8) left = x - w - 14;
+  if (top < 8) top = y + 16;
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+function hideTip() { tip.hidden = true; }
+function bindTip(node, label, html) {
+  node.setAttribute('tabindex', '0');
+  node.setAttribute('role', 'img');
+  node.setAttribute('aria-label', label);
+  node.classList.add('hit');
+  node.addEventListener('mousemove', e => showTip(html, e.clientX, e.clientY));
+  node.addEventListener('mouseleave', hideTip);
+  node.addEventListener('focus', () => { const r = node.getBoundingClientRect(); showTip(html, r.left + r.width / 2, r.top); });
+  node.addEventListener('blur', hideTip);
+}
+function yGrid(g, scale, ticks, x0, x1, format) {
+  ticks.forEach(v => {
+    const y = scale(v);
+    el('line', { x1: x0, x2: x1, y1: y, y2: y, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x0 - 10, y + 4, format(v), { class: 'tick', 'text-anchor': 'end' });
+  });
+}
+function xGrid(g, scale, ticks, y0, y1, format) {
+  ticks.forEach(v => {
+    const x = scale(v);
+    el('line', { x1: x, x2: x, y1: y0, y2: y1, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x, y1 + 20, format(v), { class: 'tick', 'text-anchor': 'middle' });
+  });
+}
+function legend(items, onToggle) {
+  const box = document.getElementById('legend');
+  box.innerHTML = '';
+  items.forEach(it => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'key';
+    b.setAttribute('aria-pressed', 'true');
+    b.innerHTML = '<i style="background:' + it.color + '"></i>' + it.name;
+    if (onToggle) b.onclick = () => {
+      const on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', on);
+      onToggle(it.name, on);
+    };
+    else b.disabled = true;
+    box.appendChild(b);
+  });
+}
+function table(head, rows) {
+  const t = document.getElementById('table');
+  t.innerHTML = '<thead><tr>' + head.map(h => '<th scope="col">' + h + '</th>').join('') + '</tr></thead><tbody>' +
+    rows.map(r => '<tr>' + r.map((c, i) => i ? '<td>' + c + '</td>' : '<th scope="row">' + c + '</th>').join('') + '</tr>').join('') + '</tbody>';
+}
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function linePath(pts, smooth) {
+  if (!smooth) return pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+  let d = 'M' + pts[0][0].toFixed(1) + ',' + pts[0][1].toFixed(1);
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    d += 'C' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ',' + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) + ' ' +
+      (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ',' + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) + ' ' + p2[0].toFixed(1) + ',' + p2[1].toFixed(1);
+  }
+  return d;
+}
+function areaPath(top, bottom, smooth) {
+  return linePath(top, smooth) + linePath(bottom.slice().reverse(), smooth).replace('M', 'L') + 'Z';
+}
+function arcPath(cx, cy, r0, r1, a0, a1) {
+  if (a1 - a0 >= Math.PI * 2 - 1e-6) a1 = a0 + Math.PI * 2 - 1e-4;
+  const large = a1 - a0 > Math.PI ? 1 : 0;
+  const p = (r, a) => (cx + r * Math.sin(a)).toFixed(2) + ',' + (cy - r * Math.cos(a)).toFixed(2);
+  let d = 'M' + p(r1, a0) + 'A' + r1 + ',' + r1 + ' 0 ' + large + ' 1 ' + p(r1, a1);
+  d += r0 > 0 ? 'L' + p(r0, a1) + 'A' + r0 + ',' + r0 + ' 0 ' + large + ' 0 ' + p(r0, a0) + 'Z' : 'L' + cx + ',' + cy + 'Z';
+  return d;
+}
+function polar(cx, cy, r, a) { return [cx + r * Math.sin(a), cy - r * Math.cos(a)]; }
+let clipCount = 0;
+function reveal(svg, g, x, y, w, h, animate, dur) {
+  const id = 'clip' + (++clipCount);
+  const r = el('rect', { x, y, width: w, height: h }, el('clipPath', { id }, el('defs', {}, svg)));
+  g.setAttribute('clip-path', 'url(#' + id + ')');
+  const draw = t => r.setAttribute('width', w * t);
+  animate ? tween(dur || 1100, 0, draw) : draw(1);
+}
+function scrub(svg, xs, top, bottom, info) {
+  const guide = el('line', { y1: top, y2: bottom, class: 'axis', 'stroke-dasharray': '3 4', opacity: 0 }, svg);
+  const half = xs.length > 1 ? (xs[1] - xs[0]) / 2 : 20;
+  const x0 = xs[0] - half;
+  const zone = el('rect', { x: x0, y: top, width: xs[xs.length - 1] - xs[0] + half * 2, height: bottom - top, fill: 'transparent', tabindex: 0, class: 'zone', role: 'img',
+    'aria-label': 'Chart area. Use the left and right arrow keys to read each value.' }, svg);
+  let cur = -1;
+  function off() { guide.setAttribute('opacity', 0); info(-1, false); hideTip(); }
+  function go(i, cx, cy) {
+    i = Math.max(0, Math.min(xs.length - 1, i)); cur = i;
+    guide.setAttribute('x1', xs[i]); guide.setAttribute('x2', xs[i]); guide.setAttribute('opacity', 1);
+    const r = info(i, true);
+    zone.setAttribute('aria-label', r.label);
+    if (cx == null) { const b = svg.getBoundingClientRect(); cx = b.left + xs[i]; cy = b.top + (r.y != null ? r.y : top + 30); }
+    showTip(r.html, cx, cy);
+  }
+  function near(px) { let best = 0, bd = Infinity; xs.forEach((x, i) => { const d = Math.abs(x - px); if (d < bd) { bd = d; best = i; } }); return best; }
+  zone.addEventListener('mousemove', e => go(near(e.clientX - svg.getBoundingClientRect().left), e.clientX, e.clientY));
+  zone.addEventListener('mouseleave', off);
+  zone.addEventListener('blur', off);
+  zone.addEventListener('focus', () => go(cur < 0 ? xs.length - 1 : cur));
+  zone.addEventListener('keydown', e => {
+    const k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowLeft') { e.preventDefault(); go((cur < 0 ? xs.length - 1 : cur) + (k === 'ArrowRight' ? 1 : -1)); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(xs.length - 1); }
+  });
+  return zone;
+}
+function mount(draw) {
+  const box = document.getElementById('chart');
+  let last = 0;
+  function render(animate) {
+    const w = box.clientWidth, h = box.clientHeight;
+    box.innerHTML = '';
+    const svg = el('svg', { viewBox: '0 0 ' + w + ' ' + h, width: w, height: h }, box);
+    draw(svg, w, h, animate);
+  }
+  new ResizeObserver(() => {
+    if (Math.abs(box.clientWidth - last) < 2) return;
+    const first = last === 0;
+    last = box.clientWidth;
+    render(first);
+  }).observe(box);
+  return render;
+}
+function buttons(onPick) {
+  document.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    onPick(b.dataset.v);
+  });
+}
+
+// The chart
+const DATA = [['Card', 46, '#7a4b2a'], ['Phone wallet', 31, '#c98b4f'], ['Cash', 17, '#8fa37e'], ['Gift card', 6, '#d9c3a5']];
+legend(DATA.map(d => ({ name: d[0], color: d[2] })));
+table(['Payment method', 'Share of sales'], DATA.map(d => [d[0], d[1] + '%']));
+mount((svg, w, h, animate) => {
+  const small = w < 560;
+  const cx = w / 2, cy = h / 2, r = Math.min(h / 2 - 34, w / 2 - (small ? 70 : 150));
+  const total = DATA.reduce((a, d) => a + d[1], 0);
+  const g = el('g', {}, svg);
+  let start = 0;
+  const parts = DATA.map(d => { const a0 = start, a1 = start + d[1] / total * Math.PI * 2; start = a1; return { d, a0, a1 }; });
+  const slices = parts.map(p => {
+    const s = el('path', { fill: p.d[2], stroke: 'var(--card)', 'stroke-width': 2 }, g);
+    const mid = (p.a0 + p.a1) / 2;
+    s.addEventListener('mouseenter', () => s.setAttribute('transform', 'translate(' + (Math.sin(mid) * 10) + ',' + (-Math.cos(mid) * 10) + ')'));
+    s.addEventListener('focus', () => s.setAttribute('transform', 'translate(' + (Math.sin(mid) * 10) + ',' + (-Math.cos(mid) * 10) + ')'));
+    ['mouseleave', 'blur'].forEach(ev => s.addEventListener(ev, () => s.removeAttribute('transform')));
+    bindTip(s, p.d[0] + ': ' + p.d[1] + ' percent of sales', '<b>' + p.d[0] + '</b><br>' + p.d[1] + '% of sales');
+    return s;
+  });
+  const labels = el('g', {}, svg);
+  parts.forEach(p => {
+    const mid = (p.a0 + p.a1) / 2, right = Math.sin(mid) >= 0;
+    const [x1, y1] = polar(cx, cy, r + 4, mid), [x2, y2] = polar(cx, cy, r + 22, mid);
+    const x3 = x2 + (right ? 16 : -16);
+    el('polyline', { points: x1 + ',' + y1 + ' ' + x2 + ',' + y2 + ' ' + x3 + ',' + y2, fill: 'none', stroke: 'var(--muted)' }, labels);
+    text(labels, x3 + (right ? 6 : -6), y2 - 2, p.d[0], { class: 'label', 'text-anchor': right ? 'start' : 'end', style: 'font-weight:600' });
+    text(labels, x3 + (right ? 6 : -6), y2 + 15, p.d[1] + '%', { class: 'tick', 'text-anchor': right ? 'start' : 'end' });
+  });
+  const draw = t => { parts.forEach((p, i) => slices[i].setAttribute('d', arcPath(cx, cy, 0, r, p.a0 * t, p.a1 * t))); labels.style.opacity = t < 1 ? 0 : 1; };
+  animate ? tween(900, 0, draw) : draw(1);
+});
+</script>
+</body>
+</html>

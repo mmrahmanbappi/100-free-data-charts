@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Circle Packing Chart Example: Who works at Kinfolk Foods | 100 Free Data Charts</title>
+<meta name="description" content="A working circle packing chart made with HTML, CSS and vanilla JavaScript. Nested circles sized by value, with a packing layout written from scratch. One file, no library.">
+<link rel="canonical" href="https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/030-circle-packing/demo.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* Change these colors to match your brand */
+:root {
+  --bg: #f5f2ee;
+  --card: #ffffff;
+  --ink: #231e19;
+  --muted: #6b6259;
+  --line: #ebe5de;
+  --accent: #c05a2e;
+  --soft: #f6e5dc;
+}
+* { box-sizing: border-box; margin: 0; }
+body { font-family: "Lexend", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; min-height: 100vh; }
+.page { max-width: 1160px; margin: 0 auto; padding: 28px 24px 40px; }
+.brand { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; font-size: .95rem; }
+.logo { font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+.logo b { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); display: inline-block; }
+.brand span:last-child { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px 30px 22px; }
+.head { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+h1 { font-size: clamp(1.35rem, 2.6vw, 1.8rem); line-height: 1.2; }
+.sub { color: var(--muted); margin-top: 6px; max-width: 60ch; }
+.take { margin-top: 14px; padding: 10px 14px; border-radius: 10px; background: var(--soft); font-weight: 500; display: inline-block; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
+.seg button { font: inherit; font-size: .9rem; border: 0; background: none; color: var(--muted); padding: 7px 12px; border-radius: 7px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--card); }
+#legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 4px; min-height: 8px; }
+.key { font: inherit; font-size: .9rem; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: none; color: var(--ink); padding: 5px 11px; border-radius: 99px; cursor: pointer; }
+.key:disabled { cursor: default; opacity: 1; }
+.key i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+.key[aria-pressed="false"] { opacity: .45; text-decoration: line-through; }
+#chart { height: 460px; margin-top: 6px; position: relative; }
+#chart svg { display: block; overflow: visible; }
+.grid { stroke: var(--line); }
+.axis { stroke: var(--muted); stroke-width: 1.2; }
+.tick { fill: var(--muted); font-size: 12px; }
+.label { fill: var(--ink); font-size: 13px; }
+.value { fill: var(--ink); font-size: 12px; font-weight: 700; }
+.hit { cursor: pointer; outline: none; transition: opacity .15s; }
+.hit:hover, .hit:focus-visible { opacity: .8; }
+.hit:focus-visible { stroke: var(--ink); stroke-width: 2; }
+.zone { outline: none; cursor: crosshair; }
+.zone:focus-visible { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 4 4; }
+.note { color: var(--muted); font-size: .85rem; margin-top: 10px; }
+details { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+summary { cursor: pointer; font-weight: 500; }
+table { border-collapse: collapse; margin-top: 12px; font-size: .9rem; width: 100%; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+td { font-variant-numeric: tabular-nums; }
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--ink); color: var(--card); padding: 8px 11px; border-radius: 8px; font-size: .85rem; line-height: 1.4; max-width: 240px; }
+#tip[hidden] { display: none; }
+button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+@media (max-width: 640px) {
+  .page { padding: 16px 12px 30px; }
+  .card { padding: 20px 16px 16px; }
+  #chart { height: 420px; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="brand"><span class="logo"><b aria-hidden="true"></b>Kinfolk Foods</span><span>Staff in September 2026</span></header>
+  <section class="card" aria-labelledby="title">
+    <div class="head">
+      <div>
+        <h1 id="title">Who works at Kinfolk Foods</h1>
+        <p class="sub">Each circle is a team, sized by headcount, and grouped inside its department.</p>
+        <p class="take">The kitchen is the biggest department, with 56 of our 180 people.</p>
+      </div>
+      
+    </div>
+    <div id="legend"></div>
+    <figure id="chart" aria-label="Who works at Kinfolk Foods. The kitchen is the biggest department, with 56 of our 180 people. Use Tab to step through each value."></figure>
+    <p class="note">Source: Kinfolk Foods staff list. Sample data for this demo.</p>
+    <details><summary>Show the data as a table</summary><table id="table"></table></details>
+  </section>
+</main>
+<div id="tip" hidden></div>
+<script>
+// Small helpers: SVG elements, scales, tooltip, legend and table.
+const NS = 'http://www.w3.org/2000/svg';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]static/.test(location.search);
+function el(tag, attrs, parent) {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs || {}) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function text(parent, x, y, str, attrs) {
+  const t = el('text', Object.assign({ x, y }, attrs || {}), parent);
+  t.textContent = str;
+  return t;
+}
+function linear(d0, d1, r0, r1) {
+  const f = v => r0 + (v - d0) / (d1 - d0) * (r1 - r0);
+  f.domain = [d0, d1];
+  return f;
+}
+function band(keys, r0, r1, pad) {
+  const step = (r1 - r0) / keys.length;
+  const bw = step * (1 - pad);
+  const f = k => r0 + keys.indexOf(k) * step + (step - bw) / 2;
+  f.bw = bw; f.step = step;
+  return f;
+}
+function niceTicks(min, max, count) {
+  const span = max - min;
+  const raw = span / count;
+  const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const m = raw / p;
+  const step = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+  const out = [];
+  for (let v = Math.ceil(min / step) * step; v <= max + step / 1e6; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+function niceMax(v, count) {
+  const t = niceTicks(0, v, count || 5);
+  const last = t[t.length - 1];
+  return last >= v ? last : last + (t[1] - t[0]);
+}
+function fmt(n, d) { return n.toLocaleString('en-US', { maximumFractionDigits: d == null ? 0 : d }); }
+function tween(dur, delay, fn) {
+  if (reduce) { fn(1); return; }
+  const start = performance.now() + (delay || 0);
+  fn(0);
+  function step(now) {
+    const t = Math.min(1, Math.max(0, (now - start) / dur));
+    fn(1 - Math.pow(1 - t, 3));
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const tip = document.getElementById('tip');
+function showTip(html, x, y) {
+  tip.innerHTML = html;
+  tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let left = x + 14, top = y - h - 12;
+  if (left + w > innerWidth - 8) left = x - w - 14;
+  if (top < 8) top = y + 16;
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+function hideTip() { tip.hidden = true; }
+function bindTip(node, label, html) {
+  node.setAttribute('tabindex', '0');
+  node.setAttribute('role', 'img');
+  node.setAttribute('aria-label', label);
+  node.classList.add('hit');
+  node.addEventListener('mousemove', e => showTip(html, e.clientX, e.clientY));
+  node.addEventListener('mouseleave', hideTip);
+  node.addEventListener('focus', () => { const r = node.getBoundingClientRect(); showTip(html, r.left + r.width / 2, r.top); });
+  node.addEventListener('blur', hideTip);
+}
+function yGrid(g, scale, ticks, x0, x1, format) {
+  ticks.forEach(v => {
+    const y = scale(v);
+    el('line', { x1: x0, x2: x1, y1: y, y2: y, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x0 - 10, y + 4, format(v), { class: 'tick', 'text-anchor': 'end' });
+  });
+}
+function xGrid(g, scale, ticks, y0, y1, format) {
+  ticks.forEach(v => {
+    const x = scale(v);
+    el('line', { x1: x, x2: x, y1: y0, y2: y1, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x, y1 + 20, format(v), { class: 'tick', 'text-anchor': 'middle' });
+  });
+}
+function legend(items, onToggle) {
+  const box = document.getElementById('legend');
+  box.innerHTML = '';
+  items.forEach(it => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'key';
+    b.setAttribute('aria-pressed', 'true');
+    b.innerHTML = '<i style="background:' + it.color + '"></i>' + it.name;
+    if (onToggle) b.onclick = () => {
+      const on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', on);
+      onToggle(it.name, on);
+    };
+    else b.disabled = true;
+    box.appendChild(b);
+  });
+}
+function table(head, rows) {
+  const t = document.getElementById('table');
+  t.innerHTML = '<thead><tr>' + head.map(h => '<th scope="col">' + h + '</th>').join('') + '</tr></thead><tbody>' +
+    rows.map(r => '<tr>' + r.map((c, i) => i ? '<td>' + c + '</td>' : '<th scope="row">' + c + '</th>').join('') + '</tr>').join('') + '</tbody>';
+}
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function linePath(pts, smooth) {
+  if (!smooth) return pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+  let d = 'M' + pts[0][0].toFixed(1) + ',' + pts[0][1].toFixed(1);
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    d += 'C' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ',' + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) + ' ' +
+      (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ',' + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) + ' ' + p2[0].toFixed(1) + ',' + p2[1].toFixed(1);
+  }
+  return d;
+}
+function areaPath(top, bottom, smooth) {
+  return linePath(top, smooth) + linePath(bottom.slice().reverse(), smooth).replace('M', 'L') + 'Z';
+}
+function arcPath(cx, cy, r0, r1, a0, a1) {
+  if (a1 - a0 >= Math.PI * 2 - 1e-6) a1 = a0 + Math.PI * 2 - 1e-4;
+  const large = a1 - a0 > Math.PI ? 1 : 0;
+  const p = (r, a) => (cx + r * Math.sin(a)).toFixed(2) + ',' + (cy - r * Math.cos(a)).toFixed(2);
+  let d = 'M' + p(r1, a0) + 'A' + r1 + ',' + r1 + ' 0 ' + large + ' 1 ' + p(r1, a1);
+  d += r0 > 0 ? 'L' + p(r0, a1) + 'A' + r0 + ',' + r0 + ' 0 ' + large + ' 0 ' + p(r0, a0) + 'Z' : 'L' + cx + ',' + cy + 'Z';
+  return d;
+}
+function polar(cx, cy, r, a) { return [cx + r * Math.sin(a), cy - r * Math.cos(a)]; }
+let clipCount = 0;
+function reveal(svg, g, x, y, w, h, animate, dur) {
+  const id = 'clip' + (++clipCount);
+  const r = el('rect', { x, y, width: w, height: h }, el('clipPath', { id }, el('defs', {}, svg)));
+  g.setAttribute('clip-path', 'url(#' + id + ')');
+  const draw = t => r.setAttribute('width', w * t);
+  animate ? tween(dur || 1100, 0, draw) : draw(1);
+}
+function scrub(svg, xs, top, bottom, info) {
+  const guide = el('line', { y1: top, y2: bottom, class: 'axis', 'stroke-dasharray': '3 4', opacity: 0 }, svg);
+  const half = xs.length > 1 ? (xs[1] - xs[0]) / 2 : 20;
+  const x0 = xs[0] - half;
+  const zone = el('rect', { x: x0, y: top, width: xs[xs.length - 1] - xs[0] + half * 2, height: bottom - top, fill: 'transparent', tabindex: 0, class: 'zone', role: 'img',
+    'aria-label': 'Chart area. Use the left and right arrow keys to read each value.' }, svg);
+  let cur = -1;
+  function off() { guide.setAttribute('opacity', 0); info(-1, false); hideTip(); }
+  function go(i, cx, cy) {
+    i = Math.max(0, Math.min(xs.length - 1, i)); cur = i;
+    guide.setAttribute('x1', xs[i]); guide.setAttribute('x2', xs[i]); guide.setAttribute('opacity', 1);
+    const r = info(i, true);
+    zone.setAttribute('aria-label', r.label);
+    if (cx == null) { const b = svg.getBoundingClientRect(); cx = b.left + xs[i]; cy = b.top + (r.y != null ? r.y : top + 30); }
+    showTip(r.html, cx, cy);
+  }
+  function near(px) { let best = 0, bd = Infinity; xs.forEach((x, i) => { const d = Math.abs(x - px); if (d < bd) { bd = d; best = i; } }); return best; }
+  zone.addEventListener('mousemove', e => go(near(e.clientX - svg.getBoundingClientRect().left), e.clientX, e.clientY));
+  zone.addEventListener('mouseleave', off);
+  zone.addEventListener('blur', off);
+  zone.addEventListener('focus', () => go(cur < 0 ? xs.length - 1 : cur));
+  zone.addEventListener('keydown', e => {
+    const k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowLeft') { e.preventDefault(); go((cur < 0 ? xs.length - 1 : cur) + (k === 'ArrowRight' ? 1 : -1)); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(xs.length - 1); }
+  });
+  return zone;
+}
+function mount(draw) {
+  const box = document.getElementById('chart');
+  let last = 0;
+  function render(animate) {
+    const w = box.clientWidth, h = box.clientHeight;
+    box.innerHTML = '';
+    const svg = el('svg', { viewBox: '0 0 ' + w + ' ' + h, width: w, height: h }, box);
+    draw(svg, w, h, animate);
+  }
+  new ResizeObserver(() => {
+    if (Math.abs(box.clientWidth - last) < 2) return;
+    const first = last === 0;
+    last = box.clientWidth;
+    render(first);
+  }).observe(box);
+  return render;
+}
+function buttons(onPick) {
+  document.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    onPick(b.dataset.v);
+  });
+}
+
+// The chart
+const DATA = [
+  { name: 'Kitchen', color: '#c05a2e', kids: [['Prep cooks', 22], ['Chefs', 14], ['Dishwashers', 11], ['Bakers', 9]] },
+  { name: 'Delivery', color: '#2f7f79', kids: [['Drivers', 31], ['Dispatch', 6], ['Fleet care', 4]] },
+  { name: 'Stores', color: '#d9a13b', kids: [['Cashiers', 18], ['Shelf staff', 15], ['Managers', 5]] },
+  { name: 'Office', color: '#5b6fb5', kids: [['Customer care', 9], ['Marketing', 7], ['IT', 6], ['Finance', 5], ['Hiring', 4]] },
+  { name: 'Farm partners', color: '#7a9a4a', kids: [['Quality', 8], ['Buyers', 6]] }
+];
+const TOTAL = DATA.reduce((a, d) => a + d.kids.reduce((s, k) => s + k[1], 0), 0);
+function pack(circles, pad) {
+  circles.sort((a, b) => b.r - a.r);
+  const placed = [];
+  const free = (x, y, r) => placed.every(q => Math.hypot(q.x - x, q.y - y) >= q.r + r + pad - 1e-6);
+  circles.forEach((c, i) => {
+    if (i === 0) { c.x = 0; c.y = 0; placed.push(c); return; }
+    if (i === 1) { c.x = placed[0].r + c.r + pad; c.y = 0; placed.push(c); return; }
+    const cx0 = placed.reduce((a, q) => a + q.x * q.r * q.r, 0) / placed.reduce((a, q) => a + q.r * q.r, 0);
+    const cy0 = placed.reduce((a, q) => a + q.y * q.r * q.r, 0) / placed.reduce((a, q) => a + q.r * q.r, 0);
+    let best = null;
+    for (let m = 0; m < placed.length; m++) for (let n = m + 1; n < placed.length; n++) {
+      const a = placed[m], b = placed[n];
+      const da = a.r + c.r + pad, db = b.r + c.r + pad, dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy);
+      if (d > da + db || d < Math.abs(da - db) || d === 0) continue;
+      const l = (da * da - db * db + d * d) / (2 * d), hh = Math.sqrt(Math.max(0, da * da - l * l));
+      const px = a.x + dx * l / d, py = a.y + dy * l / d;
+      [[px + dy * hh / d, py - dx * hh / d], [px - dy * hh / d, py + dx * hh / d]].forEach(([x, y]) => {
+        if (!free(x, y, c.r)) return;
+        const score = Math.hypot(x - cx0, y - cy0);
+        if (!best || score < best.s) best = { x, y, s: score };
+      });
+    }
+    if (!best) { const far = Math.max(...placed.map(q => Math.hypot(q.x, q.y) + q.r)); best = { x: far + c.r + pad, y: 0 }; }
+    c.x = best.x; c.y = best.y; placed.push(c);
+  });
+  const minX = Math.min(...placed.map(c => c.x - c.r)), maxX = Math.max(...placed.map(c => c.x + c.r));
+  const minY = Math.min(...placed.map(c => c.y - c.r)), maxY = Math.max(...placed.map(c => c.y + c.r));
+  const ox = (minX + maxX) / 2, oy = (minY + maxY) / 2;
+  placed.forEach(c => { c.x -= ox; c.y -= oy; });
+  return Math.max(...placed.map(c => Math.hypot(c.x, c.y) + c.r));
+}
+const groups = DATA.map(d => {
+  const kids = d.kids.map(k => ({ name: k[0], value: k[1], r: Math.sqrt(k[1]) }));
+  const inner = pack(kids, 0.35);
+  return { d, kids, value: kids.reduce((a, k) => a + k.value, 0), r: inner + 1.1 };
+});
+pack(groups, 2.4);
+const BW = Math.max(...groups.map(g => Math.abs(g.x) + g.r)) * 2, BH = Math.max(...groups.map(g => Math.abs(g.y) + g.r)) * 2;
+legend(DATA.map(d => ({ name: d.name, color: d.color })));
+table(['Department', 'Team', 'People'], DATA.flatMap(d => d.kids.map(k => [d.name, k[0], k[1]])));
+mount((svg, w, h, animate) => {
+  const turn = (w > h) !== (BW > BH);
+  const W = turn ? BH : BW, H = turn ? BW : BH;
+  const s = Math.min((w - 20) / W, (h - 36) / H), cx = w / 2, cy = h / 2 + 12;
+  const g = el('g', {}, svg);
+  groups.forEach((gr, gi) => {
+    const gx = cx + (turn ? gr.y : gr.x) * s, gy = cy + (turn ? gr.x : gr.y) * s;
+    const outer = el('circle', { cx: gx, cy: gy, r: gr.r * s, fill: gr.d.color, 'fill-opacity': .12, stroke: gr.d.color, 'stroke-width': 1.5 }, g);
+    bindTip(outer, gr.d.name + ': ' + gr.value + ' people', '<b>' + gr.d.name + '</b><br>' + gr.value + ' people, ' + Math.round(gr.value / TOTAL * 100) + '% of staff');
+    gr.kids.forEach((k, ki) => {
+      const kx = gx + k.x * s, ky = gy + k.y * s, kr = k.r * s;
+      const c = el('circle', { cx: kx, cy: ky, r: kr, fill: gr.d.color, 'fill-opacity': .85 }, g);
+      const draw = t => c.setAttribute('r', kr * t);
+      animate ? tween(700, gi * 90 + ki * 40, draw) : draw(1);
+      if (kr > 26) {
+        const fs = Math.min(13, kr / 3.2), nm = k.name.length * fs * 0.58 > kr * 1.8 ? k.name.split(' ')[0] : k.name;
+        text(g, kx, ky + (kr > 38 ? -2 : 4), nm, { class: 'tick', 'text-anchor': 'middle', 'pointer-events': 'none', style: 'fill:#fff;font-weight:700;font-size:' + fs + 'px' });
+        if (kr > 38) text(g, kx, ky + 14, k.value, { class: 'tick', 'text-anchor': 'middle', 'pointer-events': 'none', style: 'fill:#fff' });
+      }
+      bindTip(c, k.name + ', ' + gr.d.name + ': ' + k.value + ' people', '<b>' + k.name + '</b> (' + gr.d.name + ')<br>' + k.value + ' people');
+    });
+    text(g, gx, gy - gr.r * s - 6, gr.d.name + ' ' + gr.value, { class: 'label', 'text-anchor': 'middle', style: 'font-weight:700;fill:' + gr.d.color });
+  });
+});
+</script>
+</body>
+</html>

@@ -177,7 +177,13 @@ function chartPage(c, i, sib) {
     faqSchema(c.faq)] };
   const n = e(c.name), nl = e(c.name.toLowerCase()), cn = e(cat.name);
   const what = c.what.map(p => `<p>${e(p)}</p>`).join('');
-  const instead = c.instead.map(([slug, why]) => { const o = bySlug(slug); return `<li><a href="../${slug}/">${e(o.name)}</a>: ${e(why.charAt(0).toLowerCase() + why.slice(1))}</li>`; }).join('');
+  const instead = c.instead.map(([slug, why]) => {
+    const o = bySlug(slug);
+    const reason = e(why.charAt(0).toLowerCase() + why.slice(1));
+    if (o) return `<li><a href="${o.cat === c.cat ? '../' : '../../' + o.cat + '/'}${slug}/">${e(o.name)}</a>: ${reason}</li>`;
+    const soon = slug.slice(4).replace(/-/g, ' ');
+    return `<li>${e(soon.charAt(0).toUpperCase() + soon.slice(1))} (coming soon): ${reason}</li>`;
+  }).join('');
   const prev = sib[i - 1], next = sib[i + 1];
   const pager = `<nav class="pager" aria-label="More charts">${prev ? `<a href="../${prev.slug}/">Previous: ${e(prev.name)}</a>` : '<span></span>'}${next ? `<a href="../${next.slug}/">Next: ${e(next.name)}</a>` : '<span></span>'}</nav>`;
   const related = sib.filter(s => s.slug !== c.slug).map(s => tile(s, '../')).join('');
