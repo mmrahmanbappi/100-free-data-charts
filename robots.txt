@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mmrahmanbappi.github.io/100-free-data-charts/sitemap.xml
+Sitemap: https://mmrahmanbappi.github.io/70-free-data-charts/sitemap.xml

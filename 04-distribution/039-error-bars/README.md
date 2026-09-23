@@ -2,8 +2,8 @@
 
 ![Error Bar Chart example: battery life test results for five phones](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/039-error-bars/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/039-error-bars/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/039-error-bars/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/039-error-bars/
 
 Free error bar chart made with HTML, CSS and vanilla JavaScript. Averages with 95% confidence intervals and every test shown. One file to download.
 

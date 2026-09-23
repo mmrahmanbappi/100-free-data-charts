@@ -2,8 +2,8 @@
 
 ![Donut Chart example: workouts logged by members of a fitness app](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/022-donut-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/022-donut-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/022-donut-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/022-donut-chart/
 
 Free donut chart made with HTML, CSS and vanilla JavaScript. Total in the middle, hover details, toggles and keyboard support. One file to download.
 

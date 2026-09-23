@@ -2,8 +2,8 @@
 
 ![Treemap example: bookshop sales by section and genre](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/024-treemap/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/024-treemap/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/024-treemap/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/024-treemap/
 
 Free treemap made with HTML, CSS and vanilla JavaScript. Nested boxes sized by value with a squarified layout written from scratch. One file to download.
 

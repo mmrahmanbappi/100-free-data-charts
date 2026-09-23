@@ -2,8 +2,8 @@
 
 ![Alluvial Diagram example: customers changing plans over three years](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/055-alluvial-diagram/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/055-alluvial-diagram/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/055-alluvial-diagram/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/055-alluvial-diagram/
 
 Free alluvial diagram made with HTML, CSS and vanilla JavaScript. Shows how groups change over time, with hover to follow a plan. One file to download.
 

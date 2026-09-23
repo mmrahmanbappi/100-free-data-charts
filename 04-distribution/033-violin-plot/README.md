@@ -2,8 +2,8 @@
 
 ![Violin Plot example: coffee order waits at four cafes](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/033-violin-plot/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/033-violin-plot/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/033-violin-plot/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/033-violin-plot/
 
 Free violin plot made with HTML, CSS and vanilla JavaScript. Smooth distribution shapes with the median and middle half inside. One file to download.
 

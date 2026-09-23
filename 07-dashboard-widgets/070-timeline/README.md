@@ -2,8 +2,8 @@
 
 ![Timeline example: the history of a solar installer from 2014 to 2026](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/070-timeline/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/070-timeline/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/070-timeline/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/070-timeline/
 
 Free timeline made with HTML, CSS and vanilla JavaScript. Events in order with categories, details on hover and a phone friendly layout. One file to download.
 

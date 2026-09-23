@@ -2,8 +2,8 @@
 
 ![Bar Chart example: weekly bread sales at a bakery](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/001-bar-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/001-bar-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/001-bar-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/001-bar-chart/
 
 Free bar chart made with HTML, CSS and vanilla JavaScript. No library. Sortable bars, tooltips, keyboard support and a data table. One file to download.
 

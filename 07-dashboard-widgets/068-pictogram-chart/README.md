@@ -2,8 +2,8 @@
 
 ![Pictogram Chart example: trees planted by a charity each year](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/068-pictogram-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/068-pictogram-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/068-pictogram-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/068-pictogram-chart/
 
 Free pictogram chart made with HTML, CSS and vanilla JavaScript. Icons stand for amounts, with part icons for the remainder. One file to download.
 

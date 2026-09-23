@@ -2,8 +2,8 @@
 
 ![Funnel Chart example: shoppers moving from first visit to purchase in an online shop](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/028-funnel-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/028-funnel-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/028-funnel-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/028-funnel-chart/
 
 Free funnel chart made with HTML, CSS and vanilla JavaScript for sales and sign up steps. Drop off between steps and two views. One file to download.
 

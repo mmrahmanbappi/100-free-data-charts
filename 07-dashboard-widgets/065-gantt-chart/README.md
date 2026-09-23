@@ -2,8 +2,8 @@
 
 ![Gantt Chart example: a cafe renovation plan with tasks and milestones](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/065-gantt-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/065-gantt-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/065-gantt-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/065-gantt-chart/
 
 Free Gantt chart made with HTML, CSS and vanilla JavaScript. Tasks, progress, milestones, links between tasks and a today line. One file to download.
 

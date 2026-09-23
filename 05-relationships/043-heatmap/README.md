@@ -2,8 +2,8 @@
 
 ![Heatmap example: gym check-ins by day and hour](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/043-heatmap/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/043-heatmap/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/043-heatmap/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/043-heatmap/
 
 Free heatmap made with HTML, CSS and vanilla JavaScript. A color grid of busy times with hover and full keyboard control. One file to download.
 

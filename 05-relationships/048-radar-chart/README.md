@@ -2,8 +2,8 @@
 
 ![Radar Chart example: three laptops scored on six features](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/048-radar-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/048-radar-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/048-radar-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/048-radar-chart/
 
 Free radar chart made with HTML, CSS and vanilla JavaScript. Compare several items across many scores, with toggles and tooltips. One file to download.
 

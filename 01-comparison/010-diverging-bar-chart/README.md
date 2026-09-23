@@ -2,8 +2,8 @@
 
 ![Diverging Bar Chart example: visitor gains and losses for ten city parks](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/010-diverging-bar-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/010-diverging-bar-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/010-diverging-bar-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/010-diverging-bar-chart/
 
 Free diverging bar chart made with HTML, CSS and vanilla JavaScript for gains and losses. Positive right, negative left. Download one file.
 

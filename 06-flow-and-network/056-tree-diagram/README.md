@@ -2,8 +2,8 @@
 
 ![Tree Diagram example: a garden centre website map with monthly visits](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/056-tree-diagram/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/056-tree-diagram/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/056-tree-diagram/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/056-tree-diagram/
 
 Free collapsible tree diagram made with HTML, CSS and vanilla JavaScript. A sitemap you can fold and unfold, sized by visits. One file to download.
 

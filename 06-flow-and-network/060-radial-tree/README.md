@@ -2,8 +2,8 @@
 
 ![Radial Tree example: every music genre and style in a record shop](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/060-radial-tree/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/060-radial-tree/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/060-radial-tree/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/060-radial-tree/
 
 Free radial tree made with HTML, CSS and vanilla JavaScript. A hierarchy laid out in a circle, with path highlights on hover. One file to download.
 

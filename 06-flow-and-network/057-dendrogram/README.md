@@ -2,8 +2,8 @@
 
 ![Dendrogram example: grocery items that shoppers buy together](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/057-dendrogram/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/057-dendrogram/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/057-dendrogram/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/057-dendrogram/
 
 Free dendrogram made with HTML, CSS and vanilla JavaScript. A cluster tree with a movable cut line that colors the groups. One file to download.
 

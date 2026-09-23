@@ -2,9 +2,9 @@
 // Copy rules: plain human language, short sentences, no em or en dashes, readers aged 20 to 50.
 
 const SITE = {
-  name: '100 Free Data Charts',
-  base: 'https://mmrahmanbappi.github.io/100-free-data-charts/',
-  repo: 'https://github.com/mmrahmanbappi/100-free-data-charts',
+  name: '70 Free Data Charts',
+  base: 'https://mmrahmanbappi.github.io/70-free-data-charts/',
+  repo: 'https://github.com/mmrahmanbappi/70-free-data-charts',
   author: 'mmrahmanbappi',
   author_url: 'https://github.com/mmrahmanbappi',
   published: '2026-09-23',
@@ -60,9 +60,6 @@ const CATEGORIES = [
     desc: '10 free dashboard widgets made with HTML, CSS and vanilla JavaScript. Gauge, progress rings, KPI cards, calendar heatmap, Gantt, waterfall, word cloud, pictogram, radial bar, timeline.',
     intro: 'Dashboards need more than bars and lines. These ten widgets cover the pieces people ask for most: a gauge for a score, rings for daily goals, KPI cards with trend lines, a year of activity, a project plan, a profit breakdown, a word cloud and more. Each one is a single HTML file with no library, ready to drop into your own dashboard.',
   },
-  { num: 8, slug: '08-maps-and-globes', name: 'Maps and Globes', ready: false },
-  { num: 9, slug: '09-3d-charts', name: '3D Charts', ready: false },
-  { num: 10, slug: '10-3d-science-and-space', name: '3D Science and Space', ready: false },
 ];
 
 const CHARTS = [

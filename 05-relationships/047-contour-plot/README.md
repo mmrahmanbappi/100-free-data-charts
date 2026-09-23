@@ -2,8 +2,8 @@
 
 ![Contour Plot example: a hill walk with height lines and a trail](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/047-contour-plot/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/047-contour-plot/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/047-contour-plot/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/047-contour-plot/
 
 Free contour plot made with HTML, CSS and vanilla JavaScript. Height lines drawn with marching squares, a trail and hover height. One file to download.
 

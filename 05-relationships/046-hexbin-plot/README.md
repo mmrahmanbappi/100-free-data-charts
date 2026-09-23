@@ -2,8 +2,8 @@
 
 ![Hexbin Plot example: distance and fare for 3,000 taxi rides](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/046-hexbin-plot/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/046-hexbin-plot/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/046-hexbin-plot/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/046-hexbin-plot/
 
 Free hexbin plot made with HTML, CSS and vanilla JavaScript. Thousands of points grouped into hexagons, colored by count. One file to download.
 

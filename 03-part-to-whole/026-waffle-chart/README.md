@@ -2,8 +2,8 @@
 
 ![Waffle Chart example: how 100 new customers found a furniture shop](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/026-waffle-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/026-waffle-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/026-waffle-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/026-waffle-chart/
 
 Free waffle chart made with HTML, CSS and vanilla JavaScript. 100 squares that make percentages easy to picture, with highlight on click. One file to download.
 

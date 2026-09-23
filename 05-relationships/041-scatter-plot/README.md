@@ -2,8 +2,8 @@
 
 ![Scatter Plot example: used car prices against mileage](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/041-scatter-plot/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/041-scatter-plot/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/041-scatter-plot/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/041-scatter-plot/
 
 Free scatter plot made with HTML, CSS and vanilla JavaScript. No library. Trend line, groups, hover and arrow key control. One file to download.
 

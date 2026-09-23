@@ -2,8 +2,8 @@
 
 ![Semi Donut Chart example: a fundraising appeal and the money still needed](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/023-semi-donut-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/023-semi-donut-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/023-semi-donut-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/023-semi-donut-chart/
 
 Free semi donut chart made with HTML, CSS and vanilla JavaScript. A half circle progress chart with parts and a goal. One file to download.
 

@@ -2,8 +2,8 @@
 
 ![Connected Scatter Plot example: monthly bike share trips against average temperature](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/045-connected-scatter-plot/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/045-connected-scatter-plot/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/045-connected-scatter-plot/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/045-connected-scatter-plot/
 
 Free connected scatter plot made with HTML, CSS and vanilla JavaScript. Two measures over time joined in order, with a trend line. One file to download.
 

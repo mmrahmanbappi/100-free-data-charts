@@ -2,8 +2,8 @@
 
 ![Flowchart example: how an online shop handles a return request](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/059-flowchart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/059-flowchart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/059-flowchart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/059-flowchart/
 
 Free flowchart made with HTML, CSS and vanilla JavaScript. Steps, decisions and arrows, with example cases that light up their path. One file to download.
 

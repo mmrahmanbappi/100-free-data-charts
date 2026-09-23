@@ -120,7 +120,7 @@ ${FONTS}
 <script type="application/ld+json">${json(schema)}</script>
 </head>
 <body>
-<header class="bar"><div><a class="logo" href="${B}">100 Free Data Charts</a><nav><a href="${B}#categories">Categories</a><a href="${SITE.repo}">GitHub</a></nav></div></header>
+<header class="bar"><div><a class="logo" href="${B}">70 Free Data Charts</a><nav><a href="${B}#categories">Categories</a><a href="${SITE.repo}">GitHub</a></nav></div></header>
 `;
 }
 
@@ -276,10 +276,8 @@ function categoryPage(cat) {
 
 function home() {
   const n = CHARTS.length;
-  const title = '100 Free Data Charts in HTML, CSS and JavaScript (No Library)';
-  const desc = n >= 100
-    ? '100 free charts made with HTML, CSS and vanilla JavaScript. Bar, line, pie, maps and 3D charts with live demos. One file each, no library.'
-    : `${n} free charts made with HTML, CSS and vanilla JavaScript, growing to 100. Bar, stacked, bullet and more, each with a live demo. No library.`;
+  const title = '70 Free Data Charts in HTML, CSS and JavaScript (No Library)';
+  const desc = `${n} free charts made with HTML, CSS and vanilla JavaScript. Bar, line, pie, Sankey, heatmap, Gantt and more, each with a live demo. One file each, no library.`;
   const img = curl(CHARTS[0]) + 'preview.png';
   const faq = [
     ['Are these charts really free?', 'Yes. Every chart is released under the MIT license. You can use them on personal sites, client work and paid products without asking.'],
@@ -303,8 +301,8 @@ function home() {
     } else soon += `<div><b>${cat.num}. ${cn}</b>Coming soon</div>`;
   }
   const body = `<main class="wrap">
-<h1 style="margin-top:50px">100 free data charts you can put on any website</h1>
-<p class="lead">${n >= 100 ? 'All 100 charts are live.' : n + ' charts are live, with more added in batches of ten.'} Every chart is drawn with plain HTML, CSS and vanilla JavaScript, with no chart library. Each one comes with a live demo, a clear guide on when to use it, the key code, and a single HTML file to download. Change the numbers, keep the design. Free for commercial use.</p>
+<h1 style="margin-top:50px">70 free data charts you can put on any website</h1>
+<p class="lead">All ${n} charts are live, in ${CATEGORIES.length} categories. Every chart is drawn with plain HTML, CSS and vanilla JavaScript, with no chart library. Each one comes with a live demo, a clear guide on when to use it, the key code, and a single HTML file to download. Change the numbers, keep the design. Free for commercial use.</p>
 <div class="actions"><a class="btn main" href="#categories">See the charts</a><a class="btn" href="${SITE.repo}/archive/refs/heads/main.zip">Download everything (ZIP)</a><a class="btn" href="${SITE.repo}">Star on GitHub</a></div>
 <section id="categories">${sections}
 ${soon ? `<h2 style="margin-top:30px">More categories on the way</h2><div class="soon">${soon}</div>` : ''}</section>
@@ -317,7 +315,7 @@ ${soon ? `<h2 style="margin-top:30px">More categories on the way</h2><div class=
 function rootReadme() {
   const rows = CHARTS.map(c => `| ${pad(c.num)} | [${c.name}](${curl(c)}) | ${c.example.charAt(0).toUpperCase() + c.example.slice(1)} | [Demo](${curl(c)}demo.html) | <img src="${c.cat}/${c.slug}/preview.png" width="260" alt="${c.name} preview"> |`).join('\n');
   const cats = CATEGORIES.map(c => `- ${c.num}. ${c.name} (${c.ready ? 'live' : 'coming soon'})`).join('\n');
-  out('README.md', `# 100 Free Data Charts
+  out('README.md', `# 70 Free Data Charts
 
 Charts you can put on any website, built with plain HTML, CSS and vanilla JavaScript. No chart library, no framework, no build step. Each chart has a live demo, a guide on when to use it and a single HTML file you can download.
 

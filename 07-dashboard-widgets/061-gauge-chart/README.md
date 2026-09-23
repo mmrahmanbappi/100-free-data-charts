@@ -2,8 +2,8 @@
 
 ![Gauge Chart example: a hotel Net Promoter Score by quarter](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/061-gauge-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/061-gauge-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/061-gauge-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/061-gauge-chart/
 
 Free gauge chart made with HTML, CSS and vanilla JavaScript. No library. Colored zones, an animated needle and a quarter switch. One file to download.
 

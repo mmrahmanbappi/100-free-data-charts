@@ -2,8 +2,8 @@
 
 ![Dumbbell Chart example: commute times before and after a new tram line](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/008-dumbbell-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/008-dumbbell-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/008-dumbbell-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/008-dumbbell-chart/
 
 Free dumbbell chart made with HTML, CSS and vanilla JavaScript for before and after comparisons. Sort by change and download one file.
 

@@ -2,8 +2,8 @@
 
 ![Calendar Heatmap example: a year of code changes on an open source project](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/064-calendar-heatmap/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/064-calendar-heatmap/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/064-calendar-heatmap/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/064-calendar-heatmap/
 
 Free calendar heatmap made with HTML, CSS and vanilla JavaScript. A full year of daily activity in the style of a GitHub contribution graph. One file to download.
 

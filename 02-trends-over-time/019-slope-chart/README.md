@@ -2,8 +2,8 @@
 
 ![Slope Chart example: guest ratings for eight hotels in 2025 and 2026](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/019-slope-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/019-slope-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/019-slope-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/019-slope-chart/
 
 Free slope chart made with HTML, CSS and vanilla JavaScript for comparing two points in time. Up and down colors, labels that never overlap. One file to download.
 

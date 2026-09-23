@@ -2,8 +2,8 @@
 
 ![Histogram example: delivery times for 600 pizza orders](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/031-histogram/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/031-histogram/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/031-histogram/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/031-histogram/
 
 Free histogram made with HTML, CSS and vanilla JavaScript. Adjustable bin width, median and target lines, tooltips and keyboard support. One file to download.
 

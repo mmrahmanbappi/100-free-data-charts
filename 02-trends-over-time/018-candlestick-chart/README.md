@@ -2,8 +2,8 @@
 
 ![Candlestick Chart example: daily share prices and volume for a made up robotics company](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/018-candlestick-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/018-candlestick-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/018-candlestick-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/018-candlestick-chart/
 
 Free candlestick chart made with HTML, CSS and vanilla JavaScript. Open, high, low, close and volume with a crosshair and range switch. One file to download.
 

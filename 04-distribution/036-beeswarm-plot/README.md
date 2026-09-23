@@ -2,8 +2,8 @@
 
 ![Beeswarm Plot example: finish times for 300 marathon runners](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/036-beeswarm-plot/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/036-beeswarm-plot/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/036-beeswarm-plot/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/036-beeswarm-plot/
 
 Free beeswarm plot made with HTML, CSS and vanilla JavaScript. Every data point shown without overlap, colored by group. One file to download.
 

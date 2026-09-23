@@ -2,8 +2,8 @@
 
 ![Bullet Chart example: solar panel installs against target for six regions](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/009-bullet-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/009-bullet-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/009-bullet-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/009-bullet-chart/
 
 Free bullet chart made with HTML, CSS and vanilla JavaScript for KPIs and goals. Actual, target and ranges in one row. Download one file.
 

@@ -2,8 +2,8 @@
 
 ![Network Graph example: who runs with whom in a running club](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/054-network-graph/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/054-network-graph/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/054-network-graph/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/054-network-graph/
 
 Free force directed network graph made with HTML, CSS and vanilla JavaScript. Draggable nodes, groups and hover highlights. One file to download.
 

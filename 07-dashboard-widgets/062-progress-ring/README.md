@@ -2,8 +2,8 @@
 
 ![Progress Ring Chart example: daily goals in a language learning app](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/062-progress-ring/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/062-progress-ring/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/062-progress-ring/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/062-progress-ring/
 
 Free progress ring chart made with HTML, CSS and vanilla JavaScript. Concentric goal rings that fill up, with day and week views. One file to download.
 

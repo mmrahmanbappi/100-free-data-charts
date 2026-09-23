@@ -2,8 +2,8 @@
 
 ![Stacked Bar Chart example: website visits by source for an outdoor shop](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/003-stacked-bar-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/003-stacked-bar-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/003-stacked-bar-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/003-stacked-bar-chart/
 
 Free stacked bar chart made with HTML, CSS and vanilla JavaScript. Totals on top, parts inside, hide any part from the key. One file to download.
 

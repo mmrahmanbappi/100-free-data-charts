@@ -2,8 +2,8 @@
 
 ![Box Plot example: monthly rent for flats in six neighborhoods](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/032-box-plot/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/032-box-plot/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/032-box-plot/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/032-box-plot/
 
 Free box plot made with HTML, CSS and vanilla JavaScript. Quartiles, whiskers, outliers and an option to show every point. One file to download.
 

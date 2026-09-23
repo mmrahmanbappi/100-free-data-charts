@@ -2,8 +2,8 @@
 
 ![Dot Plot example: small, medium and large latte prices in eight cities](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/007-dot-plot/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/007-dot-plot/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/007-dot-plot/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/007-dot-plot/
 
 Free dot plot made with HTML, CSS and vanilla JavaScript. Compare several values per row on one line. Sort, hide sizes, and download one file.
 

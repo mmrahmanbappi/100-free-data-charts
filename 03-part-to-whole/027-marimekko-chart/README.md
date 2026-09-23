@@ -2,8 +2,8 @@
 
 ![Marimekko Chart example: e-bike market share by region and brand](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/027-marimekko-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/027-marimekko-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/027-marimekko-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/027-marimekko-chart/
 
 Free Marimekko chart made with HTML, CSS and vanilla JavaScript. Variable width columns show market size and share at once. One file to download.
 

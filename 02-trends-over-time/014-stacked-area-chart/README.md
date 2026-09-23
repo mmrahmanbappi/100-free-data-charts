@@ -2,8 +2,8 @@
 
 ![Stacked Area Chart example: hours watched each month on a streaming app, by device](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/014-stacked-area-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/014-stacked-area-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/014-stacked-area-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/014-stacked-area-chart/
 
 Free stacked area chart made with HTML, CSS and vanilla JavaScript. Layers add up to a total, hide any layer, crosshair with shares. One file to download.
 

@@ -2,8 +2,8 @@
 
 ![Sparkline example: daily sales for six products in a shop dashboard](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/017-sparkline/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/017-sparkline/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/017-sparkline/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/017-sparkline/
 
 Free sparklines made with HTML, CSS and vanilla JavaScript inside a product table. Best and worst day dots, hover values, sorting. One file to download.
 

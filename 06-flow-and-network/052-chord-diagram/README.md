@@ -2,8 +2,8 @@
 
 ![Chord Diagram example: customers switching between five phone networks](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/052-chord-diagram/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/052-chord-diagram/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/052-chord-diagram/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/052-chord-diagram/
 
 Free chord diagram made with HTML, CSS and vanilla JavaScript. Two way flows between groups shown as ribbons, with hover highlights. One file to download.
 

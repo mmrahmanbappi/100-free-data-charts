@@ -2,8 +2,8 @@
 
 ![Word Cloud example: words guests use in hotel reviews](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/067-word-cloud/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/067-word-cloud/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/067-word-cloud/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/067-word-cloud/
 
 Free word cloud made with HTML, CSS and vanilla JavaScript. Words sized by count and colored by sentiment, with a spiral layout and filters. One file to download.
 

@@ -2,8 +2,8 @@
 
 ![Ridgeline Plot example: daily high temperatures for each month of the year](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/035-ridgeline-plot/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/035-ridgeline-plot/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/035-ridgeline-plot/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/035-ridgeline-plot/
 
 Free ridgeline plot made with HTML, CSS and vanilla JavaScript. Twelve overlapping distribution curves in one compact chart. One file to download.
 

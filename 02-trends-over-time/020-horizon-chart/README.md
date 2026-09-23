@@ -2,8 +2,8 @@
 
 ![Horizon Chart example: daily temperature above or below normal for six cities over a year](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/020-horizon-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/020-horizon-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/020-horizon-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/020-horizon-chart/
 
 Free horizon chart made with HTML, CSS and vanilla JavaScript. Six cities and 365 days of data in a small space, with a crosshair. One file to download.
 

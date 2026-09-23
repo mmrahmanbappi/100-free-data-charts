@@ -2,8 +2,8 @@
 
 ![Quadrant Chart example: app features sorted by effort and impact](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/050-quadrant-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/050-quadrant-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/050-quadrant-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/050-quadrant-chart/
 
 Free quadrant chart made with HTML, CSS and vanilla JavaScript. A priority matrix with draggable points and keyboard control. One file to download.
 

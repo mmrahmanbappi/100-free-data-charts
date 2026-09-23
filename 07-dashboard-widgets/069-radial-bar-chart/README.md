@@ -2,8 +2,8 @@
 
 ![Radial Bar Chart example: monthly sales for a surf shop](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/069-radial-bar-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/069-radial-bar-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/069-radial-bar-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/069-radial-bar-chart/
 
 Free radial bar chart made with HTML, CSS and vanilla JavaScript. Bars arranged in a circle, ideal for months or hours. One file to download.
 

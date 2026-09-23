@@ -2,8 +2,8 @@
 
 ![Step Line Chart example: the interest rate on a savings account from 2021 to 2026](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/016-step-line-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/016-step-line-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/016-step-line-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/016-step-line-chart/
 
 Free step line chart made with HTML, CSS and vanilla JavaScript for prices and rates that change in jumps. Change points with tooltips. One file to download.
 

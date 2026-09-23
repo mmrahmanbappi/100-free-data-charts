@@ -2,8 +2,8 @@
 
 ![Cumulative Distribution Chart example: page load times for three versions of a website](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/040-ecdf-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/040-ecdf-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/040-ecdf-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/040-ecdf-chart/
 
 Free cumulative distribution (ECDF) chart made with HTML, CSS and vanilla JavaScript. Compare speeds or times against a target. One file to download.
 

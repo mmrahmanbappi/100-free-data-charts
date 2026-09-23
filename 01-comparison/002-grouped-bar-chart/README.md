@@ -2,8 +2,8 @@
 
 ![Grouped Bar Chart example: cinema ticket sales for three locations per quarter](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/002-grouped-bar-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/002-grouped-bar-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/002-grouped-bar-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/002-grouped-bar-chart/
 
 Free grouped bar chart made with HTML, CSS and vanilla JavaScript. Compare several series side by side, hide any series from the key. One file to download.
 

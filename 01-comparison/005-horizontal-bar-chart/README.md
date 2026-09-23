@@ -2,8 +2,8 @@
 
 ![Horizontal Bar Chart example: the most borrowed library books of the year](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/005-horizontal-bar-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/005-horizontal-bar-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/005-horizontal-bar-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/005-horizontal-bar-chart/
 
 Free horizontal bar chart made with HTML, CSS and vanilla JavaScript. Long labels stay readable. Top 5 or top 10 switch. One file to download.
 

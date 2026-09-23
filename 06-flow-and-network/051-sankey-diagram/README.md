@@ -2,8 +2,8 @@
 
 ![Sankey Diagram example: website visitors from source to landing page to outcome](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/051-sankey-diagram/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/051-sankey-diagram/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/051-sankey-diagram/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/051-sankey-diagram/
 
 Free Sankey diagram made with HTML, CSS and vanilla JavaScript. No library. Flows between steps sized by value, with hover highlights. One file to download.
 

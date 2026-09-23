@@ -2,8 +2,8 @@
 
 ![KPI Cards with Sparklines example: revenue, orders, average order and returns for an online shop](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/063-kpi-cards/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/063-kpi-cards/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/063-kpi-cards/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/063-kpi-cards/
 
 Free KPI cards with sparklines made with HTML, CSS and vanilla JavaScript. Big numbers, change badges and mini charts with a range switch. One file to download.
 

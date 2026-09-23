@@ -2,8 +2,8 @@
 
 ![Icicle Chart example: what is filling up a laptop drive](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/029-icicle-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/029-icicle-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/029-icicle-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/029-icicle-chart/
 
 Free icicle chart made with HTML, CSS and vanilla JavaScript. A zoomable hierarchy for folders, budgets or sitemaps. Click to zoom in and out. One file to download.
 

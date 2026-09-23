@@ -2,8 +2,8 @@
 
 ![Sunburst Chart example: where a city sends its household waste](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/025-sunburst-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/025-sunburst-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/025-sunburst-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/025-sunburst-chart/
 
 Free sunburst chart made with HTML, CSS and vanilla JavaScript. Two rings of nested data with details in the center on hover. One file to download.
 

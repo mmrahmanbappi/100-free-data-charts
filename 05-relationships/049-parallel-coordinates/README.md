@@ -2,8 +2,8 @@
 
 ![Parallel Coordinates Chart example: rental flats compared on six measures](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/049-parallel-coordinates/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/049-parallel-coordinates/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/049-parallel-coordinates/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/049-parallel-coordinates/
 
 Free parallel coordinates chart made with HTML, CSS and vanilla JavaScript. Filter many items across many measures by dragging on the axes. One file to download.
 

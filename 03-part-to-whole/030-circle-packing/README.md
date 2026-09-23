@@ -2,8 +2,8 @@
 
 ![Circle Packing Chart example: staff at a food company grouped by department and team](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/030-circle-packing/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/030-circle-packing/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/030-circle-packing/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/030-circle-packing/
 
 Free circle packing chart made with HTML, CSS and vanilla JavaScript. Nested circles sized by value, with a packing layout written from scratch. One file to download.
 

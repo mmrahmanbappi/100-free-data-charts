@@ -2,8 +2,8 @@
 
 ![Line Chart example: new members each month for a yoga studio app](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/011-line-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/011-line-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/011-line-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/011-line-chart/
 
 Free line chart made with HTML, CSS and vanilla JavaScript. No library. Hover crosshair, arrow key support, range switch and notes. One file to download.
 

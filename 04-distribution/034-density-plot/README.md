@@ -2,8 +2,8 @@
 
 ![Density Plot example: sunflower heights with and without plant feed](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/034-density-plot/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/034-density-plot/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/034-density-plot/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/034-density-plot/
 
 Free density plot made with HTML, CSS and vanilla JavaScript. Two smooth distribution curves compared, with medians and a crosshair. One file to download.
 

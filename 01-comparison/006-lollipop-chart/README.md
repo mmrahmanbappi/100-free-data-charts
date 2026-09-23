@@ -2,8 +2,8 @@
 
 ![Lollipop Chart example: average delivery time by city with a 24 hour target](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/006-lollipop-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/006-lollipop-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/006-lollipop-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/006-lollipop-chart/
 
 Free lollipop chart made with HTML, CSS and vanilla JavaScript. A clean bar chart alternative with a target line. Sort and download one file.
 

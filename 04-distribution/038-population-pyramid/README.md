@@ -2,8 +2,8 @@
 
 ![Population Pyramid example: the age of a town in 2006 and 2026](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/038-population-pyramid/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/038-population-pyramid/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/038-population-pyramid/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/038-population-pyramid/
 
 Free population pyramid made with HTML, CSS and vanilla JavaScript. Two sided age chart with a year switch and comparison outline. One file to download.
 

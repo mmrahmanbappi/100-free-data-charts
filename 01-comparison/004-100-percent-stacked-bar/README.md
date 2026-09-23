@@ -2,8 +2,8 @@
 
 ![100% Stacked Bar Chart example: customer survey results for five grocery stores](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/004-100-percent-stacked-bar/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/01-comparison/004-100-percent-stacked-bar/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/004-100-percent-stacked-bar/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/01-comparison/004-100-percent-stacked-bar/
 
 Free 100% stacked bar chart made with HTML, CSS and vanilla JavaScript. Built for survey and Likert results. Sort, hover and download one file.
 

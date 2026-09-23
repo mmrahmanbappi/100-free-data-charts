@@ -2,8 +2,8 @@
 
 ![Waterfall Chart example: how a bakery turns sales into profit](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/066-waterfall-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/07-dashboard-widgets/066-waterfall-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/066-waterfall-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/07-dashboard-widgets/066-waterfall-chart/
 
 Free waterfall chart made with HTML, CSS and vanilla JavaScript. Shows how a starting value becomes a final total through gains and losses. One file to download.
 

@@ -2,8 +2,8 @@
 
 ![Streamgraph example: weekly listening hours by genre on a radio app](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/015-streamgraph/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/015-streamgraph/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/015-streamgraph/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/02-trends-over-time/015-streamgraph/
 
 Free streamgraph made with HTML, CSS and vanilla JavaScript. Flowing layers centered on a middle line, labels inside the streams, crosshair. One file to download.
 

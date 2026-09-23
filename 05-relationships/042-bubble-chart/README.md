@@ -2,8 +2,8 @@
 
 ![Bubble Chart example: ad campaigns compared on cost, conversion and budget](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/042-bubble-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/042-bubble-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/042-bubble-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/042-bubble-chart/
 
 Free bubble chart made with HTML, CSS and vanilla JavaScript. Three numbers per item as x, y and size, grouped by color. One file to download.
 

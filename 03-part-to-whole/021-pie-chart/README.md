@@ -2,8 +2,8 @@
 
 ![Pie Chart example: how customers paid at a cafe](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/021-pie-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/03-part-to-whole/021-pie-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/021-pie-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/03-part-to-whole/021-pie-chart/
 
 Free pie chart made with HTML, CSS and vanilla JavaScript. No library. Labels with lines, slices that pop out on hover, keyboard support. One file to download.
 

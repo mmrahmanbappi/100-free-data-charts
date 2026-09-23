@@ -2,8 +2,8 @@
 
 ![Strip Plot example: train delays on five lines over 60 weekdays](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/037-strip-plot/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/04-distribution/037-strip-plot/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/037-strip-plot/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/04-distribution/037-strip-plot/
 
 Free strip plot made with HTML, CSS and vanilla JavaScript. Every point in each group shown as a dot, with the median marked. One file to download.
 

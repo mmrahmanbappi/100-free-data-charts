@@ -2,8 +2,8 @@
 
 ![Correlation Matrix example: what drives daily sales at a cafe](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/044-correlation-matrix/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/05-relationships/044-correlation-matrix/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/044-correlation-matrix/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/05-relationships/044-correlation-matrix/
 
 Free correlation matrix made with HTML, CSS and vanilla JavaScript. Color coded correlation values with plain English tooltips. One file to download.
 

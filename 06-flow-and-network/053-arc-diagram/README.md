@@ -2,8 +2,8 @@
 
 ![Arc Diagram example: characters who share scenes in a novel](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/053-arc-diagram/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/053-arc-diagram/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/053-arc-diagram/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/053-arc-diagram/
 
 Free arc diagram made with HTML, CSS and vanilla JavaScript. Connections between items drawn as arcs above a line, with hover focus. One file to download.
 

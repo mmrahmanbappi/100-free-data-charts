@@ -2,8 +2,8 @@
 
 ![Org Chart example: the team structure of a design studio](preview.png)
 
-**Live demo:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/058-org-chart/demo.html
-**Details and code:** https://mmrahmanbappi.github.io/100-free-data-charts/06-flow-and-network/058-org-chart/
+**Live demo:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/058-org-chart/demo.html
+**Details and code:** https://mmrahmanbappi.github.io/70-free-data-charts/06-flow-and-network/058-org-chart/
 
 Free org chart made with HTML, CSS and vanilla JavaScript. Collapsible teams, avatar initials and a phone friendly list view. One file to download.
 
