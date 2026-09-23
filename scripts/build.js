@@ -91,7 +91,52 @@ const MMCSS = "\n/* Shared look with mmrahmanbappi.github.io */\n:root{--bg:#eee
 const MMFONT = "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap\">";
 const FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;600;700&display=swap" rel="stylesheet">';
 
+// ---- SEO helpers: keep titles within 60 characters and descriptions within 110 to 160 ----
+const MM_STOP = ['and','with','for','in','of','the','a','an','to','&','on','by','your','or'];
+function mmTrimStop(w) { while (w.length && MM_STOP.includes(w[w.length - 1].toLowerCase())) w.pop(); return w; }
+function mmClean(t) {
+  t = t.trim();
+  if ((t.match(/\(/g) || []).length > (t.match(/\)/g) || []).length) t = t.slice(0, t.lastIndexOf('(')).trim();
+  t = mmTrimStop(t.split(' ')).join(' ');
+  return t.replace(/[ ,;:\-]+$/, '');
+}
+function mmTitle(t) {
+  if (t.length <= 60) return t;
+  while (t.length > 60 && /\s*\([^()]*\)/.test(t)) {
+    const all = [...t.matchAll(/\s*\([^()]*\)/g)], last = all[all.length - 1];
+    t = (t.slice(0, last.index) + t.slice(last.index + last[0].length)).trim();
+  }
+  if (t.length <= 60) return mmClean(t);
+  for (const sep of [': ', ' | ', ' - ']) {
+    const p = t.indexOf(sep);
+    if (p !== -1) {
+      const h = t.slice(0, p), s = t.slice(p + sep.length);
+      if (s.includes(',') && h.length <= 60) return mmClean(h);
+      const w = s.split(' ');
+      while (w.length && (h + sep + w.join(' ')).length > 60) w.pop();
+      const r = mmClean(w.join(' '));
+      if (r) return h + sep + r;
+      t = h; break;
+    }
+  }
+  if (t.length <= 60) return mmClean(t);
+  const w = t.split(' '); while (w.length && w.join(' ').length > 60) w.pop();
+  return mmClean(w.join(' '));
+}
+function mmDesc(d, tail) {
+  d = d.trim();
+  if (d.length > 160) {
+    const cut = d.slice(0, 159), p = cut.lastIndexOf('. ');
+    if (p > 100) d = cut.slice(0, p + 1);
+    else { const w = d.slice(0, 158).split(' '); w.pop(); d = mmTrimStop(w).join(' ').replace(/[,;:]+$/, '') + '.'; }
+  }
+  if (d.length < 110 && (d + ' ' + tail).length <= 160) d += ' ' + tail;
+  return d;
+}
+const MMTAIL = 'Free, with a live demo and no chart library.';
 function head(title, desc, url, image, keywords, schema) {
+  title = mmTitle(title); desc = mmDesc(desc, MMTAIL);
+  const ogimg = url.replace(/\/$/, '') + '/og.jpg';
   const t = e(title), d = e(desc);
   return `<!DOCTYPE html>
 <html lang="en">
@@ -109,13 +154,15 @@ function head(title, desc, url, image, keywords, schema) {
 <meta property="og:title" content="${t}">
 <meta property="og:description" content="${d}">
 <meta property="og:url" content="${url}">
-<meta property="og:image" content="${image}">
-<meta property="og:image:width" content="1280">
-<meta property="og:image:height" content="800">
+<meta property="og:image" content="${ogimg}">
+<meta property="og:image:alt" content="${t}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<link rel="image_src" href="${image}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${t}">
 <meta name="twitter:description" content="${d}">
-<meta name="twitter:image" content="${image}">
+<meta name="twitter:image" content="${ogimg}">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%2317191f'/><rect x='14' y='30' width='9' height='20' rx='2' fill='%23fff'/><rect x='28' y='18' width='9' height='32' rx='2' fill='%23fff'/><rect x='42' y='24' width='9' height='26' rx='2' fill='%23fff'/></svg>">
 ${FONTS}${MMFONT}
 <style>${CSS}${MMCSS}</style>

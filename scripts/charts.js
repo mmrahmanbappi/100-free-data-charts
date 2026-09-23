@@ -5,8 +5,8 @@ const SITE = {
   name: '70 Free Data Charts',
   base: 'https://mmrahmanbappi.github.io/70-free-data-charts/',
   repo: 'https://github.com/mmrahmanbappi/70-free-data-charts',
-  author: 'mmrahmanbappi',
-  author_url: 'https://github.com/mmrahmanbappi',
+  author: 'MM Rahman Bappi',
+  author_url: 'https://mmrahmanbappi.github.io/',
   published: '2026-09-23',
 };
 
