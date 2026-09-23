@@ -176,6 +176,15 @@ function head(title, desc, url, image, keywords, schema) {
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%2317191f'/><rect x='14' y='30' width='9' height='20' rx='2' fill='%23fff'/><rect x='28' y='18' width='9' height='32' rx='2' fill='%23fff'/><rect x='42' y='24' width='9' height='26' rx='2' fill='%23fff'/></svg>">
 ${FONTS}${MMFONT}
 <style>${CSS}${MMCSS}</style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D8QGLFQD12"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-D8QGLFQD12');
+</script>
 <script type="application/ld+json">${json(schema)}</script>
 </head>
 <body>
