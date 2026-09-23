@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Candlestick Chart Example: KSTR share price, day by day | 100 Free Data Charts</title>
+<meta name="description" content="A working candlestick chart made with HTML, CSS and vanilla JavaScript. Open, high, low, close and volume with a crosshair. One file, no library.">
+<link rel="canonical" href="https://mmrahmanbappi.github.io/100-free-data-charts/02-trends-over-time/018-candlestick-chart/demo.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* Change these colors to match your brand */
+:root {
+  --bg: #0f1318;
+  --card: #151b22;
+  --ink: #e7ecf2;
+  --muted: #8994a3;
+  --line: #232c38;
+  --accent: #2fbf8f;
+  --soft: #1e2630;
+}
+* { box-sizing: border-box; margin: 0; }
+body { font-family: "Manrope", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.5; min-height: 100vh; }
+.page { max-width: 1160px; margin: 0 auto; padding: 28px 24px 40px; }
+.brand { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; font-size: .95rem; }
+.logo { font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+.logo b { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); display: inline-block; }
+.brand span:last-child { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px 30px 22px; }
+.head { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+h1 { font-size: clamp(1.35rem, 2.6vw, 1.8rem); line-height: 1.2; }
+.sub { color: var(--muted); margin-top: 6px; max-width: 60ch; }
+.take { margin-top: 14px; padding: 10px 14px; border-radius: 10px; background: var(--soft); font-weight: 500; display: inline-block; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; gap: 3px; }
+.seg button { font: inherit; font-size: .9rem; border: 0; background: none; color: var(--muted); padding: 7px 12px; border-radius: 7px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--card); }
+#legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 4px; min-height: 8px; }
+.key { font: inherit; font-size: .9rem; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: none; color: var(--ink); padding: 5px 11px; border-radius: 99px; cursor: pointer; }
+.key:disabled { cursor: default; opacity: 1; }
+.key i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+.key[aria-pressed="false"] { opacity: .45; text-decoration: line-through; }
+#chart { height: 440px; margin-top: 6px; position: relative; }
+#chart svg { display: block; overflow: visible; }
+.grid { stroke: var(--line); }
+.axis { stroke: var(--muted); stroke-width: 1.2; }
+.tick { fill: var(--muted); font-size: 12px; }
+.label { fill: var(--ink); font-size: 13px; }
+.value { fill: var(--ink); font-size: 12px; font-weight: 700; }
+.hit { cursor: pointer; outline: none; transition: opacity .15s; }
+.hit:hover, .hit:focus-visible { opacity: .8; }
+.hit:focus-visible { stroke: var(--ink); stroke-width: 2; }
+.zone { outline: none; cursor: crosshair; }
+.zone:focus-visible { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 4 4; }
+.note { color: var(--muted); font-size: .85rem; margin-top: 10px; }
+details { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+summary { cursor: pointer; font-weight: 500; }
+table { border-collapse: collapse; margin-top: 12px; font-size: .9rem; width: 100%; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+td { font-variant-numeric: tabular-nums; }
+#tip { position: fixed; z-index: 10; pointer-events: none; background: var(--ink); color: var(--card); padding: 8px 11px; border-radius: 8px; font-size: .85rem; line-height: 1.4; max-width: 240px; }
+#tip[hidden] { display: none; }
+button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+:root { --up: #2fbf8f; --down: #f0506e; }
+@media (max-width: 640px) {
+  .page { padding: 16px 12px 30px; }
+  .card { padding: 20px 16px 16px; }
+  #chart { height: 380px; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="brand"><span class="logo"><b aria-hidden="true"></b>Kestrel Robotics (KSTR)</span><span>Daily prices to 22 September 2026</span></header>
+  <section class="card" aria-labelledby="title">
+    <div class="head">
+      <div>
+        <h1 id="title">KSTR share price, day by day</h1>
+        <p class="sub">Each candle is one trading day. Green closed higher than it opened, red closed lower. The thin lines show the day's high and low.</p>
+        <p class="take">KSTR closed at $61.26, up 29.7% over the last 60 trading days.</p>
+      </div>
+      <div class="seg" role="group" aria-label="Time range"><button type="button" data-v="60" aria-pressed="true">60 days</button><button type="button" data-v="30" aria-pressed="false">30 days</button></div>
+    </div>
+    <div id="legend"></div>
+    <figure id="chart" aria-label="KSTR share price, day by day. KSTR closed at $61.26, up 29.7% over the last 60 trading days. Tab to the chart, then use the left and right arrow keys to read each value."></figure>
+    <p class="note">Kestrel Robotics is a made up company. The prices are sample data for this demo and not financial advice.</p>
+    <details><summary>Show the data as a table</summary><table id="table"></table></details>
+  </section>
+</main>
+<div id="tip" hidden></div>
+<script>
+// Small helpers: SVG elements, scales, tooltip, legend and table.
+const NS = 'http://www.w3.org/2000/svg';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]static/.test(location.search);
+function el(tag, attrs, parent) {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs || {}) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function text(parent, x, y, str, attrs) {
+  const t = el('text', Object.assign({ x, y }, attrs || {}), parent);
+  t.textContent = str;
+  return t;
+}
+function linear(d0, d1, r0, r1) {
+  const f = v => r0 + (v - d0) / (d1 - d0) * (r1 - r0);
+  f.domain = [d0, d1];
+  return f;
+}
+function band(keys, r0, r1, pad) {
+  const step = (r1 - r0) / keys.length;
+  const bw = step * (1 - pad);
+  const f = k => r0 + keys.indexOf(k) * step + (step - bw) / 2;
+  f.bw = bw; f.step = step;
+  return f;
+}
+function niceTicks(min, max, count) {
+  const span = max - min;
+  const raw = span / count;
+  const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const m = raw / p;
+  const step = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+  const out = [];
+  for (let v = Math.ceil(min / step) * step; v <= max + step / 1e6; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+function niceMax(v, count) {
+  const t = niceTicks(0, v, count || 5);
+  const last = t[t.length - 1];
+  return last >= v ? last : last + (t[1] - t[0]);
+}
+function fmt(n, d) { return n.toLocaleString('en-US', { maximumFractionDigits: d == null ? 0 : d }); }
+function tween(dur, delay, fn) {
+  if (reduce) { fn(1); return; }
+  const start = performance.now() + (delay || 0);
+  fn(0);
+  function step(now) {
+    const t = Math.min(1, Math.max(0, (now - start) / dur));
+    fn(1 - Math.pow(1 - t, 3));
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const tip = document.getElementById('tip');
+function showTip(html, x, y) {
+  tip.innerHTML = html;
+  tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let left = x + 14, top = y - h - 12;
+  if (left + w > innerWidth - 8) left = x - w - 14;
+  if (top < 8) top = y + 16;
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+function hideTip() { tip.hidden = true; }
+function bindTip(node, label, html) {
+  node.setAttribute('tabindex', '0');
+  node.setAttribute('role', 'img');
+  node.setAttribute('aria-label', label);
+  node.classList.add('hit');
+  node.addEventListener('mousemove', e => showTip(html, e.clientX, e.clientY));
+  node.addEventListener('mouseleave', hideTip);
+  node.addEventListener('focus', () => { const r = node.getBoundingClientRect(); showTip(html, r.left + r.width / 2, r.top); });
+  node.addEventListener('blur', hideTip);
+}
+function yGrid(g, scale, ticks, x0, x1, format) {
+  ticks.forEach(v => {
+    const y = scale(v);
+    el('line', { x1: x0, x2: x1, y1: y, y2: y, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x0 - 10, y + 4, format(v), { class: 'tick', 'text-anchor': 'end' });
+  });
+}
+function xGrid(g, scale, ticks, y0, y1, format) {
+  ticks.forEach(v => {
+    const x = scale(v);
+    el('line', { x1: x, x2: x, y1: y0, y2: y1, class: v === 0 ? 'axis' : 'grid' }, g);
+    text(g, x, y1 + 20, format(v), { class: 'tick', 'text-anchor': 'middle' });
+  });
+}
+function legend(items, onToggle) {
+  const box = document.getElementById('legend');
+  box.innerHTML = '';
+  items.forEach(it => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'key';
+    b.setAttribute('aria-pressed', 'true');
+    b.innerHTML = '<i style="background:' + it.color + '"></i>' + it.name;
+    if (onToggle) b.onclick = () => {
+      const on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', on);
+      onToggle(it.name, on);
+    };
+    else b.disabled = true;
+    box.appendChild(b);
+  });
+}
+function table(head, rows) {
+  const t = document.getElementById('table');
+  t.innerHTML = '<thead><tr>' + head.map(h => '<th scope="col">' + h + '</th>').join('') + '</tr></thead><tbody>' +
+    rows.map(r => '<tr>' + r.map((c, i) => i ? '<td>' + c + '</td>' : '<th scope="row">' + c + '</th>').join('') + '</tr>').join('') + '</tbody>';
+}
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function linePath(pts, smooth) {
+  if (!smooth) return pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join('');
+  let d = 'M' + pts[0][0].toFixed(1) + ',' + pts[0][1].toFixed(1);
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    d += 'C' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ',' + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) + ' ' +
+      (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ',' + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) + ' ' + p2[0].toFixed(1) + ',' + p2[1].toFixed(1);
+  }
+  return d;
+}
+function areaPath(top, bottom, smooth) {
+  return linePath(top, smooth) + linePath(bottom.slice().reverse(), smooth).replace('M', 'L') + 'Z';
+}
+let clipCount = 0;
+function reveal(svg, g, x, y, w, h, animate, dur) {
+  const id = 'clip' + (++clipCount);
+  const r = el('rect', { x, y, width: w, height: h }, el('clipPath', { id }, el('defs', {}, svg)));
+  g.setAttribute('clip-path', 'url(#' + id + ')');
+  const draw = t => r.setAttribute('width', w * t);
+  animate ? tween(dur || 1100, 0, draw) : draw(1);
+}
+function scrub(svg, xs, top, bottom, info) {
+  const guide = el('line', { y1: top, y2: bottom, class: 'axis', 'stroke-dasharray': '3 4', opacity: 0 }, svg);
+  const half = xs.length > 1 ? (xs[1] - xs[0]) / 2 : 20;
+  const x0 = xs[0] - half;
+  const zone = el('rect', { x: x0, y: top, width: xs[xs.length - 1] - xs[0] + half * 2, height: bottom - top, fill: 'transparent', tabindex: 0, class: 'zone', role: 'img',
+    'aria-label': 'Chart area. Use the left and right arrow keys to read each value.' }, svg);
+  let cur = -1;
+  function off() { guide.setAttribute('opacity', 0); info(-1, false); hideTip(); }
+  function go(i, cx, cy) {
+    i = Math.max(0, Math.min(xs.length - 1, i)); cur = i;
+    guide.setAttribute('x1', xs[i]); guide.setAttribute('x2', xs[i]); guide.setAttribute('opacity', 1);
+    const r = info(i, true);
+    zone.setAttribute('aria-label', r.label);
+    if (cx == null) { const b = svg.getBoundingClientRect(); cx = b.left + xs[i]; cy = b.top + (r.y != null ? r.y : top + 30); }
+    showTip(r.html, cx, cy);
+  }
+  function near(px) { let best = 0, bd = Infinity; xs.forEach((x, i) => { const d = Math.abs(x - px); if (d < bd) { bd = d; best = i; } }); return best; }
+  zone.addEventListener('mousemove', e => go(near(e.clientX - svg.getBoundingClientRect().left), e.clientX, e.clientY));
+  zone.addEventListener('mouseleave', off);
+  zone.addEventListener('blur', off);
+  zone.addEventListener('focus', () => go(cur < 0 ? xs.length - 1 : cur));
+  zone.addEventListener('keydown', e => {
+    const k = e.key;
+    if (k === 'ArrowRight' || k === 'ArrowLeft') { e.preventDefault(); go((cur < 0 ? xs.length - 1 : cur) + (k === 'ArrowRight' ? 1 : -1)); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(xs.length - 1); }
+  });
+  return zone;
+}
+function mount(draw) {
+  const box = document.getElementById('chart');
+  let last = 0;
+  function render(animate) {
+    const w = box.clientWidth, h = box.clientHeight;
+    box.innerHTML = '';
+    const svg = el('svg', { viewBox: '0 0 ' + w + ' ' + h, width: w, height: h }, box);
+    draw(svg, w, h, animate);
+  }
+  new ResizeObserver(() => {
+    if (Math.abs(box.clientWidth - last) < 2) return;
+    const first = last === 0;
+    last = box.clientWidth;
+    render(first);
+  }).observe(box);
+  return render;
+}
+function buttons(onPick) {
+  document.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    onPick(b.dataset.v);
+  });
+}
+
+// The chart
+const ALL = [[47.22,48.73,46.8,48.54,1.8],[48.99,49.07,48.23,48.48,1.19],[48.32,49.59,46.8,47.43,2.22],[47.48,47.62,47.05,47.22,2.16],[46.88,48.64,46.43,47.34,1.46],[47.68,48.86,47.39,48.84,1.72],[49.09,49.69,48.62,49.5,2.11],[49.38,51.06,48.89,50.82,1.69],[50.82,51.27,50.06,51.19,1.29],[50.27,51.73,49.58,50.85,1.76],[50.1,50.9,49.65,50.34,1.91],[50.71,51.24,49.89,50.77,1.73],[50.47,51.52,50.36,51.22,1.35],[51.2,51.34,50.33,50.54,2.38],[50.95,51.04,49.5,49.94,1.82],[49.71,50.5,49.56,50.06,2.35],[50.55,50.61,48.94,50.49,1.27],[50.48,51.2,50.02,50.7,1.64],[50.85,52.74,50.83,52.27,1.78],[52.17,53.05,52.1,52.54,1.35],[52.12,52.13,50.73,51.61,2.11],[51.9,52.7,49.79,51.33,1.35],[51.23,52.33,49.55,49.86,2.88],[49.4,49.53,47.99,48.3,2.2],[47.54,48.04,46.48,47.66,1.69],[48.14,48.29,46.87,47.28,1.36],[47.53,49.38,46.83,48.48,2.15],[48.09,48.39,46.53,47.16,1.36],[47.36,48.1,45.78,45.79,2.66],[46.39,47.3,46.15,47.29,1.71],[47.26,47.36,45.07,46.7,1.83],[46.36,47.8,45.43,47.39,2.28],[47.29,47.56,46.75,47.12,1.94],[46.95,48.68,46.93,48.47,2.09],[48.18,48.41,46.43,46.87,2.31],[46.43,47.39,45.57,46.46,1.09],[47.39,48.05,46.71,46.78,2.31],[47.21,47.26,46.31,46.72,2.42],[46.85,48.47,46.28,48.01,2.83],[48.51,51.02,48.44,49.76,2.54],[49.86,52.08,49.85,51.95,2.05],[51.51,51.62,51.01,51.32,1.39],[51.01,53.69,51,52.69,2.98],[53.36,55.13,52.1,54.83,2.09],[54.55,55.89,54.54,55.09,1.63],[54.8,55.75,54.72,55.49,2.38],[55.28,58.09,54.81,58.09,3.2],[58.23,60.72,57.9,59.52,2.71],[58.92,59.63,57.16,57.44,2.7],[58.06,59.86,57.75,58.9,2.21],[58.87,59.79,58.73,59.51,1.84],[59.33,60.51,57.69,60.4,1.81],[60.21,60.77,59.52,59.73,1.32],[59.88,61.4,59.49,60.82,1.67],[61.93,62.25,60.08,60.18,2.12],[60.49,61.7,60.25,61.33,1.67],[60.57,60.58,59.28,59.9,1.78],[59.52,59.77,59.33,59.65,1.27],[59.86,60.89,59.84,60.04,2.12],[60.11,61.27,59.5,61.26,2.12]];
+const DATES = [];
+for (let d = new Date(2026, 8, 22); DATES.length < ALL.length; d.setDate(d.getDate() - 1)) if (d.getDay() % 6) DATES.unshift(new Date(d));
+const day = i => DATES[i].getDate() + ' ' + MONTHS[DATES[i].getMonth()];
+let span = 60;
+legend([{ name: 'Closed higher', color: 'var(--up)' }, { name: 'Closed lower', color: 'var(--down)' }]);
+table(['Date', 'Open', 'High', 'Low', 'Close', 'Volume'], ALL.map((c, i) => [day(i), c[0].toFixed(2), c[1].toFixed(2), c[2].toFixed(2), c[3].toFixed(2), c[4] + 'm']));
+const render = mount((svg, w, h, animate) => {
+  const small = w < 560;
+  const first = ALL.length - span;
+  const rows = ALL.slice(first);
+  const m = { t: 14, r: 62, b: 36, l: 12 };
+  const volH = (h - m.t - m.b) * 0.2, gap = 14;
+  const priceBottom = h - m.b - volH - gap;
+  const lo = Math.floor(Math.min(...rows.map(c => c[2]))), hi = Math.ceil(Math.max(...rows.map(c => c[1])));
+  const y = linear(lo, hi, priceBottom, m.t);
+  const vy = linear(0, Math.max(...rows.map(c => c[4])), h - m.b, h - m.b - volH);
+  const x = band(rows.map((c, i) => i), m.l, w - m.r, 0.3);
+  const g = el('g', {}, svg);
+  niceTicks(lo, hi, 5).forEach(v => { el('line', { x1: m.l, x2: w - m.r, y1: y(v), y2: y(v), class: 'grid' }, g); text(g, w - m.r + 8, y(v) + 4, '$' + v, { class: 'tick' }); });
+  rows.forEach((c, i) => { if (i % (small ? 15 : 10) === 0) text(g, x(i) + x.bw / 2, h - m.b + 22, day(first + i), { class: 'tick', 'text-anchor': 'middle' }); });
+  const lg = el('g', {}, svg);
+  rows.forEach((c, i) => {
+    const up = c[3] >= c[0], color = up ? 'var(--up)' : 'var(--down)', cx = x(i) + x.bw / 2;
+    el('line', { x1: cx, x2: cx, y1: y(c[1]), y2: y(c[2]), stroke: color, 'stroke-width': 1.3 }, lg);
+    el('rect', { x: x(i), width: x.bw, y: y(Math.max(c[0], c[3])), height: Math.max(1, Math.abs(y(c[0]) - y(c[3]))), fill: color, rx: 1 }, lg);
+    el('rect', { x: x(i), width: x.bw, y: vy(c[4]), height: h - m.b - vy(c[4]), fill: color, opacity: .45 }, lg);
+  });
+  reveal(svg, lg, 0, 0, w, h, animate, 1300);
+  const lastC = rows[rows.length - 1][3];
+  el('line', { x1: m.l, x2: w - m.r, y1: y(lastC), y2: y(lastC), stroke: 'var(--up)', 'stroke-dasharray': '3 4' }, svg);
+  el('rect', { x: w - m.r + 2, y: y(lastC) - 10, width: 56, height: 20, rx: 4, fill: 'var(--up)' }, svg);
+  text(svg, w - m.r + 30, y(lastC) + 4, '$' + lastC.toFixed(2), { class: 'tick', 'text-anchor': 'middle', style: 'fill:#0f1318;font-weight:700' });
+  scrub(svg, rows.map((c, i) => x(i) + x.bw / 2), m.t, h - m.b, (i, on) => {
+    if (!on) return;
+    const c = rows[i], chg = (c[3] - c[0]) / c[0] * 100;
+    return { y: y(c[1]), label: day(first + i) + ': open ' + c[0] + ', high ' + c[1] + ', low ' + c[2] + ', close ' + c[3],
+      html: '<b>' + day(first + i) + ' 2026</b><br>Open $' + c[0].toFixed(2) + '<br>High $' + c[1].toFixed(2) + '<br>Low $' + c[2].toFixed(2) + '<br>Close $' + c[3].toFixed(2) + ' (' + (chg >= 0 ? '+' : '') + chg.toFixed(1) + '%)<br>Volume ' + c[4] + 'm shares' };
+  });
+});
+buttons(v => { span = +v; render(true); });
+</script>
+</body>
+</html>

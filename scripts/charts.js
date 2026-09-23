@@ -18,7 +18,13 @@ const CATEGORIES = [
     desc: '10 free comparison charts made with HTML, CSS and vanilla JavaScript. Bar, grouped, stacked, 100% stacked, lollipop, dot plot, dumbbell, bullet and diverging.',
     intro: 'Comparison charts answer the most common question people ask about data: which one is bigger? These ten charts cover every way to compare values, from a simple bar chart to before and after dumbbells and target tracking bullet charts. Each one is a single HTML file with no library. Open the demo, change the numbers and put it on your site.',
   },
-  { num: 2, slug: '02-trends-over-time', name: 'Trends Over Time', ready: false },
+  {
+    num: 2, slug: '02-trends-over-time', name: 'Trends Over Time', ready: true,
+    keywords: 'line chart html, time series chart javascript, area chart, stacked area chart, streamgraph, candlestick chart, sparkline, slope chart',
+    title: 'Free Time Series Charts in HTML and JavaScript: Line, Area, Candlestick',
+    desc: '10 free time series charts made with HTML, CSS and vanilla JavaScript. Line, multi line, area, stacked area, streamgraph, step, sparkline, candlestick, slope, horizon.',
+    intro: 'These charts show how numbers change over days, months and years. Start with a simple line chart, add more lines to compare, fill the area to show volume, or use a candlestick chart for prices. Every chart has a crosshair you can move with your mouse or the arrow keys, and every one is a single HTML file with no library.',
+  },
   { num: 3, slug: '03-part-to-whole', name: 'Part to Whole', ready: false },
   { num: 4, slug: '04-distribution', name: 'Distribution', ready: false },
   { num: 5, slug: '05-relationships', name: 'Relationships', ready: false },
@@ -350,6 +356,330 @@ parks.forEach(([name, change], row) => {
       ['How do I show negative values in a bar chart?', 'Put zero in the middle and let negative bars grow to the left and positive bars to the right, each in its own color. That is exactly what a diverging bar chart does.'],
       ['Where should labels go in a diverging bar chart?', 'Put each label on the other side of the center line from its bar. That way labels never sit on top of bars, even when values are large.'],
       ['Which colors work best for gains and losses?', 'Use two clearly different colors, like green and red or blue and orange. Blue and orange are safer for people with red and green color blindness.'],
+    ],
+  },
+
+  {
+    num: 11, cat: '02-trends-over-time', slug: '011-line-chart', name: 'Line Chart',
+    example: 'new members each month for a yoga studio app',
+    title: 'Free Line Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free line chart made with HTML, CSS and vanilla JavaScript. No library. Hover crosshair, arrow key support, range switch and notes. One file to download.',
+    keywords: 'line chart html, line chart javascript, line chart without library, svg line chart, time series chart, free line chart template',
+    what: [
+      'A line chart is a chart that shows how a number changes over time by joining data points with a line. Time runs from left to right, and the height of the line shows the value at each moment.',
+      'Line charts are the best way to show a trend. The eye follows the line and sees at once whether things are going up, going down or repeating, like a rush of new members every January.',
+    ],
+    glance: { best: 'One number tracked over days, months or years', data: 'A date and a number for each point in time', avoid: 'Comparing separate items with no order. Use a bar chart.' },
+    when: ['Sign ups, sales or visitors per month', 'Prices or rates over time', 'Temperatures, weights or any reading taken regularly', 'Showing seasonal patterns, like a yearly peak'],
+    instead: [['012-multi-line-chart', 'You want to compare two to five things over the same time'], ['013-area-chart', 'You want to show volume, like total energy made'], ['016-step-line-chart', 'The value changes in jumps and stays flat between them']],
+    features: ['A smooth SVG line with a point for every month', 'A crosshair that follows the mouse and shows the value and the change from the month before', 'Arrow keys move the crosshair for keyboard users', 'A switch between two years and the last 12 months', 'Notes on the chart that explain the January peaks', 'The line draws itself from left to right on load'],
+    code: `const values = [320, 340, 310, 420, 460, 510, 480, 530];
+const w = 600, h = 300;
+const max = Math.max(...values);
+const points = values.map((v, i) => [40 + i * (w - 60) / (values.length - 1), h - 30 - v / max * (h - 60)]);
+
+make('path', {
+  d: points.map((p, i) => (i ? 'L' : 'M') + p[0] + ',' + p[1]).join(''),
+  fill: 'none', stroke: '#0f7b8a', 'stroke-width': 3
+});
+points.forEach(p => drawCircle(p[0], p[1], 4, '#0f7b8a'));`,
+    faq: [
+      ['How do I make a line chart in HTML without a library?', 'Turn each value into an x and y position, then join the positions into one SVG path using M for the first point and L for the rest. This template does that in plain JavaScript and adds axes, a crosshair and labels.'],
+      ['Does a line chart have to start at zero?', 'No, not always. A line chart shows change, so you can zoom in on the range of your data. For counts like members or sales, starting at zero is still the most honest choice, and this template does that.'],
+      ['Should I use a smooth or a straight line?', 'Straight lines are the most exact. A gentle curve is easier on the eye for monthly data. Avoid strong smoothing, because it can draw peaks that are not in the data.'],
+      ['When should I use a bar chart instead of a line chart?', 'Use bars when the items have no order, like products or cities. Use a line when the items follow each other in time and you care about the trend.'],
+    ],
+  },
+  {
+    num: 12, cat: '02-trends-over-time', slug: '012-multi-line-chart', name: 'Multi Line Chart',
+    example: 'average home prices in three neighborhoods over ten years',
+    title: 'Free Multi Line Chart in HTML and JavaScript (Live Demo)',
+    desc: 'Free multi line chart made with HTML, CSS and vanilla JavaScript. Labels at the end of each line, crosshair with all values, toggles. One file to download.',
+    keywords: 'multi line chart, multiple line chart javascript, line chart with multiple lines html, compare trends chart, multi series line chart',
+    what: [
+      'A multi line chart shows two or more lines on the same axes so you can compare how several things changed over the same time. Each line has its own color.',
+      'It answers questions like: which neighborhood grew faster, and did they all dip in the same year? Putting the name at the end of each line saves the reader from looking back and forth at a key.',
+    ],
+    glance: { best: 'Comparing 2 to 5 trends over the same time', data: 'A date and one number per series for each point', avoid: 'More than 5 lines. It turns into spaghetti.' },
+    when: ['Prices in several areas or stores', 'Your product against competitors', 'This year, last year and the year before by month', 'Traffic from several channels over time'],
+    instead: [['011-line-chart', 'You only track one thing'], ['014-stacked-area-chart', 'The lines add up to a total you care about'], ['019-slope-chart', 'You only have a start and an end value']],
+    features: ['Three lines with names written right at the end of each line', 'A crosshair that lists every value for the chosen year, biggest first', 'Click a name in the key to hide or show a line', 'The axis zooms to fit only the lines that are showing', 'On phones the end labels move into the key', 'Arrow key support and a full data table'],
+    code: `const years = [2016, 2018, 2020, 2022, 2024, 2026];
+const series = [
+  { name: 'Old Harbor', color: '#5b3fa8', values: [312, 341, 372, 455, 462, 497] },
+  { name: 'Southfield', color: '#1f9e89', values: [189, 201, 218, 276, 292, 321] }
+];
+const x = i => 50 + i * 90, y = v => 280 - (v - 150) / 350 * 260;
+
+series.forEach(s => {
+  const d = s.values.map((v, i) => (i ? 'L' : 'M') + x(i) + ',' + y(v)).join('');
+  make('path', { d, fill: 'none', stroke: s.color, 'stroke-width': 3 });
+  const last = s.values.length - 1;
+  drawText(x(last) + 10, y(s.values[last]) + 4, s.name);
+});`,
+    faq: [
+      ['How many lines can a line chart have?', 'Up to about five. With more, the lines cross so often that nobody can follow them. Highlight one line and gray out the rest, or make small separate charts.'],
+      ['Should I use a legend or label the lines directly?', 'Label them directly when you can, by writing the name at the end of each line. It is faster to read. Keep a legend as well for hiding lines and for small screens.'],
+      ['Can a multi line chart start above zero?', 'Yes. Line charts show change, so it is fine to zoom in on the range where the data lives, as long as the axis labels make the start value clear.'],
+      ['What is the difference between a multi line chart and a stacked area chart?', 'A multi line chart shows each series on its own. A stacked area chart piles them up so you also see the total. Use lines when the series do not add up to anything.'],
+    ],
+  },
+  {
+    num: 13, cat: '02-trends-over-time', slug: '013-area-chart', name: 'Area Chart',
+    example: 'solar power made each day by a family home',
+    title: 'Free Area Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free area chart made with HTML, CSS and vanilla JavaScript. Gradient fill, average line, crosshair and keyboard support. One file to download.',
+    keywords: 'area chart html, area chart javascript, svg area chart, gradient area chart, filled line chart',
+    what: [
+      'An area chart is a line chart with the space under the line filled in. The filled shape shows volume, so it works well for amounts that pile up, like energy made, water used or money earned.',
+      'The fill makes the chart easier to read at a glance and gives a stronger sense of how much, not only which way. A soft gradient keeps the shape light so the line on top stays sharp.',
+    ],
+    glance: { best: 'One amount over time where volume matters', data: 'A date and a number for each point in time', avoid: 'Several overlapping series. The fills hide each other.' },
+    when: ['Energy made or used each day', 'Website visits or revenue over time', 'Water, fuel or data usage', 'Any total that builds up over a period'],
+    instead: [['011-line-chart', 'You only care about the trend, not the volume'], ['014-stacked-area-chart', 'Your total is made of several parts']],
+    features: ['A gradient fill made with an SVG linearGradient', 'A dashed daily average line with its value written on it', 'A crosshair that says how far each day is above or below average', 'Cloudy days are flagged in the tooltip', 'The area reveals from left to right on load', 'Arrow key support and a data table'],
+    code: `const values = [24.1, 26.3, 25.8, 18.2, 12.4, 21.7, 27.9];
+const x = i => 40 + i * 90, y = v => 280 - v / 35 * 260;
+const edge = values.map((v, i) => x(i) + ',' + y(v));
+
+make('path', {
+  d: 'M' + edge.join('L') + 'L' + x(values.length - 1) + ',280L' + x(0) + ',280Z',
+  fill: '#e8a300', 'fill-opacity': 0.3
+});
+make('path', { d: 'M' + edge.join('L'), fill: 'none', stroke: '#e8a300', 'stroke-width': 3 });`,
+    faq: [
+      ['What is the difference between a line chart and an area chart?', 'They show the same data. An area chart fills the space under the line, which puts more weight on the amount. Use a line for the trend and an area when the size of the total matters.'],
+      ['Does an area chart need to start at zero?', 'Yes. The filled area stands for the amount, so if the axis starts above zero, the area lies about the size. Line charts can zoom in, area charts should not.'],
+      ['How do I add a gradient to an SVG area chart?', 'Add a linearGradient inside defs with two stops, a stronger color at the top and a faint one at the bottom, then set the area fill to url(#yourId). The template shows the exact code.'],
+      ['Can I show more than one series in an area chart?', 'You can, but overlapping fills get muddy. Stack the series in a stacked area chart, or use a multi line chart instead.'],
+    ],
+  },
+  {
+    num: 14, cat: '02-trends-over-time', slug: '014-stacked-area-chart', name: 'Stacked Area Chart',
+    example: 'hours watched each month on a streaming app, by device',
+    title: 'Free Stacked Area Chart in HTML and JavaScript (Live Demo)',
+    desc: 'Free stacked area chart made with HTML, CSS and vanilla JavaScript. Layers add up to a total, hide any layer, crosshair with shares. One file to download.',
+    keywords: 'stacked area chart, stacked area chart javascript, stacked area chart html, cumulative area chart, layered area chart',
+    what: [
+      'A stacked area chart shows several amounts over time, piled on top of each other. Each colored layer is one part, and the top edge of the whole stack is the total.',
+      'It shows two things at once: how the total changed, and how the mix changed inside it. In this example you can see total viewing peak in winter while phones slowly take a bigger share.',
+    ],
+    glance: { best: 'A total over time and the parts that make it up', data: 'A date and one number per part for each point', avoid: 'Comparing the middle layers exactly. Use lines.' },
+    when: ['Viewing, visits or sales by device or channel', 'Energy use by source over the year', 'Revenue by product line each month', 'Team hours split by type of work'],
+    instead: [['012-multi-line-chart', 'You need to compare each part exactly'], ['015-streamgraph', 'You have many parts and care more about the flow than exact numbers'], ['003-stacked-bar-chart', 'You only have a few points in time']],
+    features: ['Four smooth layers stacked with a running total', 'A crosshair that lists every device with its share and the total', 'Click a device in the key to hide it and restack the rest', 'Dark theme with bright, easy to tell apart colors', 'Layers reveal from left to right on load', 'Arrow key support and a data table with totals'],
+    code: `const months = 6;
+const layers = [
+  { color: '#ff5d73', values: [42, 45, 51, 55, 49, 46] },
+  { color: '#ffb547', values: [28, 29, 31, 33, 34, 36] }
+];
+const x = i => 40 + i * 110, y = v => 280 - v / 100 * 260;
+let below = Array(months).fill(0);
+
+layers.forEach(l => {
+  const top = below.map((b, i) => b + l.values[i]);
+  const up = top.map((v, i) => x(i) + ',' + y(v));
+  const down = below.map((v, i) => x(i) + ',' + y(v)).reverse();
+  make('path', { d: 'M' + up.join('L') + 'L' + down.join('L') + 'Z', fill: l.color });
+  below = top;
+});`,
+    faq: [
+      ['When should I use a stacked area chart?', 'Use it when the total matters and you also want to see how the parts change inside it over time, like viewing by device or energy by source.'],
+      ['Which layer should go at the bottom?', 'Put the largest or the most stable layer at the bottom. It sits on a flat baseline, so it is the only layer people can read accurately.'],
+      ['What is the difference between a stacked area chart and a streamgraph?', 'A stacked area chart builds up from zero, so you can read the total on the axis. A streamgraph centers the layers on a middle line, which looks more fluid but hides the exact total.'],
+      ['How many layers can a stacked area chart have?', 'Keep it to five or fewer. Thin layers in the middle of a tall stack become impossible to read.'],
+    ],
+  },
+  {
+    num: 15, cat: '02-trends-over-time', slug: '015-streamgraph', name: 'Streamgraph',
+    example: 'weekly listening hours by genre on a radio app',
+    title: 'Free Streamgraph in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free streamgraph made with HTML, CSS and vanilla JavaScript. Flowing layers centered on a middle line, labels inside the streams, crosshair. One file to download.',
+    keywords: 'streamgraph, streamgraph javascript, stream graph html, theme river chart, flowing area chart',
+    what: [
+      'A streamgraph is a stacked area chart that flows around a center line instead of sitting on the bottom. Each colored stream is one category, and its thickness shows how big it was at each moment.',
+      'It is made for seeing rises and falls across many categories at once. It gives up exact totals in exchange for a clear picture of which streams grow, shrink or take over, like podcasts overtaking rock.',
+    ],
+    glance: { best: 'Many categories changing over time', data: 'A date and one number per category for each point', avoid: 'When people need exact numbers. Use lines or bars.' },
+    when: ['Music, film or book genres over time', 'Topics people search or talk about each week', 'Product categories in an online shop over a year', 'Stories for reports and magazines where the shape is the point'],
+    instead: [['014-stacked-area-chart', 'People need to read the total on an axis'], ['012-multi-line-chart', 'You have only a few categories and need exact values']],
+    features: ['Six layers centered on a middle line so the chart is balanced', 'Genre names placed inside each stream where it is thickest', 'A crosshair that lists every genre for the chosen week, biggest first', 'Smooth curves that match exactly between layers', 'A slow reveal from left to right on load', 'Arrow key support and a full data table'],
+    code: `const weeks = 5;
+const streams = [
+  { color: '#e4572e', values: [34, 36, 35, 38, 37] },
+  { color: '#29335c', values: [30, 29, 28, 27, 26] },
+  { color: '#8e5572', values: [9, 12, 15, 19, 22] }
+];
+const totals = Array.from({ length: weeks }, (v, i) => streams.reduce((a, s) => a + s.values[i], 0));
+const x = i => 40 + i * 130, y = v => 160 - v * 1.6;
+let below = totals.map(t => -t / 2); // center on the middle line
+
+streams.forEach(s => {
+  const top = below.map((b, i) => b + s.values[i]);
+  const up = top.map((v, i) => x(i) + ',' + y(v));
+  const down = below.map((v, i) => x(i) + ',' + y(v)).reverse();
+  make('path', { d: 'M' + up.join('L') + 'L' + down.join('L') + 'Z', fill: s.color });
+  below = top;
+});`,
+    faq: [
+      ['What is a streamgraph used for?', 'It shows how many categories rise and fall over time. It is popular in news stories and reports where the overall shape tells the story better than exact numbers.'],
+      ['How is a streamgraph different from a stacked area chart?', 'Both stack layers. A stacked area chart starts at zero, so you can read the total. A streamgraph centers the stack on a middle line, which looks smoother and makes each stream easier to follow.'],
+      ['Why does a streamgraph have no y axis?', 'Because the layers float around a center line, a single axis would not give useful readings. The tooltip gives exact numbers instead.'],
+      ['Is a streamgraph the same as a theme river?', 'Yes. ThemeRiver was an early name for this chart. Streamgraph is the name most people use today.'],
+    ],
+  },
+  {
+    num: 16, cat: '02-trends-over-time', slug: '016-step-line-chart', name: 'Step Line Chart',
+    example: 'the interest rate on a savings account from 2021 to 2026',
+    title: 'Free Step Line Chart in HTML and JavaScript (Live Demo)',
+    desc: 'Free step line chart made with HTML, CSS and vanilla JavaScript for prices and rates that change in jumps. Change points with tooltips. One file to download.',
+    keywords: 'step line chart, step chart javascript, step line chart html, interest rate chart, price change chart',
+    what: [
+      'A step line chart shows a value that stays flat and then jumps to a new level, like a price, a rate or a plan limit. Instead of a sloped line between points, it draws a flat line and then a straight jump.',
+      'A normal line chart would suggest the rate slowly slid from one level to the next, which never happened. The steps show the truth: the rate stayed the same until the day it changed.',
+    ],
+    glance: { best: 'Values that change in jumps and hold between them', data: 'The date of each change and the new value', avoid: 'Values measured all the time, like temperature.' },
+    when: ['Interest rates and savings rates', 'Prices and subscription fees', 'Stock levels and plan limits', 'Tax bands and minimum wage history'],
+    instead: [['011-line-chart', 'The value really changes smoothly between points'], ['018-candlestick-chart', 'You track a price that moves all day']],
+    features: ['Flat lines and clean jumps drawn with SVG H and V commands', 'A dot at every change you can hover or reach with Tab', 'Tooltips that say raised or cut, from what to what', 'The peak is marked on the chart', 'A soft fill under the line to show the level', 'Keyboard support and a table of every change'],
+    code: `const changes = [[2021, 0.10], [2022.2, 0.75], [2023, 3.00], [2023.5, 3.60], [2025, 2.85]];
+const end = 2026.7;
+const x = t => 40 + (t - 2021) / (end - 2021) * 540, y = r => 280 - r / 4 * 260;
+
+let d = 'M' + x(changes[0][0]) + ',' + y(changes[0][1]);
+changes.slice(1).forEach(([t, rate]) => { d += 'H' + x(t) + 'V' + y(rate); });
+d += 'H' + x(end);
+make('path', { d, fill: 'none', stroke: '#1b5e4a', 'stroke-width': 3 });
+changes.forEach(([t, rate]) => drawCircle(x(t), y(rate), 5, '#1b5e4a'));`,
+    faq: [
+      ['What is a step line chart?', 'It is a line chart that moves in flat steps and sudden jumps, instead of slopes. It is used for values that stay the same until they change, like rates and prices.'],
+      ['When should I use a step chart instead of a line chart?', 'Use a step chart when the value holds steady between changes. A normal line would draw a slope that suggests gradual change, which is misleading for rates, prices or limits.'],
+      ['How do I draw steps in SVG?', 'Use the H command to draw flat to the next change date, then V to jump up or down to the new value. Repeat for each change and finish with H to the end date.'],
+      ['Should the step happen before or after the date?', 'In most cases the new value starts on the change date, so draw flat until that date and then jump. This template works that way.'],
+    ],
+  },
+  {
+    num: 17, cat: '02-trends-over-time', slug: '017-sparkline', name: 'Sparkline',
+    example: 'daily sales for six products in a shop dashboard',
+    title: 'Free Sparkline Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free sparklines made with HTML, CSS and vanilla JavaScript inside a product table. Best and worst day dots, hover values, sorting. One file to download.',
+    keywords: 'sparkline, sparkline javascript, sparkline html css, mini line chart, inline chart table, dashboard sparkline',
+    what: [
+      'A sparkline is a tiny line chart without axes, small enough to sit inside a table row or next to a number. It shows the shape of a trend in a word sized space.',
+      'Sparklines were named by Edward Tufte, who called them data words. They are perfect for dashboards, where you want to see at a glance which products are rising and which are falling without opening a full chart.',
+    ],
+    glance: { best: 'Many small trends side by side in a table', data: 'A short list of numbers for each row', avoid: 'When people need exact values from the chart itself.' },
+    when: ['Product or page lists in dashboards', 'Stock or crypto watch lists', 'KPI cards showing the last 30 days', 'Email reports where space is tight'],
+    instead: [['011-line-chart', 'One trend deserves a full size chart'], ['020-horizon-chart', 'You have many long series and need to compare them closely']],
+    features: ['Six sparklines inside a normal HTML table', 'A green dot for the best day, red for the slowest and blue for today', 'Hover any sparkline to read the value for that day', 'This week against last week, in green or red', 'Sort by most sold or by biggest change', 'Every sparkline redraws to fit its cell on any screen'],
+    code: `const sales = [42, 45, 39, 51, 48, 55, 60, 52, 58, 63];
+const w = 160, h = 40;
+const lo = Math.min(...sales), hi = Math.max(...sales);
+const x = i => 4 + i * (w - 8) / (sales.length - 1);
+const y = v => h - 4 - (v - lo) / (hi - lo) * (h - 8);
+
+make('path', { d: sales.map((v, i) => (i ? 'L' : 'M') + x(i) + ',' + y(v)).join(''), fill: 'none', stroke: '#2563c9', 'stroke-width': 2 });
+drawCircle(x(sales.indexOf(hi)), y(hi), 3, '#16835a');
+drawCircle(x(sales.indexOf(lo)), y(lo), 3, '#c8354b');`,
+    faq: [
+      ['What is a sparkline?', 'A sparkline is a very small line chart with no axes or labels, usually placed in a table or next to a number, that shows the shape of a recent trend.'],
+      ['Who invented sparklines?', 'Edward Tufte, a well known writer on data design, named them and made them popular in his 2006 book Beautiful Evidence.'],
+      ['Should a sparkline start at zero?', 'Usually not. A sparkline is about the shape of the trend, so it stretches to fill its space from the lowest to the highest value. Show the actual numbers next to it.'],
+      ['How do I add sparklines to an HTML table?', 'Put an empty SVG in each table cell, then draw a short path in each one with JavaScript, sized to the width of the cell. This template does exactly that and redraws when the screen size changes.'],
+    ],
+  },
+  {
+    num: 18, cat: '02-trends-over-time', slug: '018-candlestick-chart', name: 'Candlestick Chart',
+    example: 'daily share prices and volume for a made up robotics company',
+    title: 'Free Candlestick Chart in HTML and JavaScript (Live Demo)',
+    desc: 'Free candlestick chart made with HTML, CSS and vanilla JavaScript. Open, high, low, close and volume with a crosshair and range switch. One file to download.',
+    keywords: 'candlestick chart, candlestick chart javascript, ohlc chart html, stock chart without library, trading chart html',
+    what: [
+      'A candlestick chart shows four prices for each day: where the price opened, how high and low it went, and where it closed. The thick body runs from open to close, and the thin lines, called wicks, show the high and the low.',
+      'Green candles closed higher than they opened and red candles closed lower. Traders read runs of candles to see buying and selling pressure, and the volume bars below show how busy each day was.',
+    ],
+    glance: { best: 'Prices that move within each day or period', data: 'Open, high, low and close for each day, plus volume', avoid: 'Audiences who do not trade. A line chart is clearer.' },
+    when: ['Stock, fund and crypto prices', 'Currency exchange rates', 'Commodity prices like gold or oil', 'Any price with a daily range'],
+    instead: [['011-line-chart', 'You only need the closing price'], ['016-step-line-chart', 'The price only changes now and then']],
+    features: ['Candles with bodies and wicks drawn in SVG', 'Volume bars under the price in the same colors', 'A crosshair showing open, high, low, close, change and volume', 'A 30 day and 60 day switch', 'The latest price marked on the right side', 'Trading days only, with weekends skipped automatically'],
+    code: `const days = [[48.1, 49.0, 47.6, 48.8], [48.8, 49.5, 48.2, 48.4], [48.4, 50.2, 48.3, 50.0]];
+const y = p => 280 - (p - 47) / 4 * 260;
+
+days.forEach(([open, high, low, close], i) => {
+  const x = 60 + i * 40;
+  const color = close >= open ? '#2fbf8f' : '#f0506e';
+  drawLine(x, y(high), x, y(low), color, 1.5);                  // wick
+  drawRect(x - 10, y(Math.max(open, close)), 20,
+    Math.max(1, Math.abs(y(open) - y(close))), color);          // body
+});`,
+    faq: [
+      ['How do you read a candlestick chart?', 'Each candle is one day. The body shows the open and close price and the wicks show the high and low. Green means the price closed higher than it opened, red means it closed lower.'],
+      ['What is the difference between a candlestick chart and an OHLC chart?', 'They show the same four prices. An OHLC chart uses a line with small ticks for open and close, while a candlestick uses a filled body, which is easier to read at a glance.'],
+      ['Why are there gaps for weekends?', 'Markets are closed at weekends, so there are no candles for those days. This template skips weekends so the candles sit side by side.'],
+      ['Can I use this chart with live data?', 'Yes. Replace the ALL list with data from your own source in the same format: open, high, low, close and volume. Call the draw function again when new data arrives.'],
+    ],
+  },
+  {
+    num: 19, cat: '02-trends-over-time', slug: '019-slope-chart', name: 'Slope Chart',
+    example: 'guest ratings for eight hotels in 2025 and 2026',
+    title: 'Free Slope Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free slope chart made with HTML, CSS and vanilla JavaScript for comparing two points in time. Up and down colors, labels that never overlap. One file to download.',
+    keywords: 'slope chart, slope graph javascript, slopegraph html, before after chart, two point comparison chart',
+    what: [
+      'A slope chart compares two points in time for many items. Each item is a line from its first value on the left to its second value on the right. Lines that go up improved and lines that go down got worse.',
+      'The angle of each line tells the story at once. It is also the best way to show changes in rank, because lines that cross show items passing each other.',
+    ],
+    glance: { best: 'Many items compared at two moments', data: 'A name and two numbers for each item', avoid: 'More than two points in time. Use a line chart.' },
+    when: ['Ratings or scores this year against last year', 'Rankings before and after a change', 'Prices in two different years', 'Results for each team at the start and the end of a project'],
+    instead: [['008-dumbbell-chart', 'You want every item on its own row'], ['012-multi-line-chart', 'You have more than two points in time']],
+    features: ['Green lines for gains and red lines for drops', 'Labels that move apart so they never overlap', 'Filters to show all hotels, only drops or only gains', 'A wide invisible hover area on each line so it is easy to point at', 'Lines grow from left to right on load', 'Keyboard support and a table with the change'],
+    code: `const hotels = [['Station', 6.9, 7.6], ['Harbor', 8.7, 8.5], ['Downtown', 8.1, 8.6]];
+const left = 150, right = 450;
+const y = r => 280 - (r - 6.5) / 2.7 * 260;
+
+hotels.forEach(([name, before, after]) => {
+  const color = after >= before ? '#1f7a5c' : '#c2452d';
+  drawLine(left, y(before), right, y(after), color, 3);
+  drawText(left - 10, y(before) + 4, name + ' ' + before, 'end');
+  drawText(right + 10, y(after) + 4, after + ' ' + name);
+});`,
+    faq: [
+      ['What is a slope chart?', 'A slope chart draws a line for each item from its value at one time to its value at a later time. The slope of the line shows whether it went up or down and by how much.'],
+      ['Who made slope charts popular?', 'Edward Tufte showed them in 1983 under the name slopegraph, and they have become common in news and reports since.'],
+      ['How do I stop labels overlapping in a slope chart?', 'Sort the labels by height, then push each one down if it is too close to the one above. If the last label goes off the bottom, shift them all up. This template does exactly that.'],
+      ['When should I use a dumbbell chart instead?', 'Use a dumbbell chart when you want to scan item by item on rows. Use a slope chart when changes in rank and the direction of change matter most.'],
+    ],
+  },
+  {
+    num: 20, cat: '02-trends-over-time', slug: '020-horizon-chart', name: 'Horizon Chart',
+    example: 'daily temperature above or below normal for six cities over a year',
+    title: 'Free Horizon Chart in HTML, CSS and JavaScript (Live Demo)',
+    desc: 'Free horizon chart made with HTML, CSS and vanilla JavaScript. Six cities and 365 days of data in a small space, with a crosshair. One file to download.',
+    keywords: 'horizon chart, horizon graph javascript, horizon chart html, compact time series chart, temperature anomaly chart',
+    what: [
+      'A horizon chart packs a long time series into a thin strip by folding the values into colored bands. Small differences are light, bigger ones are darker, warm values are red and cool values are blue.',
+      'Because each row is so short, you can stack many series and compare them day by day, like six cities over a whole year. It takes a minute to learn, then it becomes one of the most useful charts for dense data.',
+    ],
+    glance: { best: 'Many long series compared in little space', data: 'A value above or below a baseline for each day', avoid: 'Readers who need a chart they understand instantly.' },
+    when: ['Temperature against normal for many cities', 'Server load or response times for many machines', 'Stock returns for many companies', 'Any daily reading for many sensors or places'],
+    instead: [['013-area-chart', 'You only have one series'], ['017-sparkline', 'You want a quick trend, not a close comparison']],
+    features: ['365 days for six cities drawn as solid SVG paths, not thousands of shapes', 'Three shades each for warmer and cooler, in steps of 4 degrees', 'A crosshair that reads every city for the chosen day', 'Month lines so you can find a date fast', 'On phones the city names move above each row', 'A summary table with warm days, cool days and extremes'],
+    code: `const values = [1, 3, 6, 9, 5, 2, -1, -4, -7, -3, 0, 2]; // above or below normal
+const band = 4, rowH = 40, base = 50, w = 30;
+const warm = ['#f4b9a7', '#e0664a', '#a8231a'], cool = ['#b3cde8', '#5b92cc', '#1f4f8c'];
+
+values.forEach((v, i) => {
+  const shades = v >= 0 ? warm : cool;
+  for (let k = 0; k < 3; k++) {
+    const part = Math.max(0, Math.min(band, Math.abs(v) - k * band)) / band * rowH;
+    if (part > 0) drawRect(20 + i * w, base - part, w, part, shades[k]);
+  }
+});`,
+    faq: [
+      ['How do you read a horizon chart?', 'Color tells you the direction, red for above normal and blue for below. Shade tells you the size, with darker meaning bigger. Taller color within a row means a larger value inside that band.'],
+      ['Why use a horizon chart instead of a line chart?', 'A horizon chart shows the same detail in about a quarter of the height. That lets you stack many series and compare them, which would be a mess with many lines.'],
+      ['How many bands should a horizon chart use?', 'Two to four bands work best. Three, like this template, is a good balance between detail and how easy it is to read.'],
+      ['What data works in a horizon chart?', 'Any series with a clear baseline, like normal temperature, a target or zero change. Values above the baseline use one color and values below use another.'],
     ],
   },
 ];
